@@ -15,6 +15,7 @@ import UserList from "./components/pages/UserList";
 import MenuList from "./components/pages/MenuList";
 import RoleList from "./components/pages/RoleList";
 
+//test
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
           {
             path: "/roleSelection",
             element: <Roles />,
-          }
+          },
         ],
       },
     ],
@@ -53,25 +54,25 @@ const router = createBrowserRouter([
             element: <ProtectedRoute />,
             children: [
               {
-                path:'/adminHome',
-                element:<AdminHome />
+                path: "/adminHome",
+                element: <AdminHome />,
               },
               {
-                path:'/ohcList',
-                element:<OhcList />
+                path: "/ohcList",
+                element: <OhcList />,
               },
               {
-                path:'/userList',
-                element: <UserList />
+                path: "/userList",
+                element: <UserList />,
               },
               {
-                path:'/roleList',
-                element:<RoleList />
+                path: "/roleList",
+                element: <RoleList />,
               },
               {
-                path:'/menuList',
-                element:<MenuList />
-              }
+                path: "/menuList",
+                element: <MenuList />,
+              },
             ],
           },
         ],
