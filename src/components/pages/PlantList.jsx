@@ -92,7 +92,7 @@ const PlantList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/plants/${id}`);
             console.log(response.data);
@@ -109,7 +109,7 @@ const PlantList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -132,7 +132,7 @@ const PlantList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/plants/${id}`);
@@ -212,10 +212,10 @@ const PlantList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Plant Name']];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
+          item.id,
+          item.plantName,
           
         ]);
         doc.autoTable({
@@ -243,26 +243,23 @@ const PlantList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            plantName: 20,
+           
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Plant Name", key: 'plantName', width: columnWidths.plantName, style: headerStyle },
+          
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                plantName: product.plantName,
+                
             })
         });
   

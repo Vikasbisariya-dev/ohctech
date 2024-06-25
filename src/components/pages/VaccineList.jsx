@@ -103,7 +103,7 @@ const VaccineList = () => {
       
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/vaccines/${id}`);
             console.log(response.data);
@@ -122,7 +122,7 @@ const VaccineList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -145,7 +145,7 @@ const VaccineList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+     //   alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/vaccines/${id}`);
@@ -236,7 +236,7 @@ const VaccineList = () => {
         const doc = new jsPDF();
         const header = [['Id', 'Vaccine Name',"Company","Description"]];
         const tableData = rowData.map(item => [
-          item.id,
+          item.Id,
           item.vaccineName,
           item.vaccineCompany,
           item.vaccineDesc,
@@ -284,7 +284,7 @@ const VaccineList = () => {
   
         rowData.map(product =>{
             sheet.addRow({
-                id: product.id,
+                Id: product.Id,
                 vaccineName: product.vaccineName,
                 vaccineCompany: product.vaccineCompany,
                 vaccineDesc: product.vaccineDesc,

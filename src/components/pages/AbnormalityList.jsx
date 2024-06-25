@@ -89,7 +89,7 @@ const AbnormalityList = () => {
 
     // to delete a row
    const handleDeleteRow = async (id) => {
-    alert(id)
+    //alert(id)
    if(window.confirm('Are you sure you want to delete this data?')){
    try {
        await axiosClientPrivate.delete(`/abnormalities/${id}`);
@@ -167,7 +167,7 @@ const AbnormalityList = () => {
     }, [fetchTrigger]);
 
     const handleEdit = async (id) => {
-        alert(id);
+    //    alert(id);
         try {
           const response = await axiosClientPrivate.get(`/abnormalities/${id}`);
             console.log(response.data);
@@ -186,7 +186,7 @@ const AbnormalityList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+     //   alert(id);
         console.log(values);
         const update = values;
         try{

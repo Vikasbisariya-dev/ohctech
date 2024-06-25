@@ -88,7 +88,7 @@ const MergeContractorList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -107,7 +107,7 @@ const MergeContractorList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+      //  alert(id);
         const update = values;
         try{
              console.log(values);
@@ -130,7 +130,7 @@ const MergeContractorList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -206,7 +206,7 @@ const MergeContractorList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'ContractorRecordUsed',"ContractorRecordMerged",]];
+        const header = [['Id', 'Contractor Record Used',"Contractor Record Merged",]];
         const tableData = rowData.map(item => [
           item.Id,
           item.ComplaintRecordUsed,
@@ -245,8 +245,8 @@ const MergeContractorList = () => {
   
         sheet.columns = [
           { header: "Id", key: 'Id', width: columnWidths.buId, style: headerStyle },
-          { header: "ContractorRecordUsed", key: 'ContractorRecordUsed', width: columnWidths.buName, style: headerStyle },
-          { header: "ContractorRecordMerged", key: 'ContractorRecordMerged', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Contractor Record Used", key: 'ContractorRecordUsed', width: columnWidths.buName, style: headerStyle },
+          { header: "Contractor Record Merged", key: 'ContractorRecordMerged', width: columnWidths.buHeadName, style: headerStyle },
           
       ];
   

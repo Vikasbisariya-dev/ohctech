@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-//import { CheckupParameterGroupValidationForm } from './Validationform';
+import { CheckupParameterGroupValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,14 +20,6 @@ import CheckupParameterGroupForm from './CheckupParameterGroupForm';
 import PropTypes from "prop-types";
 //import MultipleSelect from '../common/MultipleSelect';
 //import TextField from '@mui/material';
-import * as Yup from 'yup';
-const CheckupParameterGroupValidationForm = Yup.object({
-    group: Yup.string().required("Please enter Group"),
-    groupnumber: Yup.string().required("Please enter Group Number"),
-      groupsec: Yup.string().required("Please enter Group Section "),
-     
-  });
-
 const CheckupParameterGroupList =() => {
 
 
@@ -95,7 +87,7 @@ const CheckupParameterGroupList =() => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+      //  alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -115,7 +107,7 @@ const CheckupParameterGroupList =() => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -138,7 +130,7 @@ const CheckupParameterGroupList =() => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -218,7 +210,7 @@ const CheckupParameterGroupList =() => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['id','group', 'groupnumber',"groupsec"]];
+        const header = [['Id','Group', 'Group Number',"Group Sec"]];
         const tableData = rowData.map(item => [
             item.id,
             item.group,
@@ -263,10 +255,10 @@ const CheckupParameterGroupList =() => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'buId', width: columnWidths.Id, style: headerStyle },
-          { header: "group", key: 'group', width: columnWidths.group, style: headerStyle },
-          { header: "groupnumber", key: 'groupnumber', width: columnWidths.groupnumber, style: headerStyle },
-          { header: "groupsec", key: 'groupsec', width: columnWidths.groupsec, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Group", key: 'group', width: columnWidths.group, style: headerStyle },
+          { header: "Group Number", key: 'groupnumber', width: columnWidths.groupnumber, style: headerStyle },
+          { header: "Group Sec", key: 'groupsec', width: columnWidths.groupsec, style: headerStyle },
 
              ];
   

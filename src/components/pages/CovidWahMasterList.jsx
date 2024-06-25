@@ -8,7 +8,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
 import CovidWahMasterForm from './CovidWahMasterForm';
-//import {CovidWahMasterValidationForm } from './Validationform';
+import {CovidWahMasterValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,15 +18,6 @@ import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
-import * as Yup from 'yup';
-
-const CovidWahMasterValidationForm = Yup.object({
-
-    hindi: Yup.string().required("Please enter in Hindi"),
-    english: Yup.string().required("Please enter in English"),
-    seq: Yup.string().required("Please enter Sequence"),
-    type: Yup.string().required("Please enter  type"),
-  });
 
 const CovidWahMasterList = () => {
 
@@ -91,7 +82,7 @@ const CovidWahMasterList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -110,7 +101,7 @@ const CovidWahMasterList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -131,7 +122,7 @@ const CovidWahMasterList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -204,24 +195,24 @@ const CovidWahMasterList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Question in Hindi',"Question in English","Type","Sequence"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
-          
+          item.id,
+          item.hindi,
+          item.english,
+          item.type,
+          item.seq
         ]);
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20,
-          theme: 'grid', 
-          margin: { top: 30 }, 
+          startY: 20, // Start Y position for the table
+          theme: 'grid', // Optional theme for the table
+          margin: { top: 30 }, // Optional margin from top
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("AddCityList.pdf");
+        doc.save("CovidWahMasterList.pdf");
     };
 
 
@@ -230,7 +221,7 @@ const CovidWahMasterList = () => {
         const sheet = workbook.addWorksheet('My Sheet');
   
         const headerStyle = {
-
+          // font: { bold: true, size: 12 },
           alignment: { horizontal: 'center' }
           
       };
@@ -238,26 +229,29 @@ const CovidWahMasterList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            hindi:25,
+            english:25,
+            type:25,
+            seq:25
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Question in Hindi", key: 'hindi', width: columnWidths.hindi, style: headerStyle },
+          { header: "Question in English", key: 'english', width: columnWidths.english, style: headerStyle },
+          { header: "Type", key: 'type', width: columnWidths.type, style: headerStyle },
+          { header: "Sequence", key: 'seq', width: columnWidths.seq, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                hindi: product.hindi,
+                english: product.english,
+                type: product.type,
+                seq: product.seq,
             })
         });
   
@@ -268,9 +262,9 @@ const CovidWahMasterList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'CovidWahMasterList.xlsx';
             anchor.click();
-
+            // anchor.URL.revokeObjectURL(url);
         })
     }
    

@@ -6,7 +6,7 @@ import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-//import { HealthAdviceValidationForm } from './Validationform';
+import { AdviceValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,12 +17,6 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
 import HealthAdviceForm from './HealthAdviceForm';
-import * as Yup from 'yup';
-
-const HealthAdviceValidationForm = Yup.object({
-    HealthAdviceName: Yup.string().min(2).max(25).required("Please enter health advice name"),
-    HealthAdviceCategory: Yup.string().min(2).max(25).required("Please enter health advice category"),
-  });
 
 const HealthAdviceList = () => {
 
@@ -59,7 +53,7 @@ const HealthAdviceList = () => {
         resetForm
       } = useFormik({
         initialValues: initialValues,
-        validationSchema: HealthAdviceValidationForm,
+        validationSchema: AdviceValidationForm,
         // onSubmit: (values, action) => {
         //     console.log(values);
         //     action.resetForm();
@@ -92,7 +86,7 @@ const HealthAdviceList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -111,7 +105,7 @@ const HealthAdviceList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -134,7 +128,7 @@ const HealthAdviceList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -208,20 +202,20 @@ const HealthAdviceList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Health Advice Name',"Health Advice Category"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.HealthAdviceName,
+          item.HealthAdviceCategory,
+         
           
         ]);
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20, 
-          theme: 'grid', 
-          margin: { top: 30 }, 
+          startY: 20, // Start Y position for the table
+          theme: 'grid', // Optional theme for the table
+          margin: { top: 30 }, // Optional margin from top
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
@@ -233,7 +227,7 @@ const HealthAdviceList = () => {
         const workbook = new ExcelJS.Workbook();
         const sheet = workbook.addWorksheet('My Sheet');
         const headerStyle = {
-
+          // font: { bold: true, size: 12 },
           alignment: { horizontal: 'center' }
           
       };
@@ -241,26 +235,26 @@ const HealthAdviceList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            HealthAdviceName: 20,
+            HealthAdviceCategory: 15,
+           
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Health Advice Name", key: 'HealthAdviceName', width: columnWidths.HealthAdviceName, style: headerStyle },
+          { header: "Health Advice Category", key: 'HealthAdviceCategory', width: columnWidths.HealthAdviceCategory, style: headerStyle },
+          
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                HealthAdviceName: product.HealthAdviceName,
+                HealthAdviceCategory: product.HealthAdviceCategory,
+                
             })
         });
   
@@ -271,9 +265,9 @@ const HealthAdviceList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'HealthAdviceList.xlsx';
             anchor.click();
-
+            // anchor.URL.revokeObjectURL(url);
         })
     }
    

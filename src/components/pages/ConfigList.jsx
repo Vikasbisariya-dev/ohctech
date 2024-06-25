@@ -94,7 +94,7 @@ const ConfigList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -113,7 +113,7 @@ const ConfigList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -136,7 +136,7 @@ const ConfigList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+        //alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -211,12 +211,12 @@ const ConfigList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Key name',"Valued"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.keyname,
+          item.valued,
+          
           
         ]);
         doc.autoTable({
@@ -228,7 +228,7 @@ const ConfigList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("ConfigList.pdf");
     };
 
 
@@ -246,26 +246,26 @@ const ConfigList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            keyname: 20,
+            valued: 15,
+           
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Key Name", key: 'keyname', width: columnWidths.keyname, style: headerStyle },
+          { header: "Valued", key: 'valued', width: columnWidths.valued, style: headerStyle },
+   
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                keyname: product.keyname,
+                valued: product.valued,
+                
             })
         });
   
@@ -276,7 +276,7 @@ const ConfigList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'ConfigList.xlsx';
             anchor.click();
             
         })

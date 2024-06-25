@@ -88,7 +88,7 @@ const MergeDestinationList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -107,7 +107,7 @@ const MergeDestinationList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -130,7 +130,7 @@ const MergeDestinationList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -206,12 +206,12 @@ const MergeDestinationList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Designation Used',"Designation Record"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.DesignationUsed,
+          item.DesignationRecord,
+         
           
         ]);
         doc.autoTable({
@@ -240,26 +240,26 @@ const MergeDestinationList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            DesignationUsed: 20,
+            DesignationRecord: 15,
+            
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Designation Used", key: 'DesignationUsed', width: columnWidths.DesignationUsed, style: headerStyle },
+          { header: "Designation Record", key: 'DesignationRecord', width: columnWidths.DesignationRecord, style: headerStyle },
+          
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                DesignationUsed: product.DesignationUsed,
+                DesignationRecord: product.DesignationRecord,
+               
             })
         });
   
@@ -270,7 +270,7 @@ const MergeDestinationList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'MergeDestinationList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })

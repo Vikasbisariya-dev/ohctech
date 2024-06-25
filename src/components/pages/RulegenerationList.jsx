@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-//import { RulegenerationValidationForm } from './Validationform';
+import { RulegenerationValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,26 +20,6 @@ import RulegenerationForm from './RulegenerationForm';
 import PropTypes from "prop-types";
 //import MultipleSelect from '../common/MultipleSelect';
 //import TextField from '@mui/material';
-import * as Yup from 'yup';
-
-const RulegenerationValidationForm = Yup.object({
-    bracket: Yup.string().required("Please enter Bracket"),
-    age: Yup.string().required("Please enter Age"),
-    risk: Yup.string().required("Please enter Risk  "),
-    ageend: Yup.string().required("Please enter Age End"),
-    advice: Yup.string().required("Please enter  Advice"),
-    condition: Yup.string().required("Please enter Condition"),
-    value: Yup.string().required("Please enter  Value"),
-    gender: Yup.string().required("Please enter  Gender"),
-    abnormality: Yup.string().required("Please enter  Abnormality"),
-    result: Yup.string().required("Please enter Result"),
-    close: Yup.string().required("Please enter Close Bracket"),
-    range:Yup.string().required("Please enter Range Type "),
-    checkup:Yup.string().required("Please enter Checkup Parameter  "),
-    rule:Yup.string().required("Please enter Text Comparsion Rule"),
-    res:Yup.string().required("Please enter Result Field "),
-  
-  });
 const RulegenerationList = () => {
 
 
@@ -116,7 +96,7 @@ const RulegenerationList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -147,7 +127,7 @@ const RulegenerationList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -170,7 +150,7 @@ const RulegenerationList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -262,9 +242,10 @@ const RulegenerationList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id','bracket', 'age',"risk","ageend","advice","value","result","close","checkup","condition"
-        ,"gender","abnormality","range","res","rule"]];
+        const header = [['Id','Bracket', 'Age',"Risk","Age End","Advice","Value","Result","Close","Check up","Condition"
+        ,"Gender","Abnormality","Range","Res","Rule"]];
         const tableData = rowData.map(item => [
+            item.Id,
             item.bracket,
             item.age,
             item.risk,
@@ -332,25 +313,25 @@ const RulegenerationList = () => {
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "bracket", key: 'bracket', width: columnWidths.bracket, style: headerStyle },
-          { header: "age", key: 'age', width: columnWidths.age, style: headerStyle },
-          { header: "risk", key: 'risk', width: columnWidths.risk, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Bracket", key: 'bracket', width: columnWidths.bracket, style: headerStyle },
+          { header: "Age", key: 'age', width: columnWidths.age, style: headerStyle },
+          { header: "Risk", key: 'risk', width: columnWidths.risk, style: headerStyle },
 
-          { header: "ageend", key: 'ageend', width: columnWidths.ageend, style: headerStyle },
-          { header: "advice", key: 'advice', width: columnWidths.advice, style: headerStyle },
-          { header: "value", key: 'value', width: columnWidths.value, style: headerStyle },
-          { header: "result", key: 'result', width: columnWidths.result, style: headerStyle },
+          { header: "Age End", key: 'ageend', width: columnWidths.ageend, style: headerStyle },
+          { header: "Advice", key: 'advice', width: columnWidths.advice, style: headerStyle },
+          { header: "Value", key: 'value', width: columnWidths.value, style: headerStyle },
+          { header: "Result", key: 'result', width: columnWidths.result, style: headerStyle },
 
-          { header: "close", key: 'close', width: columnWidths.close, style: headerStyle },
-          { header: "checkup", key: 'checkup', width: columnWidths.checkup, style: headerStyle },
-          { header: "condition", key: 'condition', width: columnWidths.condition, style: headerStyle },
-          { header: "gender", key: 'gender', width: columnWidths.gender, style: headerStyle },
+          { header: "Close", key: 'close', width: columnWidths.close, style: headerStyle },
+          { header: "Check up", key: 'checkup', width: columnWidths.checkup, style: headerStyle },
+          { header: "Condition", key: 'condition', width: columnWidths.condition, style: headerStyle },
+          { header: "Gender", key: 'gender', width: columnWidths.gender, style: headerStyle },
 
-          { header: "abnormality", key: 'abnormality', width: columnWidths.abnormality, style: headerStyle },
-          { header: "range", key: 'range', width: columnWidths.range, style: headerStyle },
-          { header: "res", key: 'res', width: columnWidths.res, style: headerStyle },
-          { header: "rule", key: 'rule', width: columnWidths.rule, style: headerStyle },
+          { header: "Abnormality", key: 'abnormality', width: columnWidths.abnormality, style: headerStyle },
+          { header: "Range", key: 'range', width: columnWidths.range, style: headerStyle },
+          { header: "Res", key: 'res', width: columnWidths.res, style: headerStyle },
+          { header: "Rule", key: 'rule', width: columnWidths.rule, style: headerStyle },
           
 
          
@@ -391,7 +372,7 @@ const RulegenerationList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'RulegenerationList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })

@@ -105,7 +105,7 @@ const CalibrationEquipmentList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -128,7 +128,7 @@ const CalibrationEquipmentList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+      //  alert(id);
         const update = values;
         try{
              console.log(values);
@@ -151,7 +151,7 @@ const CalibrationEquipmentList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+        //alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -225,7 +225,7 @@ const CalibrationEquipmentList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['id', 'calibration',"modelbrand","idnumber","location","date","duedate","docupdate"]];
+        const header = [['Id', 'Calibration',"Model Brand","Id Number","Location","Date","Due Date","Docupdate"]];
         const tableData = rowData.map(item => [
           item.id,
           item.calibration,
@@ -274,14 +274,14 @@ const CalibrationEquipmentList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: " calibration", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "modelbrand", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "idnumber", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: " location", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "date", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "duedate", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "docupdate", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: " Calibration", key: 'calibration', width: columnWidths.calibration, style: headerStyle },
+          { header: "Model Brand", key: 'modelbrand', width: columnWidths.modelbrand, style: headerStyle },
+          { header: "Id Number", key: 'idnumber', width: columnWidths.idnumber, style: headerStyle },
+          { header: " Location", key: 'location', width: columnWidths.location, style: headerStyle },
+          { header: "Date", key: 'date', width: columnWidths.date, style: headerStyle },
+          { header: "Due Date", key: 'duedate', width: columnWidths.duedate, style: headerStyle },
+          { header: "Docupdate", key: 'docupdate', width: columnWidths.docupdate, style: headerStyle },
         
           
       ];

@@ -96,7 +96,7 @@ const EmployeeCadreList = () => {
 
   // to delete a row
   const handleDeleteRow = async (id) => {
-    alert(id)
+    //alert(id)
    if(window.confirm('Are you sure you want to delete this data?')){
    try {
        await axiosClientPrivate.delete(`/emp-cadres/${id}`);
@@ -176,7 +176,7 @@ useEffect(() => {
 
 
 const handleEdit = async (id) => {
-  alert(id);
+  //alert(id);
   try {
     const response = await axiosClientPrivate.get(`/emp-cadres/${id}`);
       console.log(response.data);
@@ -194,7 +194,7 @@ const handleEdit = async (id) => {
 
 
 const handleUpdate = async (id)=> {
-  alert(id);
+ // alert(id);
   console.log(values);
   const update = values;
   try{
@@ -281,7 +281,7 @@ sheet.getRow(1).font = { bold: true };
       const url = window.URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = 'download.xlsx';
+      anchor.download = 'EmployeeCadreList.xlsx';
       anchor.click();
   })
 }

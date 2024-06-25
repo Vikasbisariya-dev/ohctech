@@ -86,7 +86,7 @@ const CategoryList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -105,7 +105,7 @@ const CategoryList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -128,7 +128,7 @@ const CategoryList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -204,7 +204,7 @@ const CategoryList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['id', 'CategoryName',"status","remarks"]];
+        const header = [['Id', 'CategoryName',"Status","Remarks"]];
         const tableData = rowData.map(item => [
           item.id,
           item.CategoryName,
@@ -244,9 +244,9 @@ const CategoryList = () => {
   
         sheet.columns = [
           { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "CategoryName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "status", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "remarks", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "CategoryName", key: 'CategoryName', width: columnWidths.CategoryName, style: headerStyle },
+          { header: "Status", key: 'status', width: columnWidths.status, style: headerStyle },
+          { header: "Remarks", key: 'remarks', width: columnWidths.remarks, style: headerStyle },
           
       ];
   

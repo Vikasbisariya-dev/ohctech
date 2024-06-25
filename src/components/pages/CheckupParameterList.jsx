@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-//import { CheckupParameterValidationForm } from './Validationform';
+import { CheckupParameterValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,37 +18,8 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import CheckupParameterForm from './CheckupParameterForm';
 import PropTypes from "prop-types";
-import * as Yup from 'yup';
-
-const CheckupParameterValidationForm = Yup.object({
-
-    cpname: Yup.string().required("Please enter checkup parameter"),
-    startingrange: Yup.string().required("Please enter starting range"),
-    endingrange: Yup.string().required("Please enter ending range"),
-    columnorder: Yup.string().required("Please enter column order"),
-    placeholder: Yup.string().required("Please enter Place holder"),
-    parametervaluename: Yup.string().required("Please enter Parameter Name"),
-    checkuptype: Yup.string().required("Please enter the checkup type"),
-    refrange: Yup.string().required("Please enter ref range"),
-    default: Yup.string().required("Please enter the default"),
-    healthkeyname: Yup.string().required("Please enter healthkeyname"),
-    lessrisk: Yup.string().required("Please enter lessrisk"),
-    morerisk: Yup.string().required("Please enter morerisk"),
-    lessadvice: Yup.string().required("Please enter lessadvice"),
-    moreadvice: Yup.string().required("Please enter moreadvice"),
-    section: Yup.string().required("Please enter section"),
-    inputtype: Yup.string().required("Please enter inputtype"),
-    status: Yup.string().required("Please enter status"),
-    edit: Yup.string().required("Please enter edit"),
-    selectunit: Yup.string().required("Please enter selectunit"),
-    opd: Yup.string().required("Please enter opd"),
-    daycare: Yup.string().required("Please enter daycare"),
-    injury: Yup.string().required("Please enter injury"),
-    rangerule: Yup.string().required("Please enter rangerule"),
-    parent: Yup.string().required("Please enter parent"),
-    mandatory: Yup.string().required("Please enter mandatory"),
-  });
-  
+//import MultipleSelect from '../common/MultipleSelect';
+//import TextField from '@mui/material';
 const CheckupParameterList = () => {
 
 
@@ -137,7 +108,7 @@ const CheckupParameterList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -181,7 +152,7 @@ const CheckupParameterList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+      //  alert(id);
         const update = values;
         try{
              console.log(values);
@@ -204,7 +175,7 @@ const CheckupParameterList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -307,9 +278,9 @@ const CheckupParameterList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['id','cpname', 'healthkeyname',"startingrange","endingrange","lessrisk","morerisk","lessadvice","moreadvice","section","columnorder"
-        ,"placeholder","parametervaluename","inputtype","checkuptype","status","edit","selectunit","refrange","opd","daycare","injury"
-      ,"rangerule","parent","mandatory","default" ]];
+        const header = [['Id','Cp Name', 'Health Key Name',"Starting Range","Ending Range","Less Risk","More Risk","Less Advice","More Advice","Section","Column Order"
+        ,"Place Holder","Parameter Value Name","Input Type","Checkup Type","Status","Edit","Select Unit","Refrange","OPD","Day Care","Injury"
+      ,"Range Rule","Parent","Mandatory","Default" ]];
         const tableData = rowData.map(item => [
             item.id,
             item.cpname,
@@ -398,37 +369,37 @@ const CheckupParameterList = () => {
   
         sheet.columns = [
           { header: "id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "cpname", key: 'cpname', width: columnWidths.cpname, style: headerStyle },
-          { header: "healthkeyname", key: 'healthkeyname', width: columnWidths.healthkeyname, style: headerStyle },
-          { header: "startingrange", key: 'startingrange', width: columnWidths.startingrange, style: headerStyle },
+          { header: "Cp Name", key: 'cpname', width: columnWidths.cpname, style: headerStyle },
+          { header: "Health Key Name", key: 'healthkeyname', width: columnWidths.healthkeyname, style: headerStyle },
+          { header: "Starting Range", key: 'startingrange', width: columnWidths.startingrange, style: headerStyle },
 
-          { header: "endingrange", key: 'endingrange', width: columnWidths.endingrange, style: headerStyle },
-          { header: "lessrisk", key: 'lessrisk', width: columnWidths.lessrisk, style: headerStyle },
-          { header: "morerisk", key: 'morerisk', width: columnWidths.morerisk, style: headerStyle },
-          { header: "lessadvice", key: 'lessadvice', width: columnWidths.lessadvice, style: headerStyle },
+          { header: "Ending Range", key: 'endingrange', width: columnWidths.endingrange, style: headerStyle },
+          { header: "Less Risk", key: 'lessrisk', width: columnWidths.lessrisk, style: headerStyle },
+          { header: "More Risk", key: 'morerisk', width: columnWidths.morerisk, style: headerStyle },
+          { header: "Less Advice", key: 'lessadvice', width: columnWidths.lessadvice, style: headerStyle },
 
-          { header: "moreadvice", key: 'moreadvice', width: columnWidths.moreadvice, style: headerStyle },
-          { header: "section", key: 'section', width: columnWidths.section, style: headerStyle },
-          { header: "columnorder", key: 'columnorder', width: columnWidths.columnorder, style: headerStyle },
-          { header: "placeholder", key: 'placeholder', width: columnWidths.placeholder, style: headerStyle },
+          { header: "More Advice", key: 'moreadvice', width: columnWidths.moreadvice, style: headerStyle },
+          { header: "Section", key: 'section', width: columnWidths.section, style: headerStyle },
+          { header: "Column Order", key: 'columnorder', width: columnWidths.columnorder, style: headerStyle },
+          { header: "Place Holder", key: 'placeholder', width: columnWidths.placeholder, style: headerStyle },
 
-          { header: "parametervaluename", key: 'parametervaluename', width: columnWidths.parametervaluename, style: headerStyle },
-          { header: "inputtype", key: 'inputtype', width: columnWidths.inputtype, style: headerStyle },
-          { header: "checkuptype", key: 'checkuptype', width: columnWidths.checkuptype, style: headerStyle },
-          { header: "status", key: 'status', width: columnWidths.status, style: headerStyle },
+          { header: "Parameter Value Name", key: 'parametervaluename', width: columnWidths.parametervaluename, style: headerStyle },
+          { header: "Input Type", key: 'inputtype', width: columnWidths.inputtype, style: headerStyle },
+          { header: "Checkup Type", key: 'checkuptype', width: columnWidths.checkuptype, style: headerStyle },
+          { header: "Status", key: 'status', width: columnWidths.status, style: headerStyle },
           
 
-          { header: "edit", key: 'edit', width: columnWidths.edit, style: headerStyle },
-          { header: "selectunit", key: 'selectunit', width: columnWidths.selectunit, style: headerStyle },
-          { header: "refrange", key: 'refrange', width: columnWidths.refrange, style: headerStyle },
-          { header: "opd", key: 'opd', width: columnWidths.opd, style: headerStyle },
+          { header: "Edit", key: 'edit', width: columnWidths.edit, style: headerStyle },
+          { header: "Select Unit", key: 'selectunit', width: columnWidths.selectunit, style: headerStyle },
+          { header: "Refrange", key: 'refrange', width: columnWidths.refrange, style: headerStyle },
+          { header: "OPD", key: 'opd', width: columnWidths.opd, style: headerStyle },
 
-          { header: "daycare", key: 'daycare', width: columnWidths.daycare, style: headerStyle },
-          { header: "injury", key: 'injury', width: columnWidths.injury, style: headerStyle },
-          { header: "rangerule", key: 'rangerule', width: columnWidths.rangerule, style: headerStyle },
-          { header: "parent", key: 'parent', width: columnWidths.parent, style: headerStyle },
-          { header: "mandatory", key: 'mandatory', width: columnWidths.mandatory, style: headerStyle },
-          { header: "default", key: 'default', width: columnWidths.default, style: headerStyle },
+          { header: "Day Care", key: 'daycare', width: columnWidths.daycare, style: headerStyle },
+          { header: "Injury", key: 'injury', width: columnWidths.injury, style: headerStyle },
+          { header: "Range Rule", key: 'rangerule', width: columnWidths.rangerule, style: headerStyle },
+          { header: "Parent", key: 'parent', width: columnWidths.parent, style: headerStyle },
+          { header: "Mandatory", key: 'mandatory', width: columnWidths.mandatory, style: headerStyle },
+          { header: "Default", key: 'default', width: columnWidths.default, style: headerStyle },
       ];
   
         rowData.map(product =>{

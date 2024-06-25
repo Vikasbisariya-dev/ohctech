@@ -99,7 +99,7 @@ const DeviceList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/devices/${id}`);
             console.log(response.data);
@@ -117,7 +117,7 @@ const DeviceList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -139,7 +139,7 @@ const DeviceList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/devices/${id}`);

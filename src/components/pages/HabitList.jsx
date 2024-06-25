@@ -92,7 +92,7 @@ const HabitList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/habits/${id}`);
             console.log(response.data);
@@ -109,7 +109,7 @@ const HabitList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -131,7 +131,7 @@ const HabitList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/habits/${id}`);
@@ -210,7 +210,7 @@ const HabitList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id', 'habit',]];
+        const header = [['Id', 'Habit',]];
         const tableData = rowData.map(item => [
           item.id,
           item.habit,
@@ -243,7 +243,7 @@ const HabitList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
+            id: 10,
             habit: 20,
       };
   

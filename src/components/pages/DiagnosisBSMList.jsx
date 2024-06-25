@@ -229,7 +229,7 @@ useEffect(() => {
 
     // to delete a row
    const handleDeleteRow = async (id) => {
-    alert(id)
+   // alert(id)
    if(window.confirm('Are you sure you want to delete this data?')){
    try {
        await axiosClientPrivate.delete(`/dignosys-wise-body-systems/${id}`);
@@ -352,7 +352,7 @@ useEffect(() => {
     }, [fetchTrigger,diagnosis,bodySystem,axiosClientPrivate]);
 
     const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/dignosys-wise-body-systems/${id}`);
             console.log("before",response.data);
@@ -380,7 +380,7 @@ useEffect(() => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         // console.log("final check",values);
         values.ailmentId = diagnosis.find(item => item.label == String(values.diagnosis)).value;
         values.ailmentSystemId = bodySystem.find(item => item.label == String(values.system)).value;
@@ -408,7 +408,7 @@ useEffect(() => {
       const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [["Id","Diagnosis Name",'BodySystem Name']];
+        const header = [["Id","Diagnosis Name",'Body System Name']];
         const tableData = rowData.map(item => [
           item.id,
           item.ailmentId,
@@ -450,7 +450,7 @@ useEffect(() => {
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
           { header: "Diagnosis Name", key: 'ailmentId', width: columnWidths.ailmentId, style: headerStyle },
-          { header: "BodySystem Name", key: 'ailmentSystemId', width: columnWidths.ailmentSystemId, style: headerStyle },
+          { header: "Body System Name", key: 'ailmentSystemId', width: columnWidths.ailmentSystemId, style: headerStyle },
           
       ];
   

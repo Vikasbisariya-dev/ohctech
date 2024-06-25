@@ -107,7 +107,7 @@ const DepartmentList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/departments/${id}`);
             console.log(response.data);
@@ -127,7 +127,7 @@ const DepartmentList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
 
         try{
@@ -151,7 +151,7 @@ const DepartmentList = () => {
 
 
     const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
         try {
             await axiosClientPrivate.delete(`/departments/${id}`);
 
@@ -298,7 +298,7 @@ const DepartmentList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'Department.xlsx';
+            anchor.download = 'DepartmentList.xlsx';
             anchor.click();
         })
     }

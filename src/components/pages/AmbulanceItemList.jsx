@@ -93,7 +93,7 @@ const AmbulanceItemList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -112,7 +112,7 @@ const AmbulanceItemList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -134,7 +134,7 @@ const AmbulanceItemList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+        //alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -213,7 +213,7 @@ const AmbulanceItemList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', ' issueto'," ohclocation"," itemcatagories"]];
+        const header = [['Id', ' Issue To'," Ohc Location"," Item Catagories"]];
         const tableData = rowData.map(item => [
           item.Id,
           item.issueto,
@@ -256,9 +256,9 @@ const AmbulanceItemList = () => {
   
         sheet.columns = [
           { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
-          { header: " issueto", key: ' issueto', width: columnWidths. issueto, style: headerStyle },
-          { header: "  ohclocation", key: '  ohclocation', width:  columnWidths.ohclocation, style: headerStyle },
-          { header: " itemcatagories", key: ' itemcatagories', width: columnWidths. itemcatagories, style: headerStyle },    
+          { header: " Issue To", key: ' issueto', width: columnWidths. issueto, style: headerStyle },
+          { header: " Ohc Location", key: '  ohclocation', width:  columnWidths.ohclocation, style: headerStyle },
+          { header: " Item Catagories", key: ' itemcatagories', width: columnWidths. itemcatagories, style: headerStyle },    
       ];
   
         rowData.map(product =>{
@@ -277,7 +277,7 @@ const AmbulanceItemList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'AmbulanceItemList.xlsx';
             anchor.click();
             
         })

@@ -236,7 +236,7 @@ const handleEdit = async (id) => {
 };
 
 const handleUpdate = async (id)=> {
-  alert(id);
+ // alert(id);
   const update = values;
   try{
        console.log(values);
@@ -275,7 +275,7 @@ const handleUpdate = async (id)=> {
   const exportpdf = async () => {
       
       const doc = new jsPDF();
-      const header = [['Id', 'OhcName',"ohcCode","OhcDescription","Address","State","Fax","PrimaryPhone","PrimaryEmail","PinCode","OhcType","IconColor","IconText","OhcCategory"]];
+      const header = [['Id', 'Ohc Name',"Ohc Code","Ohc Description","Address","State","Fax","Primary Phone","Primary Email","Pin Code","Ohc Type","Icon Color","Icon Text","Ohc Category"]];
       const tableData = rowData.map(item => [
         item.id,
         item.ohcName,
@@ -336,19 +336,19 @@ const handleUpdate = async (id)=> {
 
       sheet.columns = [
         { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-        { header: "OhcName", key: 'ohcName', width: columnWidths.ohcName, style: headerStyle },
-        { header: "OhcCode", key: 'ohcCode', width: columnWidths.ohcCode, style: headerStyle },
-        { header: "OhcDescription", key: 'ohcDescription', width: columnWidths.ohcDescription, style: headerStyle },
+        { header: "Ohc Name", key: 'ohcName', width: columnWidths.ohcName, style: headerStyle },
+        { header: "Ohc Code", key: 'ohcCode', width: columnWidths.ohcCode, style: headerStyle },
+        { header: "Ohc Description", key: 'ohcDescription', width: columnWidths.ohcDescription, style: headerStyle },
         { header: "Address", key: "address", width: columnWidths.address, style: headerStyle },
         { header: "State", key: 'state', width: columnWidths.state, style: headerStyle },
         { header: "Fax", key: 'fax', width: columnWidths.fax, style: headerStyle },
-        { header: "PrimaryPhone", key: 'primaryPhone', width: columnWidths.primaryPhone, style: headerStyle },
-        { header: "PrimaryEmail", key: 'primaryEmail', width: columnWidths.primaryEmail, style: headerStyle },
-        { header: "PinCode", key: "pinCode", width: columnWidths.pinCode, style: headerStyle },
-        { header: "OhcType", key: 'ohcType', width: columnWidths.ohcType, style: headerStyle },
-        { header: "IconColor", key: 'iconColor', width: columnWidths.iconColor, style: headerStyle },
-        { header: "IconText", key: 'iconText', width: columnWidths.iconText, style: headerStyle },
-        { header: "OhcCategory", key: 'OhcCategory', width: columnWidths.OhcCategory, style: headerStyle }
+        { header: "Primary Phone", key: 'primaryPhone', width: columnWidths.primaryPhone, style: headerStyle },
+        { header: "Primary Email", key: 'primaryEmail', width: columnWidths.primaryEmail, style: headerStyle },
+        { header: "Pin Code", key: "pinCode", width: columnWidths.pinCode, style: headerStyle },
+        { header: "Ohc Type", key: 'ohcType', width: columnWidths.ohcType, style: headerStyle },
+        { header: "Icon Color", key: 'iconColor', width: columnWidths.iconColor, style: headerStyle },
+        { header: "Icon Text", key: 'iconText', width: columnWidths.iconText, style: headerStyle },
+        { header: "Ohc Category", key: 'OhcCategory', width: columnWidths.OhcCategory, style: headerStyle }
     ];
 
       rowData.map(product =>{
@@ -375,7 +375,7 @@ const handleUpdate = async (id)=> {
           const url = window.URL.createObjectURL(blob);
           const anchor = document.createElement('a');
           anchor.href = url;
-          anchor.download = 'download.xlsx';
+          anchor.download = 'OhcList.xlsx';
           anchor.click();
           // anchor.URL.revokeObjectURL(url);
       })

@@ -1,3 +1,4 @@
+import { Box, Button, ButtonGroup, Stack } from '@mui/material';
 import { useEffect, useState} from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import useAxiosPrivate from '../../utils/useAxiosPrivate';
@@ -6,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-import LandingPageForm from './LandingPageForm';
+import BodyMeasurementForm from './BodyMeasurementForm';
 // import { VaccineValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,27 +21,10 @@ import PropTypes from "prop-types";
 // new
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Link } from 'react-router-dom';
-import PersonIcon from '@mui/icons-material/Person';
-import { Box, IconButton, TextField, ButtonGroup, Button, Stack, Avatar } from '@mui/material';
-import * as Yup from 'yup';
 
 
-const LandingPageValidationForm = Yup.object({
-    indicators: Yup.string().required("Please enter indicators"),
-    actual: Yup.string().required("Please enter actual Amount"),
-    target: Yup.number().required("Please enter target "),
-    percent: Yup.number().required("Please enter percent"),
+const BodyMeasurementList = () => {
 
-  });
-
-
-
-const LandingPageList = () => {
 
     const [rowData, setRowData] = useState([]);
 
@@ -57,20 +41,14 @@ const LandingPageList = () => {
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const [paginationPageSize, setPaginationPageSize] = useState(10);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-
 
     // const [change, setChange] = useState("";)
 
     // console.log("check",paginationPageSize);
 
     const initialValues = {
-        indicators:"",
-        actual:"",
-        target:"",
-        percent:"",
-        lastModified:"",
-        modifiedBy:"",
+        weight:"",
+        inKgs: "",
       };
 
 
@@ -85,7 +63,7 @@ const LandingPageList = () => {
         resetForm
       } = useFormik({
         initialValues: initialValues,
-        validationSchema: LandingPageValidationForm,
+        // validationSchema: VaccineValidationForm,
         // onSubmit: (values, action) => {
         //     console.log(values);
         //     action.resetForm();
@@ -120,15 +98,13 @@ const LandingPageList = () => {
       
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/measurements/${id}`);
             console.log(response.data);
             setFieldValue("id",response.data.id);
-            setFieldValue("indicators",response.data.indicators);
-            setFieldValue("actual",response.data.actual);
-            setFieldValue("target",response.data.target);
-            setFieldValue("percent",response.data.percent);
+            setFieldValue("weight",response.data.weight);
+            setFieldValue("inKgs",response.data.inKgs);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -140,7 +116,7 @@ const LandingPageList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -163,7 +139,7 @@ const LandingPageList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/measurements/${id}`);
@@ -205,10 +181,8 @@ const LandingPageList = () => {
                 if (items.length > 0) {
 
                     const headerMappings = {
-                        indicators: " Indicators",
-                        actual : "Actual",
-                        target: "Target",
-                        percent: "Percent",
+                        weight: " Weight",
+                        inKgs : "in Kgs",
                     };
 
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -253,13 +227,11 @@ const LandingPageList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id', 'Indicators',"Actual","Target","Percent"]];
+        const header = [['Id', 'Weight',"In Kgs"]];
         const tableData = rowData.map(item => [
           item.id,
-          item.indicators,
-          item.actual,
-          item.target,
-          item.percent,          
+          item.weight,
+          item.inKgs,          
         ]);
         doc.autoTable({
           head: header,
@@ -270,7 +242,7 @@ const LandingPageList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("LandingPageList.pdf");
+        doc.save("BodyMeasurementList.pdf");
     };
 
 
@@ -287,11 +259,9 @@ const LandingPageList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            indicators: 20,
-            actual: 20,
-            target: 20,
-            percent: 20,
+            id: 10,
+            weight: 20,
+            inKgs: 20,
             vaccineDesc: 25,
       };
       
@@ -299,20 +269,16 @@ const LandingPageList = () => {
         //                 inKgs : "inKgs",
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "Indicators", key: 'weight', width: columnWidths.weight, style: headerStyle },
-          { header: "Actual", key: 'inKgs', width: columnWidths.inKgs, style: headerStyle },
-          { header: "Target", key: 'weight', width: columnWidths.weight, style: headerStyle },
-          { header: "Percent", key: 'inKgs', width: columnWidths.inKgs, style: headerStyle },
+          { header: "Weight", key: 'weight', width: columnWidths.weight, style: headerStyle },
+          { header: "In Kgs", key: 'inKgs', width: columnWidths.inKgs, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
-                indicators: product.indicators,
-                actual: product.actual,
-                target: product.target,
-                percent: product.percent,
+                weight: product.weight,
+                inKgs: product.inKgs,
             })
         });
   
@@ -323,7 +289,7 @@ const LandingPageList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'LandingPageList.xlsx';
+            anchor.download = 'BodyMeasurementList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })
@@ -374,29 +340,12 @@ const [index,setIndex] = useState();
   
 //   console.log("grid api");
 
-
-const handleDateChange = (newDate) => {
-    setSelectedDate(newDate);
-};
-
-const handlePrevDay = () => {
-    setSelectedDate(prev => new Date(prev.setDate(prev.getDate() - 1)));
-};
-
-const handleNextDay = () => {
-    setSelectedDate(prev => new Date(prev.setDate(prev.getDate() + 1)));
-};
-
-const navigateToAnotherPage = () => {
-    window.location.href = '/NutrientList'; // Adjust the path as needed
-};
-
     return (
         <>
         <ToastContainer />
             <Box
                 className="ag-theme-quartz" 
-                style={{ height: '110vh' }}
+                style={{ height: 500 }}
             >
 
                 <Stack sx={{ display: 'flex', flexDirection: 'row' }} marginY={1} paddingX={1}>
@@ -405,28 +354,6 @@ const navigateToAnotherPage = () => {
                         <Button variant="contained" onClick={exportpdf} color="success" endIcon={<PictureAsPdfIcon/>}>PDF</Button>
                         <Button variant="contained" onClick={()=> exportExcelfile()}  color="success" endIcon={<DownloadIcon/>}>Excel</Button>
                     </ButtonGroup>
-                    <IconButton onClick={handlePrevDay}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '150px' }}>
-                        <ArrowBackIosIcon />
-                    </div>
-                    </IconButton>
-                    <LocalizationProvider dateAdapter={AdapterDateFns} >
-                        <DatePicker
-                            value={selectedDate}
-                            onChange={handleDateChange}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </LocalizationProvider>
-                    <IconButton onClick={handleNextDay}>
-                        <ArrowForwardIosIcon />
-                    </IconButton>
-                    <Link to="/PatientAndContact/:id" style={{ textDecoration: 'none', marginLeft: 'auto' }}>
-                    <IconButton>
-                        <Avatar>
-                            <PersonIcon />
-                        </Avatar>
-                    </IconButton>
-                </Link>
 
                 </Stack>
 
@@ -437,7 +364,6 @@ const navigateToAnotherPage = () => {
                     pagination={true}
                     paginationPageSize={paginationPageSize}
                     paginationPageSizeSelector={pageSizeOptions}
-                    Sx={{height:'100%',width: '100%'}}
                     onPaginationChanged={(event) => {
                         setPaginationPageSize(event.api.paginationGetPageSize());
                         setIndex(event.api.paginationGetCurrentPage());
@@ -457,11 +383,11 @@ const navigateToAnotherPage = () => {
 
             <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="LandingPage Master">
 
-                <LandingPageForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
+                <BodyMeasurementForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
                 
             </Popup>
         </>
     );
 };
 
-export default LandingPageList;
+export default BodyMeasurementList;

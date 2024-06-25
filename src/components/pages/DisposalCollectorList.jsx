@@ -88,7 +88,7 @@ const DisposalCollectorList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+      //  alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -107,7 +107,7 @@ const DisposalCollectorList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -130,7 +130,7 @@ const DisposalCollectorList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -204,57 +204,14 @@ const DisposalCollectorList = () => {
      
 
     const exportpdf = async () => {
-        // const headers = createHeaders([
-        //     "id",
-        //     "ohcName",
-        //     // "ohcCode",
-        //     // "OhcDescription",
-        //     // "Address",
-        //     // "State",
-        //     // "Fax",
-        //     // "PrimaryPhone",
-        //     // "PrimaryEmail",
-        //     // "PinCode",
-        //     // "OhcType",
-        //     // "IconColor",
-        //     // "IconText",
-        //     // "OhcCategory",
-        // ]);
-        // const doc = new jsPDF({orientation: "landscape"});
-        // console.log(rowData[0].id);
-        // const tableData = rowData.map((row)=>(
-        //     console.log(row.id),
-        //   {
-             
-          // console.log(row.id),
-            // ...row,
-            // id: row.id,
-            // ohcName: row.ohcName,
-            // ohcCode: row.ohcCode.toString(),
-            // ohcDescription: row.ohcDescription.toString(),
-            // address: row.address.toString(),
-            // state: row.state.toString(),
-            // fax: row.fax.toString(),
-            // primaryPhone: row.primaryPhone.toString(),
-            // primaryEmail: row.primaryEmail.toString(),
-            // pinCode: row.pinCode.toString(),
-            // ohcType: row.ohcType.toString(),
-            // iconColor: row.iconColor.toString(),
-            // iconText: row.iconText.toString(),
-            // OhcCategory: row.ohcCategory.toString(),
-        // }))
-        // const tableData = {
-        //     id : rowData[0].id,
-        //     ohcName : rowData[0].ohcName,
-        // }
-        // doc.table(1,1,tableData,headers, {autoSize:true});
+       
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Collector Name',"Collecting OHC"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.CollectorName,
+          item.CollectingOHC,
+          
           
         ]);
         doc.autoTable({
@@ -266,71 +223,14 @@ const DisposalCollectorList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("DisposalCollectorList.pdf");
     };
 
 
     const exportExcelfile = async () => {
         const workbook = new ExcelJS.Workbook();
         const sheet = workbook.addWorksheet('My Sheet');
-        // sheet.columns = [
-        //     {
-        //         header: "Id",
-        //         key: 'id',
-        //     },
-        //     {
-        //         header: "OhcName",
-        //         key: 'ohcName',
-        //     },
-        //     {
-        //         header: "OhcCode",
-        //         key: 'ohcCode',
-        //     },
-        //     {
-        //         header: "OhcDescription",
-        //         key: 'ohcDescription',
-        //     },
-        //     {
-        //       header : "Address",
-        //       key : "address",
-        //     },
-        //     {
-        //         header: "State",
-        //         key: 'state',
-        //     },
-        //     {
-        //         header: "Fax",
-        //         key: 'fax',
-        //     },
-        //     {
-        //       header: "PrimaryPhone",
-        //       key: 'primaryPhone',
-        //   },
-        //   {
-        //       header: "PrimaryEmail",
-        //       key: 'primaryEmail',
-        //   },
-        //   {
-        //       header : "PinCode",
-        //       key : "pinCode",
-        //   },
-        //   {
-        //       header: "OhcType",
-        //       key: 'ohcType',
-        //   },
-        //   {
-        //       header: "IconColor",
-        //       key: 'iconColor',
-        //   },
-        //   {
-        //     header: "IconText",
-        //     key: 'iconText',
-        // },
-        // {
-        //     header: "OhcCategory",
-        //     key: 'OhcCategory',
-        // }
-        // ];
+        
   
         const headerStyle = {
           // font: { bold: true, size: 12 },
@@ -341,26 +241,26 @@ const DisposalCollectorList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            CollectorName: 20,
+            CollectingOHC: 15,
+          
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Collector Name", key: 'CollectorName', width: columnWidths.CollectorName, style: headerStyle },
+          { header: "Collecting OHC", key: 'CollectingOHC', width: columnWidths.CollectingOHC, style: headerStyle },
+        
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                CollectorName: product.CollectorName,
+                CollectingOHC: product.CollectingOHC,
+                
             })
         });
   
@@ -371,7 +271,7 @@ const DisposalCollectorList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'DisposalCollectorList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })

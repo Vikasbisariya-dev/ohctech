@@ -8,7 +8,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
 import CanteenLocationForm from './CanteenLocationForm';
-//import {CanteenLocationValidationForm } from './Validationform';
+import {CanteenLocationValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,14 +18,6 @@ import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
-import * as Yup from 'yup';
-
-const CanteenLocationValidationForm = Yup.object({
-    location: Yup.string().required("Please enter Canteen Location "),
-    code: Yup.number().min(4).required("Please enter Canteen Code"),
-    type: Yup.string().required("Please Select Type"),
-   
-  });
 
 const CanteenLocationList = () => {
 
@@ -90,7 +82,7 @@ const CanteenLocationList = () => {
           });
     
     const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -109,7 +101,7 @@ const CanteenLocationList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+      //  alert(id);
         const update = values;
         try{
              console.log(values);
@@ -131,7 +123,7 @@ const CanteenLocationList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -205,7 +197,7 @@ const CanteenLocationList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['id','location',"code","type"]];
+        const header = [['Id','Location',"Code","Type"]];
         const tableData = rowData.map(item => [
           item.id,
           item.location,
@@ -216,9 +208,9 @@ const CanteenLocationList = () => {
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20, 
-          theme: 'grid',
-          margin: { top: 30 },
+          startY: 20, // Start Y position for the table
+          theme: 'grid', // Optional theme for the table
+          margin: { top: 30 }, // Optional margin from top
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
@@ -231,6 +223,7 @@ const CanteenLocationList = () => {
         const sheet = workbook.addWorksheet('My Sheet');
   
         const headerStyle = {
+          // font: { bold: true, size: 12 },
           alignment: { horizontal: 'center' }
           
       };
@@ -245,10 +238,10 @@ const CanteenLocationList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "location", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "code", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "type", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Location", key: 'location', width: columnWidths.location, style: headerStyle },
+          { header: "Code", key: 'code', width: columnWidths.code, style: headerStyle },
+          { header: "Type", key: 'type', width: columnWidths.type, style: headerStyle },
           
       ];
   
@@ -270,6 +263,7 @@ const CanteenLocationList = () => {
             anchor.href = url;
             anchor.download = 'CanteenLocationList.xlsx';
             anchor.click();
+            // anchor.URL.revokeObjectURL(url);
         })
     }
    

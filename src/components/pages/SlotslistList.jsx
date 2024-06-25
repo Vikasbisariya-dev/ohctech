@@ -19,16 +19,7 @@ import SlotsListForm from './SlotsListForm';
 import PropTypes from "prop-types";
 //import MultipleSelect from '../common/MultipleSelect';
 //import TextField from '@mui/material';
-//import { SlotsListform } from './Validationform';
-import * as Yup from 'yup';
-
-const SlotsListform = Yup.object({
-
-    doctorname: Yup.string().min(2).max(25).required("Please enter Doctor Name"),
-    date: Yup.string().required("Please enter Date"),
-   casetype: Yup.string().required("Please enter Case Type"),
-  });
-
+import { SlotsListform } from './Validationform';
 const SlotslistList = () => {
 
 
@@ -88,7 +79,7 @@ const SlotslistList = () => {
         },
       });
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -108,7 +99,7 @@ const SlotslistList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+      //  alert(id);
         const update = values;
         try{
              console.log(values);
@@ -130,7 +121,7 @@ const SlotslistList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -216,13 +207,13 @@ const SlotslistList = () => {
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20, 
-          theme: 'grid', 
-          margin: { top: 30 }, 
+          startY: 20, // Start Y position for the table
+          theme: 'grid', // Optional theme for the table
+          margin: { top: 30 }, // Optional margin from top
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("Slotlist.pdf");
+        doc.save("SlotslistList.pdf");
     };
      const exportExcelfile = async () => {
         const workbook = new ExcelJS.Workbook();
@@ -266,9 +257,9 @@ const SlotslistList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'Slotlist.xlsx';
+            anchor.download = 'SlotslistList.xlsx';
             anchor.click();
-            
+            // anchor.URL.revokeObjectURL(url);
         })
     }
    

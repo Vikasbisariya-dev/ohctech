@@ -8,7 +8,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
 
-//import { CheckupValidationForm } from './Validationform';
+import { CheckupValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,13 +19,6 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
 import CheckupParameterValuesForm from './CheckupParameterValuesForm';
-import * as Yup from 'yup';
-export const CheckupValidationForm = Yup.object({
-    ParameterValueName: Yup.string().min(2).max(25).required("Please enter Paramete rValue Name"),
- 
-   
-});
-
 
 const CheckupParameterValuesList = () => {
 
@@ -93,7 +86,7 @@ const CheckupParameterValuesList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -110,7 +103,7 @@ const CheckupParameterValuesList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+      //  alert(id);
         const update = values;
         try{
              console.log(values);
@@ -133,7 +126,7 @@ const CheckupParameterValuesList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+     //   alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -208,7 +201,7 @@ const CheckupParameterValuesList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['id', 'ParameterValueName']];
+        const header = [['Id', 'Parameter Value Name']];
         const tableData = rowData.map(item => [
           item.id,
           item.ParameterValueName,
@@ -245,8 +238,8 @@ const CheckupParameterValuesList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "ParameterValueName", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Parameter Value Name", key: 'ParameterValueName', width: columnWidths.ParameterValueName, style: headerStyle },
            
       ];
   

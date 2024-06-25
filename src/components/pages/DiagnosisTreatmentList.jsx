@@ -110,7 +110,7 @@ const DiagnosisTreatmentList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -129,7 +129,7 @@ const DiagnosisTreatmentList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -152,7 +152,7 @@ const DiagnosisTreatmentList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -227,12 +227,18 @@ const DiagnosisTreatmentList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Chillness',"Diagnosis","Medicin","Frequency","Timing","Adroute","Duration","Dose Qty","Health Advice"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.chillness,
+          item.diagnosis,
+          item.medicin,
+          item.frequency,
+          item.timing,
+          item.adroute,
+          item.duration,
+          item.doseqty,
+          item.healthadvice,
           
         ]);
         doc.autoTable({
@@ -244,7 +250,7 @@ const DiagnosisTreatmentList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("DiagnosisTreatmentList.pdf");
     };
 
 
@@ -259,26 +265,44 @@ const DiagnosisTreatmentList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            chillness: 20,
+            diagnosis: 15,
+            medicin: 25,
+            frequency: 20,
+            timing: 15,
+            adroute: 25,
+            duration: 20,
+            doseqty: 15,
+            healthadvice: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Chillness", key: 'chillness', width: columnWidths.chillness, style: headerStyle },
+          { header: "Diagnosis", key: 'diagnosis', width: columnWidths.diagnosis, style: headerStyle },
+          { header: "Medicin", key: 'medicin', width: columnWidths.medicin, style: headerStyle },
+          { header: "Frequency", key: 'frequency', width: columnWidths.frequency, style: headerStyle },
+          { header: "Timing", key: 'timing', width: columnWidths.timing, style: headerStyle },
+          { header: "Adroute", key: 'adroute', width: columnWidths.adroute, style: headerStyle },
+          { header: "Duration", key: 'duration', width: columnWidths.duration, style: headerStyle },
+          { header: "Dose Qty", key: 'doseqty', width: columnWidths.doseqty, style: headerStyle },
+          { header: "Health Advice", key: 'healthadvice', width: columnWidths.healthadvice, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                chillness: product.chillness,
+                diagnosis: product.diagnosis,
+                medicin: product.medicin,
+                frequency: product.frequency,
+                timing: product.timing,
+                adroute: product.adroute,
+                duration: product.duration,
+                doseqty: product.doseqty,
+                healthadvice: product.healthadvice,
             })
         });
   
@@ -289,7 +313,7 @@ const DiagnosisTreatmentList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'DiagnosisTreatmentList.xlsx';
             anchor.click();
         })
     }

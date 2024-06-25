@@ -95,7 +95,7 @@ const AddFilterMasterList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -114,7 +114,7 @@ const AddFilterMasterList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -137,7 +137,7 @@ const AddFilterMasterList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -212,7 +212,7 @@ const AddFilterMasterList = () => {
 
     const exportpdf = async () => {     
         const doc = new jsPDF();
-        const header = [['Id', 'filterName',"filterCode",]];
+        const header = [['Id', 'FilterName',"FilterCode",]];
         const tableData = rowData.map(item => [
           item.Id,
           item.filterName,
@@ -252,8 +252,8 @@ const AddFilterMasterList = () => {
   
         sheet.columns = [
           { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "filterName", key: 'filterName', width: columnWidths.buName, style: headerStyle },
-          { header: "filterCode", key: 'filterCode', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "FilterName", key: 'filterName', width: columnWidths.buName, style: headerStyle },
+          { header: "FilterCode", key: 'filterCode', width: columnWidths.buHeadName, style: headerStyle },
           
       ];
   

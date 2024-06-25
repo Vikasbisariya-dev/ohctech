@@ -99,7 +99,7 @@ const ComplaintList = () => {
 
     // to delete a row
    const handleDeleteRow = async (id) => {
-    alert(id)
+    //alert(id)
    if(window.confirm('Are you sure you want to delete this data?')){
    try {
        await axiosClientPrivate.delete(`/complaints/${id}`);
@@ -178,7 +178,7 @@ const ComplaintList = () => {
     }, [fetchTrigger]);
 
     const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/complaints/${id}`);
             console.log(response.data);
@@ -197,7 +197,7 @@ const ComplaintList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         console.log(values);
         const update = values;
         try{

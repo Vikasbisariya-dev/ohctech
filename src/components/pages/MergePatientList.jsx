@@ -84,7 +84,7 @@ const MergePatientList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -102,7 +102,7 @@ const MergePatientList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -125,7 +125,7 @@ const MergePatientList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -199,9 +199,9 @@ const MergePatientList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id',"merged","used"]];
+        const header = [['Id',"Merged","Used"]];
         const tableData = rowData.map(item => [
-            item.bracket,
+            item.Id,
           
             item.merged,
             item.used,
@@ -218,7 +218,7 @@ const MergePatientList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("RulegenerationList.pdf");
+        doc.save("MergePatientList.pdf");
     };
 
 
@@ -247,10 +247,10 @@ const MergePatientList = () => {
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
        
-          { header: "merged", key: 'merged', width: columnWidths.merged, style: headerStyle },
-          { header: "used", key: 'used', width: columnWidths.used, style: headerStyle },
+          { header: "Merged", key: 'merged', width: columnWidths.merged, style: headerStyle },
+          { header: "Used", key: 'used', width: columnWidths.used, style: headerStyle },
     
 
          
@@ -273,7 +273,7 @@ const MergePatientList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'MergePatientList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })

@@ -97,7 +97,7 @@ const FirstAidList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -116,7 +116,7 @@ const FirstAidList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -139,7 +139,7 @@ const FirstAidList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -215,12 +215,13 @@ const FirstAidList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Box Name',"Box Code","Box Loc","First Aider"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.BoxName,
+          item.boxCode,
+          item.boxLoc,
+          item.firstAider,
           
         ]);
         doc.autoTable({
@@ -232,7 +233,7 @@ const FirstAidList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("FirstAidList.pdf");
     };
 
 
@@ -250,26 +251,29 @@ const FirstAidList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            BoxName: 20,
+            boxCode: 15,
+            boxLoc: 25,
+            firstAider: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Box Name", key: 'BoxName', width: columnWidths.BoxName, style: headerStyle },
+          { header: "Box Code", key: 'boxCode', width: columnWidths.boxCode, style: headerStyle },
+          { header: "Box Loc", key: 'boxLoc', width: columnWidths.boxLoc, style: headerStyle },
+          { header: "First Aider", key: 'firstAider', width: columnWidths.firstAider, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                BoxName: product.BoxName,
+                boxCode: product.boxCode,
+                boxLoc: product.boxLoc,
+                firstAider: product.firstAider,
             })
         });
   
@@ -280,7 +284,7 @@ const FirstAidList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'FirstAidList.xlsx';
             anchor.click();
             
         })

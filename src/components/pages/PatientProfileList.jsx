@@ -100,7 +100,7 @@ const PatientProfileList = () => {
     });
 
     const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
             const response = await axiosClientPrivate.get(`/patients/${id}`);
             console.log(response.data);
@@ -131,7 +131,7 @@ const PatientProfileList = () => {
     };
 
     const handleView = async (id) => {
-        alert(id);
+      //  alert(id);
         try {
             const response = await axiosClientPrivate.get(`/patients/${id}`);
             console.log(response.data);
@@ -163,7 +163,7 @@ const PatientProfileList = () => {
     };
 
     const handleUpdate = async (id) => {
-        alert(id);
+       // alert(id);
         const update = values;
         try {
             console.log(values);
@@ -181,7 +181,7 @@ const PatientProfileList = () => {
     }
 
     const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
         if (window.confirm('Are you sure you want to delete this data?')) {
             try {
                 await axiosClientPrivate.delete(`/patients/${id}`);
@@ -272,7 +272,7 @@ const PatientProfileList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['id', 'pname', "fhname", "date", "genderchoose", "blood", "aadhar", "phone", "village", "post", "ps", "tehsil", "district", "state", "pin"]];
+        const header = [['Id', 'Pname', "Fhname", "Date", "Gender Choose", "Blood", "Aadhar", "Phone", "Village", "Post", "PS", "Tehsil", "District", "State", "Pin"]];
         const tableData = rowData.map(item => [
             item.id,
             // item.selectpatientcategory,
@@ -350,22 +350,22 @@ const PatientProfileList = () => {
         };
 
         sheet.columns = [
-            { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
+            { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
             // { header: "selectpatientcategory", key: 'cpname', width: columnWidths.cpname, style: headerStyle },
-            { header: "pname", key: 'patientName', width: columnWidths.patientName, style: headerStyle },
-            { header: "fhname", key: 'fatherName', width: columnWidths.fatherName, style: headerStyle },
-            { header: "date", key: 'dob', width: columnWidths.dob, style: headerStyle },
-            { header: "genderchoose", key: 'gender', width: columnWidths.gender, style: headerStyle },
-            { header: "blood", key: 'bloodGroup', width: columnWidths.bloodGroup, style: headerStyle },
-            { header: "aadhar", key: 'aadharNo', width: columnWidths.aadharNo, style: headerStyle },
-            { header: "phone", key: 'primaryPhone', width: columnWidths.primaryPhone, style: headerStyle },
-            { header: "village", key: 'village', width: columnWidths.village, style: headerStyle },
-            { header: "post", key: 'post', width: columnWidths.post, style: headerStyle },
-            { header: "ps", key: 'ps', width: columnWidths.ps, style: headerStyle },
-            { header: "tehsil", key: 'tehsil', width: columnWidths.tehsil, style: headerStyle },
-            { header: "district", key: 'district', width: columnWidths.district, style: headerStyle },
-            { header: "state", key: 'state', width: columnWidths.state, style: headerStyle },
-            { header: "pin", key: 'pinCode', width: columnWidths.pinCode, style: headerStyle },
+            { header: "Pname", key: 'patientName', width: columnWidths.patientName, style: headerStyle },
+            { header: "Fhname", key: 'fatherName', width: columnWidths.fatherName, style: headerStyle },
+            { header: "Date", key: 'dob', width: columnWidths.dob, style: headerStyle },
+            { header: "Gender Choose", key: 'gender', width: columnWidths.gender, style: headerStyle },
+            { header: "Blood", key: 'bloodGroup', width: columnWidths.bloodGroup, style: headerStyle },
+            { header: "Aadhar", key: 'aadharNo', width: columnWidths.aadharNo, style: headerStyle },
+            { header: "Phone", key: 'primaryPhone', width: columnWidths.primaryPhone, style: headerStyle },
+            { header: "Village", key: 'village', width: columnWidths.village, style: headerStyle },
+            { header: "Post", key: 'post', width: columnWidths.post, style: headerStyle },
+            { header: "PS", key: 'ps', width: columnWidths.ps, style: headerStyle },
+            { header: "Tehsil", key: 'tehsil', width: columnWidths.tehsil, style: headerStyle },
+            { header: "District", key: 'district', width: columnWidths.district, style: headerStyle },
+            { header: "State", key: 'state', width: columnWidths.state, style: headerStyle },
+            { header: "Pin", key: 'pinCode', width: columnWidths.pinCode, style: headerStyle },
         ];
 
         rowData.map(product => {

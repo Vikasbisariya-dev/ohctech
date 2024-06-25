@@ -99,7 +99,7 @@ const AppointmentList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/appointment-slots/${id}`);
             console.log(response.data);
@@ -119,7 +119,7 @@ const AppointmentList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -141,7 +141,7 @@ const AppointmentList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+     //   alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/appointment-slots/${id}`);
@@ -223,13 +223,13 @@ const AppointmentList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'Slot start',"buHeadName","buEmail"]];
+        const header = [['Id', 'Slot start',"Slot End","Slot Count","App Type"]];
         const tableData = rowData.map(item => [
           item.id,
           item.slot,
-          item.buHeadName,
-          item.buEmail,
-          
+          item.slotEnd,
+          item.slotCount,
+          item.appType
         ]);
         doc.autoTable({
           head: header,
@@ -240,7 +240,7 @@ const AppointmentList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("AppointmentList.pdf");
     };
 
 
@@ -258,26 +258,29 @@ const AppointmentList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id:20,
+            slot:25,
+            slotEnd:25,
+            slotCount:25,
+            appType:25
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.buId, style: headerStyle },
+          { header: "Slot start", key: 'slot', width: columnWidths.slot, style: headerStyle },
+          { header: "Slot End", key: 'slotEnd', width: columnWidths.slotEnd, style: headerStyle },
+          { header: "Slot Count", key: 'slotCount', width: columnWidths.slotCount, style: headerStyle },
+          { header: "App Type", key: 'appType', width: columnWidths.appType, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                Id: product.Id,
+                slot: product.slot,
+                slotEnd: product.slotEnd,
+                slotCount: product.slotCount,
+                appType: product.appType,
             })
         });
   
@@ -288,7 +291,7 @@ const AppointmentList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'AppointmentList.xlsx';
             anchor.click();
         })
     }

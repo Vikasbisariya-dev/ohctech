@@ -98,7 +98,7 @@ const InjuryPartList = () => {
 
     // to delete a row
    const handleDeleteRow = async (id) => {
-    alert(id)
+   // alert(id)
    if(window.confirm('Are you sure you want to delete this data?')){
    try {
        await axiosClientPrivate.delete(`/injury-parts/${id}`);
@@ -176,7 +176,7 @@ const InjuryPartList = () => {
     }, [fetchTrigger]);
 
     const handleEdit = async (id) => {
-        alert(id);
+      //  alert(id);
         try {
           const response = await axiosClientPrivate.get(`/injury-parts/${id}`);
             console.log(response.data);
@@ -195,7 +195,7 @@ const InjuryPartList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         console.log(values);
         const update = values;
         try{
@@ -218,7 +218,7 @@ const InjuryPartList = () => {
       const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [["Id","Injury Part",'Injury Part Desc',"Injury Part Desc"]];
+        const header = [["Id","Injury Part",'Injury Part Desc',"Injury Part Code"]];
         const tableData = rowData.map(item => [
           item.id,
           item.name,
@@ -236,7 +236,7 @@ const InjuryPartList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("InjuryClassificationList.pdf");
+        doc.save("InjuryPartList.pdf");
     };
 
 
@@ -283,7 +283,7 @@ const InjuryPartList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'InjuryClassificationList.xlsx';
+            anchor.download = 'InjuryPartList.xlsx';
             anchor.click();
         })
     }

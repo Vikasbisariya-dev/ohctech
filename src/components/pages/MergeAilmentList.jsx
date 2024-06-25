@@ -86,7 +86,7 @@ const MergeAilmentList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -105,7 +105,7 @@ const MergeAilmentList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -127,7 +127,7 @@ const MergeAilmentList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -212,7 +212,7 @@ const MergeAilmentList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id','primaryailment', 'duplicateailment',"delete"]];
+        const header = [['Id','Primary Ailment', 'Duplicate Ailment',"Delete"]];
         const tableData = rowData.map(item => [
             item.primaryailment,
             item.duplicateailment,
@@ -257,9 +257,9 @@ const MergeAilmentList = () => {
   
         sheet.columns = [
           { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "primaryailment", key: 'primaryailment', width: columnWidths.primaryailment, style: headerStyle },
-          { header: "duplicateailment", key: 'duplicateailment', width: columnWidths.duplicateailment, style: headerStyle },
-          { header: "delete", key: 'delete', width: columnWidths.delete, style: headerStyle },
+          { header: "Primary Ailment", key: 'primaryailment', width: columnWidths.primaryailment, style: headerStyle },
+          { header: "Duplicate Ailment", key: 'duplicateailment', width: columnWidths.duplicateailment, style: headerStyle },
+          { header: "Delete", key: 'delete', width: columnWidths.delete, style: headerStyle },
 
       ];
   
@@ -279,7 +279,7 @@ const MergeAilmentList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'MergeAilmentList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })

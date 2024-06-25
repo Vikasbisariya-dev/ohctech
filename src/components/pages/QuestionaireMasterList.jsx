@@ -8,7 +8,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
 import QuestionaireMasterForm from './QuestionaireMasterForm';
-//import {QuestionaireMasterValidationForm } from './Validationform';
+import {QuestionaireMasterValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,18 +18,6 @@ import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
-import * as Yup from 'yup';
-
-const QuestionaireMasterValidationForm = Yup.object({
-    secname: Yup.string().required("Please enter Section Name"),
-    seq: Yup.string().required("Please enter Sequence"),
-    locallanguage: Yup.string().required("Please enter Local Language "),
-    question: Yup.string().required("Please enter  Question"),
-    order: Yup.string().required("Please enter order"),
-    type: Yup.string().required("Please enter  type"),
-    secavailable: Yup.string().required("Please enter Section Available"),
-    
-  });
 
 const QuestionaireMasterList = () => {
 
@@ -98,7 +86,7 @@ const QuestionaireMasterList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -117,7 +105,7 @@ const QuestionaireMasterList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -138,7 +126,7 @@ const QuestionaireMasterList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -211,24 +199,28 @@ const QuestionaireMasterList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Sec Name',"Seq","Type", 'Question',"Local Language","Sec Available","Order"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.secname,
+          item.seq,
+          item.type,
+          item.question,
+          item.locallanguage,
+          item.secavailable,
+          item.order,
           
         ]);
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20,
-          theme: 'grid', 
-          margin: { top: 30 }, 
+          startY: 20, // Start Y position for the table
+          theme: 'grid', // Optional theme for the table
+          margin: { top: 30 }, // Optional margin from top
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("AddCityList.pdf");
+        doc.save("QuestionaireMasterList.pdf");
     };
 
 
@@ -237,7 +229,7 @@ const QuestionaireMasterList = () => {
         const sheet = workbook.addWorksheet('My Sheet');
   
         const headerStyle = {
-
+          // font: { bold: true, size: 12 },
           alignment: { horizontal: 'center' }
           
       };
@@ -245,26 +237,38 @@ const QuestionaireMasterList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            secname: 20,
+            seq: 15,
+            type: 25,
+            question: 10,
+            locallanguage: 20,
+            secavailable: 15,
+            order: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Sec Name", key: 'secname', width: columnWidths.secname, style: headerStyle },
+          { header: "Seq", key: 'seq', width: columnWidths.seq, style: headerStyle },
+          { header: "Type", key: 'type', width: columnWidths.type, style: headerStyle },
+          { header: "Question", key: 'question', width: columnWidths.question, style: headerStyle },
+          { header: "Local Language", key: 'locallanguage', width: columnWidths.locallanguage, style: headerStyle },
+          { header: "Sec Available", key: 'secavailable', width: columnWidths.secavailable, style: headerStyle },
+          { header: "Order", key: 'order', width: columnWidths.order, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                secname: product.secname,
+                seq: product.seq,
+                type: product.type,
+                question: product.question,
+                locallanguage: product.locallanguage,
+                secavailable: product.secavailable,
+                order: product.order,
             })
         });
   
@@ -275,9 +279,9 @@ const QuestionaireMasterList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'QuestionaireMasterList.xlsx';
             anchor.click();
-
+            // anchor.URL.revokeObjectURL(url);
         })
     }
    

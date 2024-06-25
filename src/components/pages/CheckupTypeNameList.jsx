@@ -8,7 +8,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
 import CheckupTypeNameForm from './CheckupTypeNameForm';
-//import { CheckupTypeNameValidationForm } from './Validationform';
+import { CheckupTypeNameValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,19 +18,6 @@ import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
-import * as Yup from 'yup';
-export const CheckupTypeNameValidationForm = Yup.object({
-    CheckTypeName: Yup.string().min(2).max(25).required("Please enter Check Type Name"),
-    CheckTypeCode: Yup.string().min(2).max(25).required("Please enter Check Type Code"),
-    Duration: Yup.string().min(2).max(25).required("Please enter Duration"),
-    Cost: Yup.string().min(2).max(25).required("Please enter Cost"),
-    CheckFormSection: Yup.string().min(2).max(25).required("Please enter CheckFormSection"),
-    SetStatus: Yup.string().min(2).max(25).required("Please enter your SetStatus"),
-    LabCheckup: Yup.string().min(2).max(25).required("Please enter LabCheckup"),
-    SectionChoiceAvailable: Yup.string().min(2).max(25).required("Please enter SectionChoiceAvailable"),
-    ApplicableOhcs: Yup.string().min(2).max(25).required("Please enter ApplicableOhcs"),
-   
-});
 
 
 const CheckupTypeNameList = () => {
@@ -105,7 +92,7 @@ const CheckupTypeNameList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -124,7 +111,7 @@ const CheckupTypeNameList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -145,7 +132,7 @@ const CheckupTypeNameList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -217,57 +204,20 @@ const CheckupTypeNameList = () => {
      
 
     const exportpdf = async () => {
-        // const headers = createHeaders([
-        //     "id",
-        //     "ohcName",
-        //     // "ohcCode",
-        //     // "OhcDescription",
-        //     // "Address",
-        //     // "State",
-        //     // "Fax",
-        //     // "PrimaryPhone",
-        //     // "PrimaryEmail",
-        //     // "PinCode",
-        //     // "OhcType",
-        //     // "IconColor",
-        //     // "IconText",
-        //     // "OhcCategory",
-        // ]);
-        // const doc = new jsPDF({orientation: "landscape"});
-        // console.log(rowData[0].id);
-        // const tableData = rowData.map((row)=>(
-        //     console.log(row.id),
-        //   {
-             
-          // console.log(row.id),
-            // ...row,
-            // id: row.id,
-            // ohcName: row.ohcName,
-            // ohcCode: row.ohcCode.toString(),
-            // ohcDescription: row.ohcDescription.toString(),
-            // address: row.address.toString(),
-            // state: row.state.toString(),
-            // fax: row.fax.toString(),
-            // primaryPhone: row.primaryPhone.toString(),
-            // primaryEmail: row.primaryEmail.toString(),
-            // pinCode: row.pinCode.toString(),
-            // ohcType: row.ohcType.toString(),
-            // iconColor: row.iconColor.toString(),
-            // iconText: row.iconText.toString(),
-            // OhcCategory: row.ohcCategory.toString(),
-        // }))
-        // const tableData = {
-        //     id : rowData[0].id,
-        //     ohcName : rowData[0].ohcName,
-        // }
-        // doc.table(1,1,tableData,headers, {autoSize:true});
+      
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Check Type Name',"Check Type Code","Duration",'Cost',"Check Form Section","Set Status","Lab Checkup","Section Choice Available",'Applicable Ohcs']];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.CheckTypeName,
+          item.CheckTypeCode,
+          item.Duration,
+          item.Cost,
+          item.CheckFormSection,
+          item.SetStatus,
+          item.LabCheckup,
+          item.SectionChoiceAvailable,
+          item.ApplicableOhcs,
           
         ]);
         doc.autoTable({
@@ -279,71 +229,14 @@ const CheckupTypeNameList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("CheckupTypeNameForm.pdf");
+        doc.save("CheckupTypeNameList.pdf");
     };
 
 
     const exportExcelfile = async () => {
         const workbook = new ExcelJS.Workbook();
         const sheet = workbook.addWorksheet('My Sheet');
-        // sheet.columns = [
-        //     {
-        //         header: "Id",
-        //         key: 'id',
-        //     },
-        //     {
-        //         header: "OhcName",
-        //         key: 'ohcName',
-        //     },
-        //     {
-        //         header: "OhcCode",
-        //         key: 'ohcCode',
-        //     },
-        //     {
-        //         header: "OhcDescription",
-        //         key: 'ohcDescription',
-        //     },
-        //     {
-        //       header : "Address",
-        //       key : "address",
-        //     },
-        //     {
-        //         header: "State",
-        //         key: 'state',
-        //     },
-        //     {
-        //         header: "Fax",
-        //         key: 'fax',
-        //     },
-        //     {
-        //       header: "PrimaryPhone",
-        //       key: 'primaryPhone',
-        //   },
-        //   {
-        //       header: "PrimaryEmail",
-        //       key: 'primaryEmail',
-        //   },
-        //   {
-        //       header : "PinCode",
-        //       key : "pinCode",
-        //   },
-        //   {
-        //       header: "OhcType",
-        //       key: 'ohcType',
-        //   },
-        //   {
-        //       header: "IconColor",
-        //       key: 'iconColor',
-        //   },
-        //   {
-        //     header: "IconText",
-        //     key: 'iconText',
-        // },
-        // {
-        //     header: "OhcCategory",
-        //     key: 'OhcCategory',
-        // }
-        // ];
+        
   
         const headerStyle = {
           // font: { bold: true, size: 12 },
@@ -355,25 +248,43 @@ const CheckupTypeNameList = () => {
         
         const columnWidths = {
             Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            CheckTypeName: 20,
+            CheckTypeCode: 15,
+            Duration: 25,
+            Cost: 20,
+            CheckFormSection: 15,
+            SetStatus: 25,
+            LabCheckup: 20,
+            SectionChoiceAvailable: 15,
+            ApplicableOhcs: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Check Type Name", key: 'CheckTypeName', width: columnWidths.CheckTypeName, style: headerStyle },
+          { header: "Check Type Code", key: 'CheckTypeCode', width: columnWidths.CheckTypeCode, style: headerStyle },
+          { header: "Duration", key: 'Duration', width: columnWidths.Duration, style: headerStyle },
+          { header: "Cost", key: 'Cost', width: columnWidths.Cost, style: headerStyle },
+          { header: "Check Form Section", key: 'CheckFormSection', width: columnWidths.CheckFormSection, style: headerStyle },
+          { header: "Set Status", key: 'SetStatus', width: columnWidths.SetStatus, style: headerStyle },
+          { header: "Lab Checkup", key: 'LabCheckup', width: columnWidths.LabCheckup, style: headerStyle },
+          { header: "Section Choice Available", key: 'SectionChoiceAvailable', width: columnWidths.SectionChoiceAvailable, style: headerStyle },
+          { header: "Applicable Ohcs", key: 'ApplicableOhcs', width: columnWidths.ApplicableOhcs, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                Id: product.Id,
+                CheckTypeName: product.CheckTypeName,
+                CheckTypeCode: product.CheckTypeCode,
+                Duration: product.Duration,
+                Cost: product.Cost,
+                CheckFormSection: product.CheckFormSection,
+                SetStatus: product.SetStatus,
+                LabCheckup: product.LabCheckup,
+                SectionChoiceAvailable: product.SectionChoiceAvailable,
+                ApplicableOhcs: product.ApplicableOhcs,
             })
         });
   
@@ -384,7 +295,7 @@ const CheckupTypeNameList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'CheckupTypeNameList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })

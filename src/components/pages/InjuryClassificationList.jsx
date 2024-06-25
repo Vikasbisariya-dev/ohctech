@@ -94,7 +94,7 @@ const InjuryClassificationList = () => {
 
     // to delete a row
    const handleDeleteRow = async (id) => {
-    alert(id)
+   // alert(id)
    if(window.confirm('Are you sure you want to delete this data?')){
    try {
        await axiosClientPrivate.delete(`/injury-classes/${id}`);
@@ -173,7 +173,7 @@ const InjuryClassificationList = () => {
     }, [fetchTrigger]);
 
     const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/injury-classes/${id}`);
             console.log(response.data);
@@ -192,7 +192,7 @@ const InjuryClassificationList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+      //  alert(id);
         console.log(values);
         const update = values;
         try{
@@ -215,7 +215,7 @@ const InjuryClassificationList = () => {
       const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [["Id","Complaint",'Complaint in Details',"Is Active"]];
+        const header = [["Id","Injury Class Name",'Injury Class Desc',"Injury Class Code"]];
         const tableData = rowData.map(item => [
           item.id,
           item.injClassName,

@@ -84,7 +84,7 @@ const MergeStationList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -100,7 +100,7 @@ const MergeStationList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -123,7 +123,7 @@ const MergeStationList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+        //alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -204,8 +204,9 @@ const MergeStationList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id','record', 'records' ]];
+        const header = [['Id','Record', 'Records' ]];
         const tableData = rowData.map(item => [
+            item.Id,
             item.record,
             item.records,
             
@@ -244,15 +245,15 @@ const MergeStationList = () => {
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "record", key: 'record', width: columnWidths.record, style: headerStyle },
-          { header: "records", key: 'records', width: columnWidths.records, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Record", key: 'record', width: columnWidths.record, style: headerStyle },
+          { header: "Records", key: 'records', width: columnWidths.records, style: headerStyle },
          
         ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
+                Id: product.Id,
                 record: product.record,
                 records: product. records,
                 
@@ -270,7 +271,7 @@ const MergeStationList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'MergeStationList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })

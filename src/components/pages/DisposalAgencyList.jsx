@@ -49,7 +49,7 @@ const DisposalAgencyList = () => {
 
 
     const initialValues = {
-        agencyName: "",
+        agencyname: "",
         agencyaddress: "",
         registrationno: "",
         allocation: "",
@@ -100,11 +100,11 @@ const DisposalAgencyList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
-            setFieldValue("agencyName",response.data.agencyName);
+            setFieldValue("buEmail",response.data.buEmail);
             setFieldValue("buHeadName",response.data.buHeadName);
             setFieldValue("buId",response.data.buId);
             setFieldValue("buName",response.data.buName);
@@ -119,7 +119,7 @@ const DisposalAgencyList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -142,7 +142,7 @@ const DisposalAgencyList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+        //alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -177,7 +177,6 @@ const DisposalAgencyList = () => {
                 const response = await axiosClientPrivate.get('business-units', { signal: controller.signal });
                 const items = response.data.content;
                     // console.log(items);
-
                 setRowData(items);
                 if (items.length > 0) {
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -220,15 +219,15 @@ const DisposalAgencyList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Agency Name',"Agency Address","Registration No", 'Allocation',"Hod Name","Hod Email"]];
         const tableData = rowData.map(item => [
           item.id,
-          item.agencyName,
-          item.buHeadName,
-          item.buEmail,
-          item.agencyName,
-          item.buHeadName,
-          item.buEmail,
+          item.agencyname,
+          item.agencyaddress,
+          item.registrationno,
+          item.allocation,
+          item.hodname,
+          item.hodemail,
           
         ]);
         doc.autoTable({
@@ -240,7 +239,7 @@ const DisposalAgencyList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("DisposalAgencyList.pdf");
     };
 
 
@@ -257,26 +256,35 @@ const DisposalAgencyList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            agencyname: 20,
+            agencyaddress: 15,
+            registrationno: 25,
+            allocation: 20,
+            hodname: 15,
+            hodemail: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Agency Name", key: 'agencyname', width: columnWidths.agencyname, style: headerStyle },
+          { header: "Agency Address", key: 'agencyaddress', width: columnWidths.agencyaddress, style: headerStyle },
+          { header: "Registration No", key: 'registrationno', width: columnWidths.registrationno, style: headerStyle },
+          { header: "Allocation", key: 'allocation', width: columnWidths.allocation, style: headerStyle },
+          { header: "Hod Name", key: 'hodname', width: columnWidths.hodname, style: headerStyle },
+          { header: "Hod Email", key: 'hodemail', width: columnWidths.hodemail, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                id: product.id,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                buId: product.buId,
+                agencyname: product.agencyname,
+                agencyaddress: product.agencyaddress ,
+                registrationno: product.registrationno,
+                allocation: product.allocation,
+                hodname: product.hodname,
+                hodemail: product.hodemail,
             })
         });
   
@@ -287,7 +295,7 @@ const DisposalAgencyList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'DisposalAgencyList.xlsx';
             anchor.click();
             
         })

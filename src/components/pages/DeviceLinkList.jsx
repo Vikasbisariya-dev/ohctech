@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-//import { DeviceLinkValidation } from './Validationform';
+import { DeviceLinkValidation } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,14 +17,6 @@ import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import DeviceLinkForm from './DeviceLinkForm';
-import * as Yup from 'yup';
-
-const DeviceLinkValidation = Yup.object({
-    devices: Yup.string().required("Please enter device "),
-    parametersname: Yup.string().required("Please enter parametersname"),
-    DeviceParamCode: Yup.string().required("Please enter Device Parameter Code  "),
-  
-  });
 
 const DeviceLinkList = () => {
 
@@ -97,7 +89,7 @@ const DeviceLinkList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -116,7 +108,7 @@ const DeviceLinkList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -138,7 +130,7 @@ const DeviceLinkList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+        //alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -210,20 +202,20 @@ const DeviceLinkList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Devices',"Device Param Code"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.devices,
+          item.DeviceParamCode,
+          
           
         ]);
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20,
-          theme: 'grid', 
-          margin: { top: 30 }, 
+          startY: 20, // Start Y position for the table
+          theme: 'grid', // Optional theme for the table
+          margin: { top: 30 }, // Optional margin from top
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
@@ -237,6 +229,7 @@ const DeviceLinkList = () => {
 
   
         const headerStyle = {
+          // font: { bold: true, size: 12 },
           alignment: { horizontal: 'center' }
           
       };
@@ -244,26 +237,26 @@ const DeviceLinkList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            devices: 20,
+            DeviceParamCode: 15,
+            
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Devices", key: 'devices', width: columnWidths.devices, style: headerStyle },
+          { header: "Device Param Code", key: 'DeviceParamCode', width: columnWidths.DeviceParamCode, style: headerStyle },
+       
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                devices: product.devices,
+                DeviceParamCode: product.DeviceParamCode,
+                
             })
         });
   
@@ -276,6 +269,7 @@ const DeviceLinkList = () => {
             anchor.href = url;
             anchor.download = 'DeviceLinkList.xlsx';
             anchor.click();
+            // anchor.URL.revokeObjectURL(url);
         })
     }
    

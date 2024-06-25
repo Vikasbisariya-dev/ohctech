@@ -83,7 +83,7 @@ const TrainingScheduleList = () => {
         },
       });
       const handleEdit = async (id) => {
-        alert(id);
+      //  alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -108,7 +108,7 @@ const TrainingScheduleList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -130,7 +130,7 @@ const TrainingScheduleList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -245,7 +245,7 @@ const TrainingScheduleList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
+            id: 10,
              programName: 20,
             fromDate: 20,
             toDate: 20,
@@ -256,7 +256,7 @@ const TrainingScheduleList = () => {
          };
   
         sheet.columns = [
-          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
        
           { header: "Program Name", key: 'programName', width: columnWidths.programName, style: headerStyle },
          

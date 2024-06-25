@@ -92,7 +92,7 @@ const SaltList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/salt-masters/${id}`);
             console.log(response.data);
@@ -109,7 +109,7 @@ const SaltList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -132,7 +132,7 @@ const SaltList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/salt-masters/${id}`);
@@ -212,7 +212,7 @@ const SaltList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', "salt"]];
+        const header = [['Id', "Salt"]];
         const tableData = rowData.map(item => [
           item.id,
           item.saltName,
@@ -227,7 +227,7 @@ const SaltList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("SaltList.pdf");
     };
 
 
@@ -243,7 +243,7 @@ const SaltList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
+            id: 10,
             saltName: 20,
             
       };
@@ -268,7 +268,7 @@ const SaltList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'SaltList.xlsx';
             anchor.click();
         })
     }

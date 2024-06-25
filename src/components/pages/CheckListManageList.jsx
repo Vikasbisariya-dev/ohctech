@@ -100,7 +100,7 @@ const CheckListManageList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -123,7 +123,7 @@ const CheckListManageList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -146,7 +146,7 @@ const CheckListManageList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -220,7 +220,7 @@ const CheckListManageList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['id','issueto', "ohclocation","itemtype","item","qty","unit","delete"
+        const header = [['Id','Issue To', "Ohc Location","Item Type","Item","Qty","Unit","Delete"
         ]];
         const tableData = rowData.map(item => [
             item.id,
@@ -270,14 +270,14 @@ const CheckListManageList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "issueto", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "ohclocation", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "itemtype", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "item", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "qty", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "unit", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "delete", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Issue To", key: 'issueto', width: columnWidths.issueto, style: headerStyle },
+          { header: "Ohc Location", key: 'ohclocation', width: columnWidths.ohclocation, style: headerStyle },
+          { header: "Item Type", key: 'itemtype', width: columnWidths.itemtype, style: headerStyle },
+          { header: "Item", key: 'item', width: columnWidths.item, style: headerStyle },
+          { header: "Qty", key: 'qty', width: columnWidths.qty, style: headerStyle },
+          { header: "Unit", key: 'unit', width: columnWidths.unit, style: headerStyle },
+          { header: "Delete", key: 'delete', width: columnWidths.delete, style: headerStyle },
          
           
       ];

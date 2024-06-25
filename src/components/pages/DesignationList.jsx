@@ -101,7 +101,7 @@ const DesignationList = () => {
       });
 
       const handleDeleteRow = async (id) => {
-        alert(id)
+        //alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/designations/${id}`);
@@ -182,7 +182,7 @@ const DesignationList = () => {
 
 
     const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/designations/${id}`);
             // console.log(response.data);
@@ -203,7 +203,7 @@ const DesignationList = () => {
 
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -288,7 +288,7 @@ const DesignationList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'designation.xlsx';
+            anchor.download = 'DesignationList.xlsx';
             anchor.click();
         })
     }

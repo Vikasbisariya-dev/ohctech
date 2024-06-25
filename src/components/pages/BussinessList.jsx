@@ -98,7 +98,7 @@ const BussinessList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -117,7 +117,7 @@ const BussinessList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        //alert(id);
         const update = values;
         try{
              console.log(values);
@@ -139,7 +139,7 @@ const BussinessList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -222,7 +222,7 @@ const BussinessList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Bussiness Name',"Bussiness Head Name","Bussiness Email"]];
         const tableData = rowData.map(item => [
           item.buId,
           item.buName,
@@ -262,9 +262,9 @@ const BussinessList = () => {
   
         sheet.columns = [
           { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Bussiness Name", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Bussiness Head Name", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Bussiness Email", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
           
       ];
   
@@ -284,7 +284,7 @@ const BussinessList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'BussinessList.xlsx';
             anchor.click();
            
         })

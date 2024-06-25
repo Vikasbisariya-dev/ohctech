@@ -104,7 +104,7 @@ const SectionList = () => {
 
    // to delete a row
    const handleDeleteRow = async (id) => {
-    alert(id)
+   // alert(id)
    if(window.confirm('Are you sure you want to delete this data?')){
    try {
        await axiosClientPrivate.delete(`/sections/${id}`);
@@ -188,7 +188,7 @@ const CustomActionComponent = ({id}) => {
     }, [fetchTrigger]);
 
     const handleEdit = async (id) => {
-        alert(id);
+      //  alert(id);
         try {
           const response = await axiosClientPrivate.get(`/sections/${id}`);
             console.log(response.data);
@@ -210,7 +210,7 @@ const CustomActionComponent = ({id}) => {
 
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         console.log(values);
         const update = values;
         try{
@@ -253,7 +253,7 @@ const CustomActionComponent = ({id}) => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("SectionList.pdf");
     };
 
 
@@ -303,7 +303,7 @@ const CustomActionComponent = ({id}) => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'SectionList.xlsx';
             anchor.click();
         })
     }

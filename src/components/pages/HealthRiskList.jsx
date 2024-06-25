@@ -6,7 +6,7 @@ import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-//import {HealthRiskValidationForm } from './Validationform';
+import {RiskValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,12 +17,6 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
 import HealthRiskForm from './HealthRiskForm';
-import * as Yup from 'yup';
-
-const HealthRiskValidationForm = Yup.object({
-    HealthRiskName: Yup.string().min(2).max(25).required("Please enter health risk name"),
-    HealthAdviceCategory: Yup.string().min(2).max(25).required("Please enter health advice category"),
-  });
 
 const HealthRiskList = () => {
 
@@ -60,7 +54,7 @@ const HealthRiskList = () => {
         resetForm
       } = useFormik({
         initialValues: initialValues,
-        validationSchema: HealthRiskValidationForm,
+        validationSchema: RiskValidationForm,
         // onSubmit: (values, action) => {
         //     console.log(values);
         //     action.resetForm();
@@ -93,7 +87,7 @@ const HealthRiskList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -112,7 +106,7 @@ const HealthRiskList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -135,7 +129,7 @@ const HealthRiskList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+      //  alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -210,20 +204,20 @@ const HealthRiskList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Health Risk Name',"Health Advice Category"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.HealthRiskName,
+          item.HealthAdviceCategory,
+          
           
         ]);
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20,
-          theme: 'grid',
-          margin: { top: 30 }, 
+          startY: 20, // Start Y position for the table
+          theme: 'grid', // Optional theme for the table
+          margin: { top: 30 }, // Optional margin from top
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
@@ -236,7 +230,7 @@ const HealthRiskList = () => {
         const sheet = workbook.addWorksheet('My Sheet');
   
         const headerStyle = {
-
+          // font: { bold: true, size: 12 },
           alignment: { horizontal: 'center' }
           
       };
@@ -245,25 +239,25 @@ const HealthRiskList = () => {
         
         const columnWidths = {
             Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            HealthRiskName: 20,
+            HealthAdviceCategory: 15,
+            
       };
   
         sheet.columns = [
           { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Health Risk Name", key: 'HealthRiskName', width: columnWidths.HealthRiskName, style: headerStyle },
+          { header: "Health Advice Category", key: 'HealthAdviceCategory', width: columnWidths.HealthAdviceCategory, style: headerStyle },
+          
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                HealthRiskName: product.HealthRiskName,
+                HealthAdviceCategory: product.HealthAdviceCategory,
+                
             })
         });
   
@@ -276,7 +270,7 @@ const HealthRiskList = () => {
             anchor.href = url;
             anchor.download = 'HealthRiskList.xlsx';
             anchor.click();
-
+            // anchor.URL.revokeObjectURL(url);
         })
     }
    

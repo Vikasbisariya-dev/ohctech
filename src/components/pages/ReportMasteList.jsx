@@ -100,7 +100,7 @@ const ReportMasterList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+        //alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -119,7 +119,7 @@ const ReportMasterList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -141,7 +141,7 @@ const ReportMasterList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -217,12 +217,14 @@ const ReportMasterList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Report Type',"Function Name","Url", 'Report Name',"Report Code"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.ReportType,
+          item.FunctionName,
+          item.url,
+          item.ReportName,
+          item.ReportCode,
           
         ]);
         doc.autoTable({
@@ -234,7 +236,7 @@ const ReportMasterList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("ReportMasterList.pdf");
     };
 
 
@@ -252,26 +254,32 @@ const ReportMasterList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            ReportType: 20,
+            FunctionName: 15,
+            url: 25,
+            ReportName: 15,
+            ReportCode: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Report Type", key: 'ReportType', width: columnWidths.ReportType, style: headerStyle },
+          { header: "Function Name", key: 'FunctionName', width: columnWidths.FunctionName, style: headerStyle },
+          { header: "Url", key: 'url', width: columnWidths.url, style: headerStyle },
+          { header: "Report Name", key: 'ReportName', width: columnWidths.ReportName, style: headerStyle },
+          { header: "Report Code", key: 'ReportCode', width: columnWidths.ReportCode, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                ReportType: product.ReportType,
+                FunctionName: product.FunctionName,
+                url: product.url,
+                ReportName: product.ReportName,
+                ReportCode: product.ReportCode,
             })
         });
   
@@ -282,7 +290,7 @@ const ReportMasterList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'ReportMasterList.xlsx';
             anchor.click();
             
         })

@@ -93,7 +93,7 @@ const GroupitemsList = () => {
 
 
       const handleEdit = async (id) => {
-        alert(id);
+       // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
@@ -134,7 +134,7 @@ const GroupitemsList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+       // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -157,7 +157,7 @@ const GroupitemsList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+       // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
@@ -233,9 +233,9 @@ const GroupitemsList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id','itemName', 'itemCode',"category","itemform","relatedAilmentSystem","usageCategory","subClassification","salt","indication","contraindication"
-        ,"sideEffect","interaction","medicineprecaution","reorderstorelevel","ministorelevel","minindentlevel","maxiindentlevel","reorderpercentagelevel","isprescription","stauts","unitofmesurement"
-      ,"remark" ]];
+        const header = [['Id','Item Name', 'Item Code',"Category","Item Form","Related Ailment System","Usage Category","Sub Classification","Salt","Indication","Contraindication"
+        ,"Side Effect","Interaction","Medicine Precaution","Reorder Store Level","Mini Store Level","Minindent Level","Maxiindent Level","Reorder Percentage Level","Isprescription","Stauts","Unit of Mesurement"
+      ,"Remark" ]];
         const tableData = rowData.map(item => [
             item.Id,
             item.itemName,
@@ -271,7 +271,7 @@ const GroupitemsList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("MedicineList.pdf");
+        doc.save("GroupitemsList.pdf");
     };
 
 
@@ -289,7 +289,7 @@ const GroupitemsList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
+            id: 10,
            
             itemName: 20,
             itemCode: 15,
@@ -318,41 +318,41 @@ const GroupitemsList = () => {
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "itemName", key: 'itemName', width: columnWidths.itemName, style: headerStyle },
-          { header: "itemCode", key: 'itemCode', width: columnWidths.itemCode, style: headerStyle },
-          { header: "category", key: 'category', width: columnWidths.category, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Item Name", key: 'itemName', width: columnWidths.itemName, style: headerStyle },
+          { header: "Item Code", key: 'itemCode', width: columnWidths.itemCode, style: headerStyle },
+          { header: "Category", key: 'category', width: columnWidths.category, style: headerStyle },
 
-          { header: "itemform", key: 'itemform', width: columnWidths.itemform, style: headerStyle },
-          { header: "relatedAilmentSystem", key: 'relatedAilmentSystem', width: columnWidths.relatedAilmentSystem, style: headerStyle },
-          { header: "usageCategory", key: 'usageCategory', width: columnWidths.usageCategory, style: headerStyle },
-          { header: "subClassification", key: 'subClassification', width: columnWidths.subClassification, style: headerStyle },
+          { header: "Item Form", key: 'itemform', width: columnWidths.itemform, style: headerStyle },
+          { header: "Related Ailment System", key: 'relatedAilmentSystem', width: columnWidths.relatedAilmentSystem, style: headerStyle },
+          { header: "Usage Category", key: 'usageCategory', width: columnWidths.usageCategory, style: headerStyle },
+          { header: "Sub Classification", key: 'subClassification', width: columnWidths.subClassification, style: headerStyle },
 
-          { header: "salt", key: 'salt', width: columnWidths.salt, style: headerStyle },
-          { header: "indication", key: 'indication', width: columnWidths.indication, style: headerStyle },
-          { header: "contraindication", key: 'contraindication', width: columnWidths.contraindication, style: headerStyle },
-          { header: "sideEffect", key: 'sideEffect', width: columnWidths.sideEffect, style: headerStyle },
+          { header: "Salt", key: 'salt', width: columnWidths.salt, style: headerStyle },
+          { header: "Indication", key: 'indication', width: columnWidths.indication, style: headerStyle },
+          { header: "Contraindication", key: 'contraindication', width: columnWidths.contraindication, style: headerStyle },
+          { header: "Side Effect", key: 'sideEffect', width: columnWidths.sideEffect, style: headerStyle },
 
-          { header: "interaction", key: 'interaction', width: columnWidths.interaction, style: headerStyle },
-          { header: "medicineprecaution", key: 'medicineprecaution', width: columnWidths.medicineprecaution, style: headerStyle },
-          { header: "reorderstorelevel", key: 'reorderstorelevel', width: columnWidths.reorderstorelevel, style: headerStyle },
-          { header: "ministorelevel", key: 'ministorelevel', width: columnWidths.ministorelevel, style: headerStyle },
+          { header: "Interaction", key: 'interaction', width: columnWidths.interaction, style: headerStyle },
+          { header: "Medicine Precaution", key: 'medicineprecaution', width: columnWidths.medicineprecaution, style: headerStyle },
+          { header: "Reorder Store Level", key: 'reorderstorelevel', width: columnWidths.reorderstorelevel, style: headerStyle },
+          { header: "Mini Store Level", key: 'ministorelevel', width: columnWidths.ministorelevel, style: headerStyle },
           
 
-          { header: "minindentlevel", key: 'minindentlevel', width: columnWidths.minindentlevel, style: headerStyle },
-          { header: "maxiindentlevel", key: 'maxiindentlevel', width: columnWidths.maxiindentlevel, style: headerStyle },
-          { header: "reorderpercentagelevel", key: 'reorderpercentagelevel', width: columnWidths.reorderpercentagelevel, style: headerStyle },
-          { header: "isprescription", key: 'isprescription', width: columnWidths.isprescription, style: headerStyle },
+          { header: "Minindent Level", key: 'minindentlevel', width: columnWidths.minindentlevel, style: headerStyle },
+          { header: "Maxiindent Level", key: 'maxiindentlevel', width: columnWidths.maxiindentlevel, style: headerStyle },
+          { header: "Reorder Percentage Level", key: 'reorderpercentagelevel', width: columnWidths.reorderpercentagelevel, style: headerStyle },
+          { header: "Isprescription", key: 'isprescription', width: columnWidths.isprescription, style: headerStyle },
 
-          { header: "stauts", key: 'stauts', width: columnWidths.stauts, style: headerStyle },
-          { header: "unitofmesurement", key: 'unitofmesurement', width: columnWidths.unitofmesurement, style: headerStyle },
-          { header: "remark", key: 'remark', width: columnWidths.remark, style: headerStyle },
+          { header: "Stauts", key: 'stauts', width: columnWidths.stauts, style: headerStyle },
+          { header: "Unit of Mesurement", key: 'unitofmesurement', width: columnWidths.unitofmesurement, style: headerStyle },
+          { header: "Remark", key: 'remark', width: columnWidths.remark, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
+                id: product.id,
                 itemName: product.itemName,
                 itemCode: product.itemCode,
                 itemform: product.itemform,
@@ -395,7 +395,7 @@ const GroupitemsList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'GroupitemsList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })
