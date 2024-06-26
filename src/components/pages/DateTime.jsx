@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box} from "@mui/material";
+import {Box, Stack, Typography} from "@mui/material";
 var DateTime=()=>{
 var showdate=new Date();
 var day=showdate.getDay();
@@ -24,13 +24,28 @@ var dt=week[day]+", "+months[month]+" "+date+", "+year;
 var displaytime=hours+"."+minutes+"."+seconds;
 
 return(
-<div >
-    <p readOnly="true" type="text" style={{marginLeft:"10px",justifyContent:"center",textAlign:"left",fontSize:"12px",color:"#005da3",borderRadius:"5px",backgroundColor:"#F2F2F2",width:"150px" }}>
-     <Box sx={{marginLeft:"8px"}}>{dt}</Box>  
-    <Box sx={{marginLeft:"8px"}}>{displaytime}</Box>
-        
-    </p>
-</div>
+<Stack>
+      <Typography
+        component={'div'}
+        style={{
+          marginLeft: "10px",
+          justifyContent: "center",
+          textAlign: "left",
+          fontSize: "13px",
+          color: "#2979ff",
+          borderRadius: "5px",
+          backgroundColor: "#e3f2fd",
+          width: "150px",
+        }}
+      >
+        <Box sx={{ marginLeft: "8px", fontWeight: "fontWeightMedium" }}>
+          {dt}
+        </Box>
+        <Box sx={{ marginLeft: "8px", fontWeight: "fontWeightMedium" }}>
+          {displaytime}
+        </Box>
+      </Typography>
+    </Stack>
 );
 }
 export default DateTime;

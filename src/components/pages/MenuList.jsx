@@ -146,7 +146,7 @@ const MenuList = () => {
         id: PropTypes.number.isRequired,
       };
     return <div> <Button onClick={() =>  handleEdit(id)} > <EditNoteRoundedIcon /></Button>
-       <Button color="error" onClick={() => handleDeleteRow(id)}> <DeleteSweepRoundedIcon /> </Button> </div>
+       <Button color="error" onClick={() => handleDeleteRow(id)}> <DeleteSweepRoundedIcon/> </Button>  </div>
 
 };
 

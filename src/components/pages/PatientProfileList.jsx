@@ -17,26 +17,26 @@ import 'jspdf-autotable';
 import PatientInfoForm from "./PatientProfileForm"
 import PropTypes from "prop-types";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-
-const PatientValidationForm = Yup.object({
-    selectpatientcategory: Yup.string().required("Please choose patient category "),
-  pname: Yup.string().required("Please enter patient name"),
-  fhname: Yup.string().required("Please enter father anme "),
-  date: Yup.string().required("Please enter birth date"),
-  genderchoose: Yup.string().required("Please  genderchoose"),
-  blood: Yup.string().required("Please enter  blood"),
-  aadhar: Yup.string().required("Please enter aadhar"),
-  phone: Yup.string().required("Please enter phone number"),
-  village: Yup.string().required("Please enter village"),
-  post: Yup.string().required("Please enter post"),
-  ps: Yup.string().required("Please enter ps"),
-  tehsil:Yup.string().required("Please enter tehsil "),
-  district:Yup.string().required("Please enter district "),
-  state:Yup.string().required("Please enter sat"),
-  pin:Yup.string().required("Please enter pin"),
-});
+import { useNavigate } from 'react-router-dom';
+// const PatientValidationForm = Yup.object({
+//     selectpatientcategory: Yup.string().required("Please choose patient category "),
+//   pname: Yup.string().required("Please enter patient name"),
+//   fhname: Yup.string().required("Please enter father anme "),
+//   date: Yup.string().required("Please enter birth date"),
+//   genderchoose: Yup.string().required("Please  genderchoose"),
+//   blood: Yup.string().required("Please enter  blood"),
+//   aadhar: Yup.string().required("Please enter aadhar"),
+//   phone: Yup.string().required("Please enter phone number"),
+//   village: Yup.string().required("Please enter village"),
+//   post: Yup.string().required("Please enter post"),
+//   ps: Yup.string().required("Please enter ps"),
+//   tehsil:Yup.string().required("Please enter tehsil "),
+//   district:Yup.string().required("Please enter district "),
+//   state:Yup.string().required("Please enter sat"),
+//   pin:Yup.string().required("Please enter pin"),
+// });
 
 const PatientProfileList = () => {
     const [rowData, setRowData] = useState([]);
@@ -47,6 +47,7 @@ const PatientProfileList = () => {
     const [id, setId] = useState(1);
     const [showupdate, setShowupdate] = useState(false);
     const [fetchTrigger, setFetchTrigger] = useState(0);
+    const navigate = useNavigate();
 
     // public record PatientDto(Long id, String patientName, String fatherName, LocalDate dob, String gender, String bloodGroup, String aadharNo, String primaryPhone, String village, String post, String ps, String tehsil, String district, String state, Integer pinCode, Integer modifiedBy) {
     const initialValues = {
@@ -80,7 +81,7 @@ const PatientProfileList = () => {
         resetForm
     } = useFormik({
         initialValues: initialValues,
-         validationSchema: PatientValidationForm,
+        //  validationSchema: PatientValidationForm,
         onSubmit: async (values, { resetForm }) => {
             try {
                 const response = await axiosClientPrivate.post('/patients', values);
@@ -90,6 +91,7 @@ const PatientProfileList = () => {
                 setFetchTrigger(prev => prev + 1);
                 console.log('Response:', response.data);
                 resetForm();
+                navigate(`/PatientAndContact/${ rowData[rowData.length-1].id + 1}`);
             } catch (error) {
                 console.log(values);
                 console.error('Error:', error);
@@ -196,7 +198,7 @@ const PatientProfileList = () => {
         };
         return <div>
             <Button onClick={() => handleView(id)}><VisibilityIcon /></Button>
-            <Link to={`/Patient/${id}`}>
+            <Link to={`/PatientAndContact/${id}`}>
             <Button ><EditNoteRoundedIcon /></Button>
             </Link>
             <Button color="error" onClick={() => handleDeleteRow(id)}><DeleteSweepRoundedIcon /></Button>

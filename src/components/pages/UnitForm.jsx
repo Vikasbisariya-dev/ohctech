@@ -1,8 +1,6 @@
-import Ohclogo from "./Ohclogo";
 import { FormControl, Grid} from "@mui/material";
 import PropTypes from "prop-types";
 import Input from "../common/Input";
-import { InputLabel, MenuItem, Select } from "@mui/material";
 
 
 
@@ -41,15 +39,15 @@ const UnitForm = ({
                 <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
                   <Input
                     label="Unit ID"
-                    name="unitId"
+                    name="id"
                     type="number"
                     size="large"
-                    value={values.unitId}
+                    value={values.id}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     helperText={
-                      errors.unitId && touched.unitId? (
-                        <span style={{ color: "red" }}>{errors.unitId}</span>
+                      errors.id && touched.id? (
+                        <span style={{ color: "red" }}>{errors.id}</span>
                       ) : null
                     }
                   />
@@ -57,15 +55,15 @@ const UnitForm = ({
                 <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
                   <Input
                     label="unit Name"
-                    name="UnitName"
+                    name="unitName"
                     type="text"
                     size="large"
-                    value={values.UnitName}
+                    value={values.unitName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     helperText={
-                      errors.UnitName && touched.UnitName? (
-                        <span style={{ color: "red" }}>{errors.UnitName}</span>
+                      errors.unitName && touched.unitName? (
+                        <span style={{ color: "red" }}>{errors.unitName}</span>
                       ) : null
                     }
                   />
@@ -73,15 +71,15 @@ const UnitForm = ({
                 <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
                   <Input
                     label="Remarks"
-                    name="Remarks"
+                    name="unitRemarks"
                     type="text"
                     size="large"
-                    value={values.Remarks}
+                    value={values.unitRemarks}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     helperText={
-                      errors.Remarks && touched.Remarks? (
-                        <span style={{ color: "red" }}>{errors.Remarks}</span>
+                      errors.unitRemarks && touched.unitRemarks? (
+                        <span style={{ color: "red" }}>{errors.unitRemarks}</span>
                       ) : null
                     }
                   />

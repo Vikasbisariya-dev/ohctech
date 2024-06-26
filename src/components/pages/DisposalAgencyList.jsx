@@ -50,12 +50,20 @@ const DisposalAgencyList = () => {
 
     const initialValues = {
         agencyName: "",
+
         agencyAddress: "",
         registrationNo: "",
         allocationRegNo: "",
         hodName: "",
         hodEmail: "",
         modifiedBy:"",
+
+        agencyaddress: "",
+        registrationno: "",
+        allocation: "",
+        hodname: "",
+        hodemail: ""
+
       };
       const {
         values,
@@ -106,11 +114,17 @@ const DisposalAgencyList = () => {
           const response = await axiosClientPrivate.get(`/disposal-agencies/${id}`);
             console.log(response.data);
             setFieldValue("agencyName",response.data.agencyName);
+
             setFieldValue("agencyAddress",response.data.agencyAddress);
             setFieldValue("registrationNo",response.data.registrationNo);
             setFieldValue("allocationRegNo",response.data.allocationRegNo);
             setFieldValue("hodName",response.data.hodName);
             setFieldValue("hodEmail",response.data.hodEmail);
+
+            setFieldValue("buHeadName",response.data.buHeadName);
+            setFieldValue("buId",response.data.buId);
+            setFieldValue("buName",response.data.buName);
+
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -180,6 +194,7 @@ const DisposalAgencyList = () => {
                 const response = await axiosClientPrivate.get('disposal-agencies', { signal: controller.signal });
                 const items = response.data.content;
                     // console.log(items);
+
                 setRowData(items);
                 if (items.length > 0) {
                     const headerMappings = {
@@ -241,6 +256,13 @@ const DisposalAgencyList = () => {
           item.allocationRegNo,
           item.hodnNme,
           item.hodEmail,
+          item.id,
+          item.agencyName,
+          item.buHeadName,
+          item.buEmail,
+          item.agencyName,
+          item.buHeadName,
+          item.buEmail,
           
         ]);
         doc.autoTable({
@@ -295,6 +317,10 @@ const DisposalAgencyList = () => {
                 allocationRegNo: product.allocationRegNo,
                 hodName: product.hodName,
                 hodEmail: product.hodEmail,
+                id: product.id,
+                buName: product.buName,
+                buHeadName: product.buHeadName,
+                buEmail: product.buEmail,
             })
         });
   

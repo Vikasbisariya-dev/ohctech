@@ -1,5 +1,4 @@
-import { Box, Button, ButtonGroup, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import useAxiosPrivate from '../../utils/useAxiosPrivate';
 import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
@@ -7,7 +6,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-import NutrientForm from './FoodMasterForm';
+import LandingPageForm from './LandingPageForm';
 // import { VaccineValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
@@ -21,25 +20,27 @@ import PropTypes from "prop-types";
 // new
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import * as Yup from 'yup';
-import EmpHealthDasboard from './EmpHealthDashboard';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Link } from 'react-router-dom';
-
-const NutrientValidationForm = Yup.object({
-  foodId: Yup.string().required("Please Enter Food Name "),
-  calories: Yup.string().required("Please Enter Calories Amount"),
-  addedSugar: Yup.string().required("Please Enter Amount of AddedSuger "),
-  maida: Yup.string().required("Please Enter The Amount of Maida"),
-  quantityInGrams: Yup.string().required("Please  Enter Quantity In Gram"),
-  proteins: Yup.string().required("Please Enter Protein Amount"),
-  deepFried: Yup.string().required("Please Choose Deep Fried Or Not"),
-  saturatedFats: Yup.string().required("Please Enter Amount Of Saturated Fat"),
-  
-});
+import PersonIcon from '@mui/icons-material/Person';
+import { Box, IconButton, TextField, ButtonGroup, Button, Stack, Avatar } from '@mui/material';
+import * as Yup from 'yup';
 
 
-const NutrientList = () => {
+const LandingPageValidationForm = Yup.object({
+    indicators: Yup.string().required("Please enter indicators"),
+    actual: Yup.string().required("Please enter actual Amount"),
+    target: Yup.number().required("Please enter target "),
+    percent: Yup.number().required("Please enter percent"),
 
+  });
+
+
+
+const LandingPageList = () => {
 
     const [rowData, setRowData] = useState([]);
 
@@ -55,30 +56,21 @@ const NutrientList = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
-    const [paginationPageSize, setPaginationPageSize] = useState(2);
-
-    const [foodname,setFoodname] = useState([{}]);
+    const [paginationPageSize, setPaginationPageSize] = useState(10);
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
 
     // const [change, setChange] = useState("";)
 
     // console.log("check",paginationPageSize);
 
-    // Long id, Long foodId, String calories, String addedSugar, String maida,
-    //                             String quantityInGrams, String proteins, String deepFried, String saturatedFats) {
-
-
     const initialValues = {
-        // foodId:"",
-        foodname:"",
-        calories:"",
-        addedSugar:"",
-        maida:"",
-        quantityInGrams:"",
-        proteins:"",
-        deepFried:"",
-        saturatedFats:"",
-        
+        indicators:"",
+        actual:"",
+        target:"",
+        percent:"",
+        lastModified:"",
+        modifiedBy:"",
       };
 
 
@@ -93,20 +85,16 @@ const NutrientList = () => {
         resetForm
       } = useFormik({
         initialValues: initialValues,
-        validationSchema:NutrientValidationForm,
+        validationSchema: LandingPageValidationForm,
         // onSubmit: (values, action) => {
         //     console.log(values);
         //     action.resetForm();
         //   },
         onSubmit: async (values, {resetForm}) => {
-
-            const fooddish = foodname.find(item => item.label === values.foodname);
-            const dishid = fooddish ? fooddish.value : null;
-            values['foodId'] = values.foodname;
-            delete values.foodname;
-            values.foodId = dishid;
         try {
-            const response = await axiosClientPrivate.post('/nutrients', values);
+            // values['inKgs'] = parseFloat(values.inKgs);
+            // console.log("checkkk",values);
+            const response = await axiosClientPrivate.post('/measurements', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -134,23 +122,13 @@ const NutrientList = () => {
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/nutrients/${id}`);
+          const response = await axiosClientPrivate.get(`/measurements/${id}`);
             console.log(response.data);
-
-            values.id = response.data.id;
-            const updateDish = foodname.find(item => item.value == parseInt(response.data.foodId)).label;
-            values.foodname = String(updateDish);
-
-
             setFieldValue("id",response.data.id);
-            setFieldValue("foodname",String(updateDish));
-            setFieldValue("calories",response.data.calories);
-            setFieldValue("addedSugar",response.data.addedSugar);
-            setFieldValue("maida",response.data.maida);
-            setFieldValue("quantityInGrams",response.data.quantityInGrams);
-            setFieldValue("proteins",response.data.proteins);
-            setFieldValue("deepFried",response.data.deepFried);
-            setFieldValue("saturatedFats",response.data.saturatedFats);
+            setFieldValue("indicators",response.data.indicators);
+            setFieldValue("actual",response.data.actual);
+            setFieldValue("target",response.data.target);
+            setFieldValue("percent",response.data.percent);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -163,12 +141,10 @@ const NutrientList = () => {
 
       const handleUpdate = async (id)=> {
         alert(id);
-        values.foodId = foodname.find(item => item.label == String(values.foodname)).value;
-        delete values.foodname;
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/nutrients/${id}`,update);
+             await axiosClientPrivate.put(`/measurements/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -190,7 +166,7 @@ const NutrientList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/nutrients/${id}`);
+           await axiosClientPrivate.delete(`/measurements/${id}`);
         //    setRowData(prevData => prevData.filter(row => row.buId !== id));
         setFetchTrigger(prev => prev+1);
 
@@ -214,45 +190,6 @@ const NutrientList = () => {
     // const paginationPageSizeSelector = [50, 100, 200, 500];
     const pageSizeOptions = [2, 4, 8, 10];
 
-    useEffect(() => {
-        const controller = new AbortController();
-    
-        const getAllOhc = async () => {
-            try {
-                const response = await axiosClientPrivate.get('http://localhost:8080/foods', { signal: controller.signal });
-                const items = response.data.content;
-                    console.log("food name :-",items);
-    
-                    // const newDiagnosisMap = new Map();
-                    // items.forEach(item => newDiagnosisMap.set(item.ailmentSysName, item.id));
-                    // setBodysystem(newDiagnosisMap);
-    
-                    // console.log(diagnosisMap.size);
-                    // const ailment = items.map((item)=>{
-                    //   // diagnosisMap.set(item.id,item.ailmentSysName);
-                    //   return item.ailmentSysName;
-                    // });
-    
-                    const foodname = items.map((item)=>{
-                      return {label : item.foodName,value : item.id};
-                    });
-    
-                    
-                    setFoodname(foodname);
-                    // console.log(ailment);
-    
-            } catch (err) {
-                console.error("Failed to fetch data: ", err);
-            }
-        };
-    
-        getAllOhc();
-    
-        return () => {
-            controller.abort();
-        };
-    
-    }, []);
     
 
     useEffect(() => {
@@ -260,28 +197,18 @@ const NutrientList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get(`http://localhost:8080/nutrients?page=0&size=${paginationPageSize}`, { signal: controller.signal });
+                const response = await axiosClientPrivate.get(`http://localhost:8080/measurements?page=0&size=${paginationPageSize}`, { signal: controller.signal });
                 const items = response.data.content;
-                    console.log("new",items);
+                    // console.log("new",items);
                 setRowData(items);
-
-                if(foodname.length>0){
-                    items.forEach(obj => {
-                        obj.foodId = foodname.find(item => item.value == parseInt(obj.foodId)).label;
-                      });
-                }
-                else{
-                    console.log("Not found!");
-                }
-
-
 
                 if (items.length > 0) {
 
                     const headerMappings = {
-                        vaccineName: "Vaccine Name",
-                        vaccineCompany : "Company",
-                        vaccineDesc : "Description",
+                        indicators: " Indicators",
+                        actual : "Actual",
+                        target: "Target",
+                        percent: "Percent",
                     };
 
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -304,6 +231,8 @@ const NutrientList = () => {
                     setColDefs(columns);
                 }
 
+                
+
             } catch (err) {
                 console.error("Failed to fetch data: ", err);
                 setRowData([]);
@@ -316,27 +245,21 @@ const NutrientList = () => {
             controller.abort();
         };
 
-    }, [paginationPageSize,foodname,fetchTrigger,axiosClientPrivate]);
+    }, [paginationPageSize,fetchTrigger,axiosClientPrivate]);
 
 
      
 
     const exportpdf = async () => {
-        
+       
         const doc = new jsPDF();
-        const header = [['Id', 'Food name',"Quantity in grams","Calories","Protein","Added sugar","Deep fried","Maida","Saturated fats"]];
+        const header = [['Id', 'Indicators',"Actual","Target","Percent"]];
         const tableData = rowData.map(item => [
           item.id,
-          item.foodId,
-          item.quantityInGrams,
-          item.calories,
-          item.proteins,
-          item.addedSugar,
-          item.deepFried,
-          item.maida,
-          item.saturatedFats,
-          
-          
+          item.indicators,
+          item.actual,
+          item.target,
+          item.percent,          
         ]);
         doc.autoTable({
           head: header,
@@ -347,7 +270,7 @@ const NutrientList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("NutrientList.pdf");
+        doc.save("LandingPageList.pdf");
     };
 
 
@@ -364,41 +287,32 @@ const NutrientList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            id: 10,
-            foodId: 20,
-            quantityInGrams: 20,
-            calories: 25,
-            proteins: 20,
-            addedSugar: 25,
-            deepFried: 25,
-            maida: 20,
-            saturatedFats: 25,
+            Id: 10,
+            indicators: 20,
+            actual: 20,
+            target: 20,
+            percent: 20,
+            vaccineDesc: 25,
       };
       
-  
+             // weight: "Exercise Name",
+        //                 inKgs : "inKgs",
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "Food name", key: 'foodId', width: columnWidths.foodId, style: headerStyle },
-          { header: "Quantity in grams", key: 'quantityInGrams', width: columnWidths.quantityInGrams, style: headerStyle },
-          { header: "Calories", key: 'calories', width: columnWidths.calories, style: headerStyle },
-          { header: "Protein", key: 'proteins', width: columnWidths.proteins, style: headerStyle },
-          { header: "Added sugar", key: 'addedSugar', width: columnWidths.addedSugar, style: headerStyle },
-          { header: "Deep fried", key: 'deepFried', width: columnWidths.deepFried, style: headerStyle },
-          { header: "Maida", key: 'maida', width: columnWidths.maida, style: headerStyle },
-          { header: "Saturated fats", key: 'saturatedFats', width: columnWidths.saturatedFats, style: headerStyle },          
+          { header: "Indicators", key: 'weight', width: columnWidths.weight, style: headerStyle },
+          { header: "Actual", key: 'inKgs', width: columnWidths.inKgs, style: headerStyle },
+          { header: "Target", key: 'weight', width: columnWidths.weight, style: headerStyle },
+          { header: "Percent", key: 'inKgs', width: columnWidths.inKgs, style: headerStyle },
+          
       ];
   
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
-                foodId: product.foodId,
-                quantityInGrams: product.quantityInGrams,
-                calories: product.calories,
-                proteins: product.proteins,
-                addedSugar: product.addedSugar,
-                deepFried: product.deepFried,
-                maida: product.maida,
-                saturatedFats: product.saturatedFats,
+                indicators: product.indicators,
+                actual: product.actual,
+                target: product.target,
+                percent: product.percent,
             })
         });
   
@@ -409,7 +323,7 @@ const NutrientList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'NutrientList.xlsx';
+            anchor.download = 'LandingPageList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })
@@ -460,6 +374,23 @@ const [index,setIndex] = useState();
   
 //   console.log("grid api");
 
+
+const handleDateChange = (newDate) => {
+    setSelectedDate(newDate);
+};
+
+const handlePrevDay = () => {
+    setSelectedDate(prev => new Date(prev.setDate(prev.getDate() - 1)));
+};
+
+const handleNextDay = () => {
+    setSelectedDate(prev => new Date(prev.setDate(prev.getDate() + 1)));
+};
+
+const navigateToAnotherPage = () => {
+    window.location.href = '/NutrientList'; // Adjust the path as needed
+};
+
     return (
         <>
         <ToastContainer />
@@ -467,27 +398,36 @@ const [index,setIndex] = useState();
                 className="ag-theme-quartz" 
                 style={{ height: '110vh' }}
             >
-            <EmpHealthDasboard />
+
                 <Stack sx={{ display: 'flex', flexDirection: 'row' }} marginY={1} paddingX={1}>
-                <ButtonGroup variant="contained" aria-label="Basic button group" >
-                <Link to="/PatientAndContact/:id">
-                <Button variant="contained" startIcon={<AddCircleOutlineRoundedIcon />} sx={{marginRight : "5px",}} >
-                Patient Profile
-               </Button>
-               </Link>
-               <Link to="/PatientAndContact/:id">
-                <Button variant="contained" startIcon={<AddCircleOutlineRoundedIcon />} sx={{marginRight : "5px"}} >
-                    Contact
-                </Button>
+                    <ButtonGroup variant="contained" aria-label="Basic button group">
+                        <Button variant="contained" endIcon={<AddCircleOutlineRoundedIcon />} onClick={() => { setOpenPopup(true) }}>Add New</Button>
+                        <Button variant="contained" onClick={exportpdf} color="success" endIcon={<PictureAsPdfIcon/>}>PDF</Button>
+                        <Button variant="contained" onClick={()=> exportExcelfile()}  color="success" endIcon={<DownloadIcon/>}>Excel</Button>
+                    </ButtonGroup>
+                    <IconButton onClick={handlePrevDay}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '150px' }}>
+                        <ArrowBackIosIcon />
+                    </div>
+                    </IconButton>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} >
+                        <DatePicker
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
+                    <IconButton onClick={handleNextDay}>
+                        <ArrowForwardIosIcon />
+                    </IconButton>
+                    <Link to="/PatientAndContact/:id" style={{ textDecoration: 'none', marginLeft: 'auto' }}>
+                    <IconButton>
+                        <Avatar>
+                            <PersonIcon />
+                        </Avatar>
+                    </IconButton>
                 </Link>
-                </ButtonGroup>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '250px' }}>
-                    <Button variant="contained" endIcon={<AddCircleOutlineRoundedIcon />} onClick={() => { setOpenPopup(true) }} sx={{marginRight : "5px"}}>Add New</Button>
-                    <Button variant="contained" onClick={exportpdf} color="success" endIcon={<PictureAsPdfIcon/>}>PDF</Button>
-                    <Button variant="contained" onClick={()=> exportExcelfile()}  color="success" endIcon={<DownloadIcon/>} sx={{marginLeft : "5px"}}>Excel</Button>
-                </div>
-                
-                 
+
                 </Stack>
 
                 <AgGridReact
@@ -515,13 +455,13 @@ const [index,setIndex] = useState();
 
             </Box>
 
-            <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Nutrition Master">
+            <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="LandingPage Master">
 
-                <NutrientForm foodname={foodname} values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
+                <LandingPageForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
                 
             </Popup>
         </>
     );
 };
 
-export default NutrientList;
+export default LandingPageList;

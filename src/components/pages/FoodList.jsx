@@ -1,5 +1,5 @@
 import { Box, Button, ButtonGroup, Stack } from '@mui/material';
-import { useEffect, useState,useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import useAxiosPrivate from '../../utils/useAxiosPrivate';
 import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
@@ -21,6 +21,13 @@ import PropTypes from "prop-types";
 // new
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import * as Yup from 'yup';
+
+const FoodValidationForm = Yup.object({
+    foodCode: Yup.string().required("Please Enter Food Code "),
+    foodName: Yup.string().required("Please Enter Food Name "),
+  
+});
 
 
 const FoodList = () => {
@@ -48,6 +55,7 @@ const FoodList = () => {
 
     const initialValues = {
         foodName: "",
+        foodCode : "",
         lastModified: "",
         modifiedBy: ""
       };
@@ -64,7 +72,7 @@ const FoodList = () => {
         resetForm
       } = useFormik({
         initialValues: initialValues,
-        // validationSchema: VaccineValidationForm,
+        validationSchema:FoodValidationForm,
         // onSubmit: (values, action) => {
         //     console.log(values);
         //     action.resetForm();
@@ -97,11 +105,12 @@ const FoodList = () => {
       
 
       const handleEdit = async (id) => {
-        alert(id);
+        // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/foods/${id}`);
             console.log(response.data);
             setFieldValue("id",response.data.id);
+            setFieldValue("foodCode",response.data.foodCode);
             setFieldValue("foodName",response.data.foodName);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
@@ -114,7 +123,7 @@ const FoodList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        alert(id);
+        // alert(id);
         const update = values;
         try{
              console.log(values);
@@ -137,7 +146,7 @@ const FoodList = () => {
 
      // to delete a row
      const handleDeleteRow = async (id) => {
-        alert(id)
+        // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/foods/${id}`);
@@ -173,13 +182,14 @@ const FoodList = () => {
             try {
                 const response = await axiosClientPrivate.get(`http://localhost:8080/foods?page=0&size=${paginationPageSize}`, { signal: controller.signal });
                 const items = response.data.content;
-                    // console.log("new",items);
+                    console.log("new",items);
                 setRowData(items);
 
                 if (items.length > 0) {
 
                     const headerMappings = {
                         foodName: "Food name",
+                        foodCode : "Food code"
                     };
 
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -224,9 +234,10 @@ const FoodList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'Food name']];
+        const header = [['Id', 'Food code','Food name']];
         const tableData = rowData.map(item => [
           item.id,
+          item.foodCode,
           item.foodName,
           
           
@@ -259,12 +270,13 @@ const FoodList = () => {
         const columnWidths = {
             Id: 10,
             foodName: 20,
-           
+            foodCode : 20,
       };
       
   
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Food code", key: 'foodCode', width: columnWidths.foodCode, style: headerStyle },
           { header: "Food name", key: 'foodName', width: columnWidths.foodName, style: headerStyle },
           
       ];
@@ -272,6 +284,7 @@ const FoodList = () => {
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
+                foodCode : product.foodCode,
                 foodName: product.foodName,
             })
         });
@@ -339,7 +352,7 @@ const [index,setIndex] = useState();
         <ToastContainer />
             <Box
                 className="ag-theme-quartz" 
-                style={{ height: 500 }}
+                style={{ height: '110vh' }}
             >
 
                 <Stack sx={{ display: 'flex', flexDirection: 'row' }} marginY={1} paddingX={1}>
@@ -358,6 +371,7 @@ const [index,setIndex] = useState();
                     pagination={true}
                     paginationPageSize={paginationPageSize}
                     paginationPageSizeSelector={pageSizeOptions}
+                    Sx={{height:'100%',width: '100%'}}
                     onPaginationChanged={(event) => {
                         setPaginationPageSize(event.api.paginationGetPageSize());
                         setIndex(event.api.paginationGetCurrentPage());

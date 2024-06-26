@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-import NutrientForm from './FoodMasterForm';
+//import NutrientForm from './NutrientForm';
 // import { VaccineValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
@@ -18,27 +18,28 @@ import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
+import FoodMasterForm from './FoodMasterForm';
 // new
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import * as Yup from 'yup';
-import EmpHealthDasboard from './EmpHealthDashboard';
-import { Link } from 'react-router-dom';
 
-const NutrientValidationForm = Yup.object({
-  foodId: Yup.string().required("Please Enter Food Name "),
-  calories: Yup.string().required("Please Enter Calories Amount"),
-  addedSugar: Yup.string().required("Please Enter Amount of AddedSuger "),
-  maida: Yup.string().required("Please Enter The Amount of Maida"),
-  quantityInGrams: Yup.string().required("Please  Enter Quantity In Gram"),
-  proteins: Yup.string().required("Please Enter Protein Amount"),
-  deepFried: Yup.string().required("Please Choose Deep Fried Or Not"),
-  saturatedFats: Yup.string().required("Please Enter Amount Of Saturated Fat"),
+
+const NutritionalvalueValidationForm = Yup.object({
+    foodCode: Yup.string().required("Please enter Food Code"),
+    foodName: Yup.string().required("Please enter Food Name"),
+    calories: Yup.number().required("Please enter Calories  "),
+    proteins: Yup.number().required("Please enter Proteins"),
+    maida: Yup.number().required("Please enter  Maida in grams"),
+    addedSugar: Yup.number().required("Please enter Added sugar in grams"),
+    saturatedFat: Yup.number().required("Please enter  Saturated fat in grams"),
+    fibre: Yup.string().required("Please enter  Fibre"),
+    remarks: Yup.string().required("Please enter Remarks"),
   
-});
+  });
 
 
-const NutrientList = () => {
+const FoodMasterList = () => {
 
 
     const [rowData, setRowData] = useState([]);
@@ -57,7 +58,7 @@ const NutrientList = () => {
 
     const [paginationPageSize, setPaginationPageSize] = useState(2);
 
-    const [foodname,setFoodname] = useState([{}]);
+    const [foodname,setFoodcode] = useState([{}]);
 
 
     // const [change, setChange] = useState("";)
@@ -69,15 +70,16 @@ const NutrientList = () => {
 
 
     const initialValues = {
-        // foodId:"",
+        foodCode:"",
         foodname:"",
         calories:"",
-        addedSugar:"",
-        maida:"",
-        quantityInGrams:"",
         proteins:"",
+        maida:"",
+        addedSugar:"",
+        saturatedFat:"",
         deepFried:"",
-        saturatedFats:"",
+        fibre:"",
+        remarks:"",
         
       };
 
@@ -93,7 +95,7 @@ const NutrientList = () => {
         resetForm
       } = useFormik({
         initialValues: initialValues,
-        validationSchema:NutrientValidationForm,
+        validationSchema: NutritionalvalueValidationForm,
         // onSubmit: (values, action) => {
         //     console.log(values);
         //     action.resetForm();
@@ -102,11 +104,11 @@ const NutrientList = () => {
 
             const fooddish = foodname.find(item => item.label === values.foodname);
             const dishid = fooddish ? fooddish.value : null;
-            values['foodId'] = values.foodname;
-            delete values.foodname;
+            values['foodId'] = values.foodName;
+            delete values.foodName;
             values.foodId = dishid;
         try {
-            const response = await axiosClientPrivate.post('/nutrients', values);
+            const response = await axiosClientPrivate.post('/nutritipnal-values', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -134,23 +136,25 @@ const NutrientList = () => {
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/nutrients/${id}`);
+          const response = await axiosClientPrivate.get(`/nutritipnal-values/${id}`);
             console.log(response.data);
 
             values.id = response.data.id;
             const updateDish = foodname.find(item => item.value == parseInt(response.data.foodId)).label;
-            values.foodname = String(updateDish);
+            values.foodName = String(updateDish);
 
 
             setFieldValue("id",response.data.id);
-            setFieldValue("foodname",String(updateDish));
+            // setFieldValue("foodCode",String(data.foodCode));
+            setFieldValue("foodName",String(updateDish));
             setFieldValue("calories",response.data.calories);
-            setFieldValue("addedSugar",response.data.addedSugar);
-            setFieldValue("maida",response.data.maida);
-            setFieldValue("quantityInGrams",response.data.quantityInGrams);
             setFieldValue("proteins",response.data.proteins);
+            setFieldValue("maida",response.data.maida);
+            setFieldValue("addedSugar",response.data.addedSugar);
+            setFieldValue("saturatedFat",response.data.saturatedFat);
             setFieldValue("deepFried",response.data.deepFried);
-            setFieldValue("saturatedFats",response.data.saturatedFats);
+            setFieldValue("fibre",response.data.fibre);
+            setFieldValue("remarks",response.data.remarks);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -163,12 +167,12 @@ const NutrientList = () => {
 
       const handleUpdate = async (id)=> {
         alert(id);
-        values.foodId = foodname.find(item => item.label == String(values.foodname)).value;
-        delete values.foodname;
+        values.foodId = foodname.find(item => item.label == String(values.foodName)).value;
+        delete values.foodName;
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/nutrients/${id}`,update);
+             await axiosClientPrivate.put(`/nutritipnal-values/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -190,7 +194,7 @@ const NutrientList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/nutrients/${id}`);
+           await axiosClientPrivate.delete(`/nutritipnal-values/${id}`);
         //    setRowData(prevData => prevData.filter(row => row.buId !== id));
         setFetchTrigger(prev => prev+1);
 
@@ -233,12 +237,11 @@ const NutrientList = () => {
                     //   return item.ailmentSysName;
                     // });
     
-                    const foodname = items.map((item)=>{
+                    const foodName = items.map((item)=>{
                       return {label : item.foodName,value : item.id};
                     });
     
-                    
-                    setFoodname(foodname);
+                    setFoodcode(foodName);
                     // console.log(ailment);
     
             } catch (err) {
@@ -260,7 +263,7 @@ const NutrientList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get(`http://localhost:8080/nutrients?page=0&size=${paginationPageSize}`, { signal: controller.signal });
+                const response = await axiosClientPrivate.get(`http://localhost:8080/nutritipnal-values?page=0&size=${paginationPageSize}`, { signal: controller.signal });
                 const items = response.data.content;
                     console.log("new",items);
                 setRowData(items);
@@ -279,9 +282,16 @@ const NutrientList = () => {
                 if (items.length > 0) {
 
                     const headerMappings = {
-                        vaccineName: "Vaccine Name",
-                        vaccineCompany : "Company",
-                        vaccineDesc : "Description",
+                        foodCode:" Food Code",
+                        foodName:" Food Name",
+                        calories:"Calories",
+                        proteins:"Proteins in grams",
+                        maida:"Maida in grams",
+                        addedSugar:" Added sugar in grams",
+                        saturatedFat:" Saturated fat in grams",
+                        deepFried:" Deep Fried",
+                        fibre:"Fibre",
+                        remarks:"Remarks",
                     };
 
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -316,7 +326,7 @@ const NutrientList = () => {
             controller.abort();
         };
 
-    }, [paginationPageSize,foodname,fetchTrigger,axiosClientPrivate]);
+    }, [paginationPageSize,fetchTrigger,axiosClientPrivate]);
 
 
      
@@ -324,30 +334,32 @@ const NutrientList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'Food name',"Quantity in grams","Calories","Protein","Added sugar","Deep fried","Maida","Saturated fats"]];
+        const header = [['Id', 'Food Code', 'Food Name',"Calories","Protein","Maida","Added sugar","Saturated fats","Deep fried","Fibre","Remarks"]];
         const tableData = rowData.map(item => [
           item.id,
-          item.foodId,
-          item.quantityInGrams,
+          item.foodCode,
+          item.foodName,
           item.calories,
           item.proteins,
-          item.addedSugar,
-          item.deepFried,
           item.maida,
+          item.addedSugar,
           item.saturatedFats,
+          item.deepFried,
+          item.fibre,
+          item.remarks,
           
           
         ]);
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20, // Start Y position for the table
-          theme: 'grid', // Optional theme for the table
-          margin: { top: 30 }, // Optional margin from top
+          startY: 20,
+          theme: 'grid', 
+          margin: { top: 30 }, 
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("NutrientList.pdf");
+        doc.save("FoodMasterList.pdf");
     };
 
 
@@ -356,7 +368,7 @@ const NutrientList = () => {
         const sheet = workbook.addWorksheet('My Sheet');
   
         const headerStyle = {
-          // font: { bold: true, size: 12 },
+  
           alignment: { horizontal: 'center' }
           
       };
@@ -365,40 +377,46 @@ const NutrientList = () => {
         
         const columnWidths = {
             id: 10,
-            foodId: 20,
-            quantityInGrams: 20,
+            foodCode: 20,
+            foodName: 20,
             calories: 25,
             proteins: 20,
-            addedSugar: 25,
-            deepFried: 25,
             maida: 20,
+            addedSugar: 25,
             saturatedFats: 25,
+            deepFried: 25,
+            fibre: 25,
+            remarks: 25,
       };
       
   
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "Food name", key: 'foodId', width: columnWidths.foodId, style: headerStyle },
-          { header: "Quantity in grams", key: 'quantityInGrams', width: columnWidths.quantityInGrams, style: headerStyle },
+          { header: "Food Code", key: 'foodCode', width: columnWidths.foodCode, style: headerStyle },
+          { header: "Food Name", key: 'foodName', width: columnWidths.foodName, style: headerStyle },
           { header: "Calories", key: 'calories', width: columnWidths.calories, style: headerStyle },
           { header: "Protein", key: 'proteins', width: columnWidths.proteins, style: headerStyle },
-          { header: "Added sugar", key: 'addedSugar', width: columnWidths.addedSugar, style: headerStyle },
-          { header: "Deep fried", key: 'deepFried', width: columnWidths.deepFried, style: headerStyle },
           { header: "Maida", key: 'maida', width: columnWidths.maida, style: headerStyle },
-          { header: "Saturated fats", key: 'saturatedFats', width: columnWidths.saturatedFats, style: headerStyle },          
+          { header: "Added sugar", key: 'addedSugar', width: columnWidths.addedSugar, style: headerStyle },
+          { header: "Saturated fats", key: 'saturatedFats', width: columnWidths.saturatedFats, style: headerStyle },
+          { header: "Deep fried", key: 'deepFried', width: columnWidths.deepFried, style: headerStyle },
+          { header: "Fibre", key: 'fibre', width: columnWidths.fibre, style: headerStyle },
+          { header: "Remarks", key: 'remarks', width: columnWidths.remarks, style: headerStyle },          
       ];
   
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
-                foodId: product.foodId,
-                quantityInGrams: product.quantityInGrams,
+                foodCode: product.foodCode,
+                foodName: product.foodName,
                 calories: product.calories,
                 proteins: product.proteins,
-                addedSugar: product.addedSugar,
-                deepFried: product.deepFried,
                 maida: product.maida,
+                addedSugar: product.addedSugar,
                 saturatedFats: product.saturatedFats,
+                deepFried: product.deepFried,
+                fibre: product.fibre,
+                remarks: product.remarks,
             })
         });
   
@@ -409,9 +427,8 @@ const NutrientList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'NutrientList.xlsx';
+            anchor.download = 'FoodMasterList.xlsx';
             anchor.click();
-            // anchor.URL.revokeObjectURL(url);
         })
     }
    
@@ -465,29 +482,16 @@ const [index,setIndex] = useState();
         <ToastContainer />
             <Box
                 className="ag-theme-quartz" 
-                style={{ height: '110vh' }}
+                style={{ height: "110vh" }}
             >
-            <EmpHealthDasboard />
+
                 <Stack sx={{ display: 'flex', flexDirection: 'row' }} marginY={1} paddingX={1}>
-                <ButtonGroup variant="contained" aria-label="Basic button group" >
-                <Link to="/PatientAndContact/:id">
-                <Button variant="contained" startIcon={<AddCircleOutlineRoundedIcon />} sx={{marginRight : "5px",}} >
-                Patient Profile
-               </Button>
-               </Link>
-               <Link to="/PatientAndContact/:id">
-                <Button variant="contained" startIcon={<AddCircleOutlineRoundedIcon />} sx={{marginRight : "5px"}} >
-                    Contact
-                </Button>
-                </Link>
-                </ButtonGroup>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '250px' }}>
-                    <Button variant="contained" endIcon={<AddCircleOutlineRoundedIcon />} onClick={() => { setOpenPopup(true) }} sx={{marginRight : "5px"}}>Add New</Button>
-                    <Button variant="contained" onClick={exportpdf} color="success" endIcon={<PictureAsPdfIcon/>}>PDF</Button>
-                    <Button variant="contained" onClick={()=> exportExcelfile()}  color="success" endIcon={<DownloadIcon/>} sx={{marginLeft : "5px"}}>Excel</Button>
-                </div>
-                
-                 
+                    <ButtonGroup variant="contained" aria-label="Basic button group">
+                        <Button variant="contained" endIcon={<AddCircleOutlineRoundedIcon />} onClick={() => { setOpenPopup(true) }}>Add New</Button>
+                        <Button variant="contained" onClick={exportpdf} color="success" endIcon={<PictureAsPdfIcon/>}>PDF</Button>
+                        <Button variant="contained" onClick={()=> exportExcelfile()}  color="success" endIcon={<DownloadIcon/>}>Excel</Button>
+                    </ButtonGroup>
+
                 </Stack>
 
                 <AgGridReact
@@ -515,13 +519,13 @@ const [index,setIndex] = useState();
 
             </Box>
 
-            <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Nutrition Master">
+            <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Nutrition Value Master">
 
-                <NutrientForm foodname={foodname} values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
+                <FoodMasterForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
                 
             </Popup>
         </>
     );
 };
 
-export default NutrientList;
+export default FoodMasterList;

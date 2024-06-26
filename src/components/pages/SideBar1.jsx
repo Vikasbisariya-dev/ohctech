@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import {
   Box,
-  // Typography,
+  Grid,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Divider,
+  Typography,
   IconButton,
   useMediaQuery,
   useTheme,
@@ -30,12 +31,12 @@ import {
 import Collapse from "@mui/material/Collapse";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExpandLess from "@mui/icons-material/ExpandLess";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+// import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Toolbar from "@mui/material/Toolbar";
 import { Link } from "react-router-dom";
 
-// import DutyRooster from '../../assets/images/DutyRooster.png';
+import DutyRooster from '../../assets/images/DutyRooster.png';
 // import Inventory from '../../assets/images/Inventory.png'
 import OPDSetupMaster from '../../assets/images/OPS Setup Master.png'
 // import StoreIssue from '../../assets/images/Store Issue.png'
@@ -44,17 +45,17 @@ import PatientManagement from '../../assets/images/Patient Management.png'
 import DataSetup from '../../assets/images/Data Setup.png'
 // import BioWaste from '../../assets/images/Bio-Waste.png'
 // import ChronicIllnessMaster from '../../assets/images/Chronic Illness Master.png'
-import Logout from '../../assets/images/Logout.png'
-
-
+import Logout from '../../assets/images/Logout.png';
+import Back from '../../assets/images/back.png';
 import useAxiosPrivate from "../../utils/useAxiosPrivate";
 // import { useNavigate } from "react-router-dom";
 import { useSessionStorage } from "../../utils/useSessionStorage";
 import { useEffect } from "react";
-import MuiDrawer from '@mui/material/Drawer';
+// import MuiDrawer from '@mui/material/Drawer';
 import DateTime from "./DateTime";
-
-const drawerWidth = 240;
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useRef } from "react";
+const drawerWidth = 250;
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -76,39 +77,27 @@ const closedMixin = (theme) => ({
   },
 });
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  // ...theme.mixins.toolbar,
-}));
+// const DrawerHeader = styled('div')(({ theme }) => ({
+  // display: 'flex',
+  // alignItems: 'center',
+  // justifyContent: 'flex-end',
+//   padding: theme.spacing(0, 1),
+//   // necessary for content to be below app bar
+//   // ...theme.mixins.toolbar,
+// }));
 
-const MiniDrawer = styled("div")(({ theme, open }) => ({
-  width: theme.spacing(7),
-  backgroundColor:"white",
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  border: "2px solid #dedede", // Add a 1px solid border
- ...(open && {
-   ...openedMixin(theme),
-  }),
- ...(!open && {
-   ...closedMixin(theme),
-  }),
-}));
 
-const SideBar1 = () => {
+
+const SideBar1 = ()=> {
 
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [isCollapse, setIsCollapse] = React.useState(false);
-  const [isopen,setIsOpen]=useState(false);
+  const [isCollapse, setIsCollapse] = useState(false);
+  const [isopen,setIsOpen] = useState(false);
   
+
   const handleCollapse = (index) => {
     setIsCollapse((prevOpen) => (prevOpen === index ? null : index));
   };
@@ -116,7 +105,7 @@ const SideBar1 = () => {
     setIsOpen((prevOpen) => (prevOpen === index ? null : index));
   };
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -125,6 +114,23 @@ const SideBar1 = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const MiniDrawer = styled("div")(({ theme, open }) => ({
+    width: isMobile ? "100vh" : 240,
+    height:"100vh",
+    backgroundColor:"white",
+    // flexShrink: 0,
+    transition: "width 0.2s ease-in-out",
+    // whiteSpace: "nowrap",
+    boxSizing: "border-box",
+    border: "1px solid #dedede", // Add a 1px solid border
+   ...(open && {
+     ...openedMixin(theme),
+    }),
+   ...(!open && {
+     ...closedMixin(theme),
+    }),
+  }));
 
   // const sidebararr = [
   //   {
@@ -222,7 +228,7 @@ const SideBar1 = () => {
 
 
   // vikas
-   //  cosnt [data,setData] = useState([]);
+    // cosnt [data,setData] = useState([]);
    const axiosClientPrivate = useAxiosPrivate();
    const [data, setData] = useState([]);
   //  const [hoveredCard, setHoveredCard] = useState(null); // State to track hovered card
@@ -238,7 +244,10 @@ const SideBar1 = () => {
   //  };
    // const navigate = useNavigate();
  
+   const runOnce = useRef(false);
+
    useEffect(() => {
+    let isMounted = true;
      const controller = new AbortController();
  
      const getRoles = async () => {
@@ -250,21 +259,31 @@ const SideBar1 = () => {
            }
          );
             console.log("side bar menu: ",response.data),
+            // setFetchTrigger(prev => prev+1);
          //   setData(JSON.stringify(response.data)); string
-         setData(response.data);
+        //  setData(response.data);
+        isMounted && setData(response.data);
        } catch (err) {
          console.error(err);
          setData([]);
        }
      };
- 
-     getRoles();
+
+     if(runOnce.current){
+      getRoles();
+     }
+     
  
      return () => {
+      isMounted = false;
        controller.abort();
+       runOnce.current = true;
      };
+
    }, [axiosClientPrivate, roleId]);
 
+
+console.log("menus",data);
 
 // new 
   
@@ -272,14 +291,15 @@ const SidebarMap = {
   DataSetup: DataSetup,
   OPDSetupMaster: OPDSetupMaster,
   PatientManagement : PatientManagement,
-//   CMO: chiefmedoff,
+  DutyRooster: DutyRooster,
 //   EMP : employee,
 //   PHY :  pharmacy
 };
 
 
+
   return (
-      <Box>
+      <Box >
       <MiniDrawer open={open}>
       {/* <Divider /> */}
       {/* <ListItem>
@@ -294,47 +314,57 @@ const SidebarMap = {
         <React.Fragment key={item.Id}>
           <ListItem disablePadding onClick={() => handleCollapse(index)}>
             <ListItemButton>
-              <ListItemIcon>
+               
+               <ListItemIcon>
                <img src={SidebarMap[item.iconText]} width="20"/>
               </ListItemIcon>
-              <ListItemText  primary={item.menuName} />
+              {/*<ListItemText  primary={item.menuName} />*/}
+              <ListItemText
+                primary={
+                  <Typography variant="body2" >
+                    {item.menuName}
+                  </Typography>
+                }
+              />
               {item.childMenus && (isCollapse === index ? <ExpandLess /> : <ExpandMore />)}
             </ListItemButton>
           </ListItem>
           {item.childMenus && (
             <Collapse in={isCollapse === index} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
+              <List  disablePadding sx={{ paddingLeft: '56px', margin : '0px' }} >
                 {item.childMenus.map((secondItem, childIndex) => (
-                  <React.Fragment key={secondItem.Id}>
+                  <React.Fragment key={secondItem.Id} >
                     <ListItem disablePadding onClick={() => handleOpen(childIndex)}>
-                      <ListItemButton to={`${secondItem.menuUrl}`}>
-                       {/* <ListItemIcon>
-                          <img src={met.images} width="20"/>
-                        </ListItemIcon>*/}
+                    
+                    <Link to={secondItem.menuUrl} >
+                    <ListItemButton sx={{  margin : '0px',paddingY: '0px' }} >
+                      {/*<ListItemText primary={secondItem.name} onClick={() => handleOpen(childIndex)} />*/}
+                      <ListItemText
+                      onClick={() => handleOpen(childIndex)}
+                      primary={
+                        <Typography variant="body2" style={{ color: 'gray' }}>
+                          {secondItem.name}
+                        </Typography>
+                      }
+                    />
 
-                        {/*<ListItemText primary={secondItem.name} />*/}
-                        
-                        <ListItemText primary={secondItem.name} />
-                      
-                        {secondItem.childMenus.length>0 ? secondItem.childMenus && (isopen === childIndex ? <ExpandLess /> : <ExpandMore />) : ''}
-                      </ListItemButton>
+                      {secondItem.childMenus.length > 0
+                        ? secondItem.childMenus && (isopen === childIndex ? <ExpandLess /> : <ExpandMore />)
+                        : ''}
+                    </ListItemButton> 
+                  </Link>
                     </ListItem>
                     {secondItem.childMenus && (
                       <Collapse in={isopen === childIndex} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding sx={{ paddingLeft: '56px' }}>
                           {secondItem.childMenus.map((thirdItem) => (
                             <ListItem key={thirdItem.Id} disablePadding>
-                              <ListItemButton to={`${secondItem.menuUrl}`}>
-                                {/* <ListItemIcon>
-                                  {met.images}
-                                </ListItemIcon> 
-
-                                <ListItemText primary={thirdItem.name} />*/}
-                                
-                                  <ListItemText primary={thirdItem.name} />
-                            
+                            <Link to={thirdItem.menuUrl} style={{ textDecoration: 'none', color: 'inherit' }}>
+                              <ListItemButton>
+                                <ListItemText primary={thirdItem.name} />
                               </ListItemButton>
-                            </ListItem>
+                            </Link>
+                          </ListItem>
                           ))}
                         </List>
                       </Collapse>
@@ -347,33 +377,57 @@ const SidebarMap = {
         </React.Fragment>
       ))}
      </List>
-
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
       <Toolbar>
-        <IconButton
-          color="inherit"
+     <Grid container direction="row" spacing={2}>
+       {/* <Grid item> */}
+       <IconButton
+          // color="inherit"
           aria-label="open drawer"
           onClick={handleDrawerOpen}
           edge="start"
           sx={{
-            marginRight: 5,
+            // marginRight: 5,
+            marginLeft: 0.5,
             ...(open && { display: 'none' }),
+            // justifyContent: 'flex-end',
           }}
         >
-          <ChevronRightIcon />
+          {open ? (
+            <img src={Back} width="25px" />
+          ) : (
+            <img src={Back} width="25px" />
+          )}
         </IconButton>
-        <center><DateTime/></center>
+        {open && (
+          <IconButton
+            aria-label="close drawer"
+            onClick={handleDrawerClose}
+            sx={{
+              marginLeft: 21,
+              // justifyContent: 'flex-end',
+            }}
+          >
+            <img src={Back} width="25px" />
+          </IconButton>
+        )}
+        {/* </Grid> */}
+        {/* <Grid item>
+          <Typography variant="body1" component="div" sx={{ ml: 3, mt: 1 }}>
+            <DateTime />
+          </Typography>
+        </Grid> */}
+      </Grid>
       </Toolbar>
-      <Divider />
+      
       <List>
-        <ListItem disablePadding>
+        <ListItem  sx={{ position: 'absolute', top: "450px", width: '100%',ml: 3 ,mt: -2}}>
+          <ListItemText primary={<DateTime />} />
+        </ListItem>
+        <Divider sx={{ position: 'absolute', top: "500px", width: '100%' }}/>
+        <ListItem disablePadding sx={{ position: 'absolute', top: "500px", width: '100%' }}>
           <ListItemButton>
             <ListItemIcon>
-              <img src={Logout} width="20"/>
+              <img src={Logout} width="20" />
             </ListItemIcon>
             <ListItemText primary="Logout" />
           </ListItemButton>

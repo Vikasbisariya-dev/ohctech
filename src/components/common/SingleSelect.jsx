@@ -43,7 +43,7 @@ import Autocomplete from '@mui/material/Autocomplete';
           options={arr}
           // getOptionLabel={(option) => option.label }  // This tells Autocomplete how to display each option
           // isOptionEqualToValue={(option, value) => option.value === value.value}
-          sx={{ width: 300 }}
+          sx={{ width: 250 }}
             value={value}
             type = {type}
             onChange={onChange}

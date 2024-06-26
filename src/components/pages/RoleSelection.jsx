@@ -71,7 +71,7 @@ const RoleSelection = () => {
     }
 
     updateSessionData({ roleId: id });
-    navigate("/adminHome");
+    navigate("/AdminDashboard");
   };
 
   //  Ending

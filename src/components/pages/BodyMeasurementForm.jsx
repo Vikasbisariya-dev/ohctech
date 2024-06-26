@@ -50,7 +50,7 @@ import {  Grid} from "@mui/material";
               <Input
                   label="In Kgs"
                   name="inKgs"
-                  type="text"
+                  type="number"
                   size="large"
                   sx={{ width: "300px" }}
                   value={values.inKgs}
