@@ -11,7 +11,7 @@ const AddFilterMasterForm = ({
   handleChange,
   setFieldValue,
   handleSubmit,
-}) => {
+}) =>{
     AddFilterMasterForm.propTypes = {
     values: PropTypes.object.isRequired,
     touched: PropTypes.object.isRequired,
