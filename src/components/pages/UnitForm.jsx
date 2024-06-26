@@ -36,22 +36,7 @@ const UnitForm = ({
           <Grid item xs={12}  justifyContent="center" alignItems="center">
             <FormControl fullWidth>
               <Grid container spacing={2} justifyContent="center" alignItems="center">
-                <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
-                  <Input
-                    label="Unit ID"
-                    name="id"
-                    type="number"
-                    size="large"
-                    value={values.id}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    helperText={
-                      errors.id && touched.id? (
-                        <span style={{ color: "red" }}>{errors.id}</span>
-                      ) : null
-                    }
-                  />
-                </Grid>
+                
                 <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
                   <Input
                     label="unit Name"
@@ -68,22 +53,7 @@ const UnitForm = ({
                     }
                   />
                 </Grid>
-                <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
-                  <Input
-                    label="Remarks"
-                    name="unitRemarks"
-                    type="text"
-                    size="large"
-                    value={values.unitRemarks}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    helperText={
-                      errors.unitRemarks && touched.unitRemarks? (
-                        <span style={{ color: "red" }}>{errors.unitRemarks}</span>
-                      ) : null
-                    }
-                  />
-                </Grid>
+                
               </Grid>
             </FormControl>
           </Grid>

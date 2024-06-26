@@ -21,9 +21,7 @@ import PropTypes from "prop-types";
 import * as Yup from 'yup';
 
 const UnitValidationForm = Yup.object({
-  id: Yup.string().required("Please enter unit id"),
   unitName: Yup.string().required("Please Enter unit name"),
-  unitRemarks: Yup.string().required("Please Enter Remarks"),
 });
 
 const UnitList = () => {
@@ -45,10 +43,7 @@ const UnitList = () => {
 
 
     const initialValues = {
-       
-        id:"",
         unitName:"",
-        unitRemarks:""
       };
 
 
@@ -70,7 +65,7 @@ const UnitList = () => {
         //   },
         onSubmit: async (values, {resetForm}) => {
         try {
-            const response = await axiosClientPrivate.post('/units', values);
+            const response = await axiosClientPrivate.post('/checkup-parameter-units', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -98,11 +93,10 @@ const UnitList = () => {
       const handleEdit = async (id) => {
         // alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/units/${id}`);
+          const response = await axiosClientPrivate.get(`/checkup-parameter-units/${id}`);
             console.log(response.data);
             setFieldValue("id",response.data.id);
             setFieldValue("unitName",response.data.unitName);
-            setFieldValue("unitRemarks",response.data.unitRemarks);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -118,7 +112,7 @@ const UnitList = () => {
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/units/${id}`,update);
+             await axiosClientPrivate.put(`/checkup-parameter-units/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -140,7 +134,7 @@ const UnitList = () => {
         // alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/units/${id}`);
+           await axiosClientPrivate.delete(`/checkup-parameter-units/${id}`);
         //    setRowData(prevData => prevData.filter(row => row.buId !== id));
         setFetchTrigger(prev => prev+1);
 
@@ -168,16 +162,15 @@ const UnitList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get(`http://localhost:8080/units?page=0&size=${paginationPageSize}`, { signal: controller.signal });
+                const response = await axiosClientPrivate.get(`http://localhost:8080/checkup-parameter-units?page=0&size=${paginationPageSize}`, { signal: controller.signal });
                 const items = response.data.content;
                     console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
 
                   const headerMappings = {
-                    id: "Unit ID",
+                 
                     unitName : "Unit Name",
-                    unitRemarks : "Remarks",
                 };
 
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -221,11 +214,10 @@ const UnitList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Unit ID', 'Unit Name',"Remarks"]];
+        const header = [['Unit ID', 'Unit Name']];
         const tableData = rowData.map(item => [
           item.id,
           item.unitName,
-          item.unitRemarks,
         ]);
         doc.autoTable({
           head: header,
@@ -262,7 +254,6 @@ const UnitList = () => {
         sheet.columns = [
           { header: "Unit ID", key: 'id', width: columnWidths.id, style: headerStyle },
           { header: "Unit Name", key: 'unitName', width: columnWidths.unitName, style: headerStyle },
-          { header: "Remarks", key: 'unitRemarks', width: columnWidths.unitRemarks, style: headerStyle },
           
       ];
   
@@ -270,7 +261,6 @@ const UnitList = () => {
             sheet.addRow({
                 id: product.id,
                 unitName: product.unitName,
-                unitRemarks: product.unitRemarks,
             })
         });
   
