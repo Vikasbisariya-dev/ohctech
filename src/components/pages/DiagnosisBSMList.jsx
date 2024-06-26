@@ -22,8 +22,8 @@ import 'jspdf-autotable';
 import * as Yup from 'yup';
 
  const bodysystemForm = Yup.object({
-    DiagnosisName: Yup.string().required("Please enter Diagnosis Name"),
-     BodySystem: Yup.string().required("Please enter Body System"),
+    diagnosis: Yup.string().required("Please enter Diagnosis Name"),
+    system: Yup.string().required("Please enter Body System"),
   });
 
 const DiagnosisBSMList = () => {
@@ -63,8 +63,7 @@ const DiagnosisBSMList = () => {
     const initialValues = {
         diagnosis : '',
         system : '',
-        lastModified: "",
-        modifiedBy: ""
+        
       };
 
       const {
@@ -312,16 +311,16 @@ useEffect(() => {
             
                     const headerMappings = {
                         diagnosis: "Diagnosis",
-                        system : "Dystem",
-                        lastModified : "Last Modified",
-                        modifiedBy : "Modified By",
+                        system : "System",
+                        
                     };
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        //filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
@@ -418,9 +417,9 @@ useEffect(() => {
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20, // Start Y position for the table
-          theme: 'grid', // Optional theme for the table
-          margin: { top: 30 }, // Optional margin from top
+          startY: 20, 
+          theme: 'grid', 
+          margin: { top: 30 }, 
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
@@ -434,7 +433,7 @@ useEffect(() => {
         
   
         const headerStyle = {
-          // font: { bold: true, size: 12 },
+          
           alignment: { horizontal: 'center' }
           
       };
@@ -471,7 +470,7 @@ useEffect(() => {
             anchor.href = url;
             anchor.download = 'DiagnosisBSMList.xlsx';
             anchor.click();
-            // anchor.URL.revokeObjectURL(url);
+           
         })
     }
 

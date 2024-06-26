@@ -179,15 +179,15 @@ const BussinessList = () => {
                         buName: "Bussiness Name",
                         buHeadName : "Bussiness Head Name",
                         buEmail : "Bussiness Email",
-                        lastModified : "Last Modified",
-                        modifiedBy : "Modified By",
+                        
                     };
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        //filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
@@ -222,7 +222,7 @@ const BussinessList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Bussiness Name',"Bussiness Head Name","Bussiness Email"]];
         const tableData = rowData.map(item => [
           item.buId,
           item.buName,
@@ -262,9 +262,9 @@ const BussinessList = () => {
   
         sheet.columns = [
           { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Bussiness Name", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Bussiness Head Name", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Bussiness Email", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
           
       ];
   
@@ -284,7 +284,7 @@ const BussinessList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'BussinessList.xlsx';
             anchor.click();
            
         })

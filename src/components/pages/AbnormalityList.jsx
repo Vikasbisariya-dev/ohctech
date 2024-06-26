@@ -134,9 +134,10 @@ const AbnormalityList = () => {
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        //filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
@@ -208,7 +209,7 @@ const AbnormalityList = () => {
       const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [["Id","Parameter value Name",'Wellness Progarms']];
+        const header = [["Id","Parameter Value Name",'Wellness Progarms']];
         const tableData = rowData.map(item => [
           item.id,
           item.abnormalityName,
@@ -223,7 +224,7 @@ const AbnormalityList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("AddDocDetailList.pdf");
+        doc.save("AbnoralitylList.pdf");
     };
 
 
@@ -241,24 +242,23 @@ const AbnormalityList = () => {
         
         const columnWidths = {
             id: 20,
-            ailmentName: 25,
-            ailmentDesc: 25,
-            ailmentCode: 25,
+            abnormalityName: 25,
+            wellnessProgram: 25,
+            
         };
   
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "Doctor", key: 'ailmentName', width: columnWidths.ailmentName, style: headerStyle },
-          { header: "Doctor Emp Code", key: 'ailmentDesc', width: columnWidths.ailmentDesc, style: headerStyle },
-          { header: "Doctor Details", key: 'ailmentCode', width: columnWidths.ailmentCode, style: headerStyle },
+          { header: "Parameter Value Name", key: 'abnormalityName', width: columnWidths.abnormalityName, style: headerStyle },
+          { header: "Wellness Progarms", key: 'wellnessProgram', width: columnWidths.wellnessProgram, style: headerStyle },
       ];
   
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
-                doctorName: product.doctorName,
-                doctorEmpId: product.doctorEmpId,
-                doctorDesc: product.doctorDesc,
+                abnormalityName: product.abnormalityName,
+                wellnessProgram: product.wellnessProgram,
+                
             })
         });
   
@@ -269,7 +269,7 @@ const AbnormalityList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'AddDocDetailList.xlsx';
+            anchor.download = 'AbnoralitylList.xlsx';
             anchor.click();
             
         })

@@ -150,9 +150,10 @@ const RefferalPointList = () => {
                         const  columns = Object.keys(items[0]).map(key => ({
                             field: key,
                             headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                            filter: true,
+                            //filter: true,
                             floatingFilter: true,
                             sortable: true,
+                            filter: 'agTextColumnFilter' ,
                             width: key === 'id' ? 100 : undefined,
                         }));
     
@@ -302,7 +303,8 @@ const RefferalPointList = () => {
                 const url = window.URL.createObjectURL(blob);
                 const anchor = document.createElement('a');
                 anchor.href = url;
-                anchor.download = 'ComplaintList.xlsx';
+               
+                anchor.download = 'RefferalPointList.xlsx';
                 anchor.click();
             })
         }

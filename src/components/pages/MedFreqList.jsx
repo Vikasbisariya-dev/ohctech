@@ -19,6 +19,12 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+// new
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+// public record MedicineFrequencyDto(Long id, String medicineFrequency, String frequencyDescription, Float qty, String displayOrder, Integer active, Integer isDefault) {
+
 
 import * as Yup from 'yup';
 
@@ -32,11 +38,6 @@ const MedValidationForm = Yup.object({
   });
 
 
-// new
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-
-// public record MedicineFrequencyDto(Long id, String medicineFrequency, String frequencyDescription, Float qty, String displayOrder, Integer active, Integer isDefault) {
 
 
 const MedFreqList = () => {
@@ -214,9 +215,6 @@ const MedFreqList = () => {
                         active: "status",
                         isDefault: "select default",
 
-                        vaccineName: "Vaccine Name",
-                        vaccineCompany : "Company",
-                        vaccineDesc : "Description",
 
                     };
 
@@ -283,8 +281,6 @@ const MedFreqList = () => {
 
         doc.save("MedFreqList.pdf");
 
-        doc.save("VaccineList.pdf");
-
     };
 
     const exportExcelfile = async () => {
@@ -341,8 +337,6 @@ const MedFreqList = () => {
             anchor.href = url;
 
             anchor.download = 'MedFreqList.xlsx';
-
-            anchor.download = 'VaccineList.xlsx';
 
             anchor.click();
         })

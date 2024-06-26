@@ -53,12 +53,7 @@ const DepartmentList = () => {
         departmentName : "",
         departmentHeadName : "",
         departmentEmail : "",
-        lastModified: "",
-        modifiedBy: ""
-        // DeptName: "",
-        // BussinessUnit: "",
-        // DeptHeadName: "",
-        // DeptHeadEmail:""
+        
      
       };
 
@@ -191,17 +186,18 @@ const DepartmentList = () => {
                 if (items.length > 0) {
 
                     const headerMappings = {
-                      buId: "Bussiness Id",
+                      buId: "Department Id",
                       departmentName : "Department Name",
                       departmentHeadName : "Department Head Name",
-                      departmentEmail : "Department Email",
+                      departmentEmail : "Department Head Email",
                     };
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        //filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
@@ -235,8 +231,9 @@ const DepartmentList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Bussiness Unit ID','Department Name',"Department Head Name","Department Head Email",'Department ID']];
+        const header = [["Id",'Department Id','Department Name',"Department Head Name","Department Head Email"]];
         const tableData = rowData.map(item => [
+          item.id,
           item.buId,
           item.departmentName,
           item.departmentHeadName,
@@ -267,6 +264,7 @@ const DepartmentList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
+            id: 20,
             buId: 15,
             departmentName: 25,
             departmentHeadName: 25,
@@ -274,7 +272,8 @@ const DepartmentList = () => {
       };
   
         sheet.columns = [
-          { header: "Bussiness Unit ID", key: 'buId', width: columnWidths.buId, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Department ID", key: 'buId', width: columnWidths.buId, style: headerStyle },
           { header: "Department Name", key: 'departmentName', width: columnWidths.departmentName, style: headerStyle },
           { header: "Department Head Name", key: 'departmentHeadName', width: columnWidths.departmentHeadName, style: headerStyle },
           { header: "Department Head Email", key: 'departmentEmail', width: columnWidths.departmentEmail, style: headerStyle },
@@ -283,6 +282,7 @@ const DepartmentList = () => {
   
         rowData.map(product =>{
             sheet.addRow({
+                id: product.id,
                 buId: product.buId,
                 departmentName: product.departmentName,
                 departmentHeadName: product.departmentHeadName,
@@ -298,7 +298,7 @@ const DepartmentList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'Department.xlsx';
+            anchor.download = 'DepartmentList.xlsx';
             anchor.click();
         })
     }
