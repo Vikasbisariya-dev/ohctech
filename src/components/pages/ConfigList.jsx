@@ -22,8 +22,8 @@ import PropTypes from "prop-types";
 import * as Yup from 'yup';
 
 const ConfigValidationForm = Yup.object({
-  keyname: Yup.string().required("Please enter the Key Name"),
-  valued: Yup.string().required("Please Enter the Value"),
+  keyName: Yup.string().required("Please enter the Key Name"),
+  value: Yup.string().required("Please Enter the Value"),
 
 });
 
@@ -47,8 +47,9 @@ const ConfigList = () => {
 
 
     const initialValues = {
-        keyname: "",
-        valued: ""
+        keyName: "",
+        value: "",
+        modifiedBy:""
       };
       const {
         values,
@@ -68,7 +69,7 @@ const ConfigList = () => {
         //   },
         onSubmit: async (values, {resetForm}) => {
         try {
-            const response = await axiosClientPrivate.post('/business-units', values);
+            const response = await axiosClientPrivate.post('/Config-units', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -96,12 +97,10 @@ const ConfigList = () => {
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/business-units/${id}`);
+          const response = await axiosClientPrivate.get(`/Config-units/${id}`);
             console.log(response.data);
-            setFieldValue("buEmail",response.data.buEmail);
-            setFieldValue("buHeadName",response.data.buHeadName);
-            setFieldValue("buId",response.data.buId);
-            setFieldValue("buName",response.data.buName);
+            setFieldValue("Key Name",response.data.keyName);
+            setFieldValue("Value",response.data.value);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -117,7 +116,7 @@ const ConfigList = () => {
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/business-units/${id}`,update);
+             await axiosClientPrivate.put(`/Config-units/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -139,7 +138,7 @@ const ConfigList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/business-units/${id}`);
+           await axiosClientPrivate.delete(`/Config-units/${id}`);
         //    setRowData(prevData => prevData.filter(row => row.buId !== id));
         setFetchTrigger(prev => prev+1);
     } catch (error) {
@@ -166,22 +165,29 @@ const ConfigList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get('business-units', { signal: controller.signal });
+                const response = await axiosClientPrivate.get('Config-units', { signal: controller.signal });
                 const items = response.data.content;
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
+                  const headerMappings = {
+                    keyName: "Key Name",
+                    value: "Value",
+                };
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                        //filter: true,
                         floatingFilter: true,
-                        sortable: true
+                        sortable: true,
+                        filter: 'agTextColumnFilter' ,
+                        width: key === 'id' ? 100 : undefined,
+                   
                     }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
-                            const id = params.data.buId;
+                            const id = params.data.id;
                             return <CustomActionComponent id={id} />
                         }
                     });
@@ -211,12 +217,11 @@ const ConfigList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'keyName',"value"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.keyName,
+          item.value,
           
         ]);
         doc.autoTable({
@@ -228,7 +233,7 @@ const ConfigList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("ConfigList.pdf");
     };
 
 
@@ -247,25 +252,22 @@ const ConfigList = () => {
         
         const columnWidths = {
             Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            keyName: 20,
+            value: 15,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Key Name", key: 'keyName', width: columnWidths.keyName, style: headerStyle },
+          { header: "value", key: 'value', width: columnWidths.value, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                Id: product.Id,
+                keyName: product.keyName,
+                value: product.value,
             })
         });
   
@@ -276,7 +278,7 @@ const ConfigList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'ConfigList.xlsx';
             anchor.click();
             
         })

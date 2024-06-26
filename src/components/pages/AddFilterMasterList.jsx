@@ -44,10 +44,10 @@ const AddFilterMasterList = () => {
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
 
-    const initialValues = {
-       
+    const initialValues = { 
         filterName:"",
         filterCode:"",
+        modifiedBy:"",
       };
 
 
@@ -69,14 +69,14 @@ const AddFilterMasterList = () => {
         //   },
         onSubmit: async (values, {resetForm}) => {
         try {
-            const response = await axiosClientPrivate.post('/business-units', values);
+            const response = await axiosClientPrivate.post('/filters-units', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
-                   // getting id(key,value) of last index
-            //     const id = rowData[rowData.length-1].buId;
+                   // getting id(filterCode) of last index
+            //     const id = rowData[rowData.length-1].filterCode;
             //     const obj = {
-            //         buId : id+1,
+            //         filterCode : id+1,
             //         ...values
             //     }
             //  console.log(obj);
@@ -97,12 +97,10 @@ const AddFilterMasterList = () => {
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/business-units/${id}`);
+          const response = await axiosClientPrivate.get(`/filters-units/${id}`);
             console.log(response.data);
-            setFieldValue("buEmail",response.data.buEmail);
-            setFieldValue("buHeadName",response.data.buHeadName);
-            setFieldValue("buId",response.data.buId);
-            setFieldValue("buName",response.data.buName);
+            setFieldValue("filterName",response.data.filterName);
+            setFieldValue("filterCode",response.data.filterCode);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -118,7 +116,7 @@ const AddFilterMasterList = () => {
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/business-units/${id}`,update);
+             await axiosClientPrivate.put(`/filters-units/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -140,8 +138,8 @@ const AddFilterMasterList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/business-units/${id}`);
-        //    setRowData(prevData => prevData.filter(row => row.buId !== id));
+           await axiosClientPrivate.delete(`/filters-units/${id}`);
+        //    setRowData(prevData => prevData.filter(row => row.filterCode !== id));
         setFetchTrigger(prev => prev+1);
 
        } catch (error) {
@@ -168,22 +166,31 @@ const AddFilterMasterList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get('business-units', { signal: controller.signal });
+                const response = await axiosClientPrivate.get('filters-units', { signal: controller.signal });
                 const items = response.data;
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
+                  const headerMappings = {
+                    filterName: "Filter Name",
+                    filterCode: "Filter Code",
+                  };
+
+
+
                    const  columns = Object.keys(items[0]).map(key => ({
-                        field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
-                        floatingFilter: true,
-                        sortable: true
+                          field: key,
+                          headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                        // filter: true,
+                          floatingFilter: true,
+                          sortable: true,
+                          filter: 'agTextColumnFilter' ,
+                          width: key === 'id' ? 100 : undefined,
                     }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
-                            const id = params.data.buId;
+                            const id = params.data.filterCode;
                             return <CustomActionComponent id={id} />
                         }
                     });
@@ -212,7 +219,7 @@ const AddFilterMasterList = () => {
 
     const exportpdf = async () => {     
         const doc = new jsPDF();
-        const header = [['Id', 'filterName',"filterCode",]];
+        const header = [['Id', 'Filter Name',"Filter Code",]];
         const tableData = rowData.map(item => [
           item.Id,
           item.filterName,
@@ -251,9 +258,9 @@ const AddFilterMasterList = () => {
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "filterName", key: 'filterName', width: columnWidths.buName, style: headerStyle },
-          { header: "filterCode", key: 'filterCode', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Filter Name", key: 'filterName', width: columnWidths.filterName, style: headerStyle },
+          { header: "Filter Code", key: 'filterCode', width: columnWidths.filterCode, style: headerStyle },
           
       ];
   

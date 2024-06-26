@@ -1,13 +1,7 @@
-import { FormControl, Grid, TextField } from "@mui/material";
+import { FormControl, Grid} from "@mui/material";
 import PropTypes from "prop-types";
 import Input from "../common/Input";
-import SingleSelect from "../common/SingleSelect"
-import MultipleSelect from "../common/MultipleSelect";
-import { InputLabel, MenuItem, Select } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import { useState } from "react";
-import MultiCheckbox from "./MultiCheckbox";
-//import Select from "@mui/material";
+
 const ConfigForm = ({
   values,
   touched,
@@ -26,11 +20,6 @@ const ConfigForm = ({
     setFieldValue: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
-
-  //const ohcselect = ["Student", "Employee"];
- // const adroute=["ICU","Personal Clinic","Government Hospital"];
-  //const dename=["AED","Blood Pressure Monitors","Nebulizers","Oxygen canisters"];
- 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <form onSubmit={handleSubmit}>
@@ -41,16 +30,16 @@ const ConfigForm = ({
               <Grid container spacing={2} justifyContent="center" alignItems="center">
                 <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
                 <Input
-                    label="Enter key  Name"
-                    name="keyname"
+                    label="Enter key Name"
+                    name="keyName"
                     type="text"
                     size="large"
-                    value={values.keyname}
+                    value={values.keyName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     helperText={
-                      errors.keyname && touched.keyname? (
-                        <span style={{ color: "red" }}>{errors.keyname}</span>
+                      errors.keyName && touched.keyName? (
+                        <span style={{ color: "red" }}>{errors.keyName}</span>
                       ) : null
                     }
                   />
@@ -58,15 +47,15 @@ const ConfigForm = ({
                 <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
                 <Input
                     label="Enter value"
-                    name="valued"
+                    name="value"
                     type="text"
                     size="large"
-                    value={values.valued}
+                    value={values.value}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     helperText={
-                      errors.valued && touched.valued? (
-                        <span style={{ color: "red" }}>{errors.valued}</span>
+                      errors.value && touched.value? (
+                        <span style={{ color: "red" }}>{errors.value}</span>
                       ) : null
                     }
                   />
