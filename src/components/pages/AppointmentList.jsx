@@ -223,12 +223,13 @@ const AppointmentList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'Slot start',"buHeadName","buEmail"]];
+        const header = [['Id', 'Slot Start',"Slot End","Slot Count","App Type"]];
         const tableData = rowData.map(item => [
           item.id,
           item.slot,
-          item.buHeadName,
-          item.buEmail,
+          item.slotEnd,
+          item.slotCount,
+          item.appType,
           
         ]);
         doc.autoTable({
@@ -258,26 +259,29 @@ const AppointmentList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            slot: 20,
+            slotEnd: 15,
+            slotCount: 25,
+            appType: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Slot Start", key: 'slot', width: columnWidths.slot, style: headerStyle },
+          { header: "Slot End", key: 'slotEnd', width: columnWidths.slotEnd, style: headerStyle },
+          { header: "Slot Count", key: 'slotCount', width: columnWidths.slotCount, style: headerStyle },
+          { header: "App Type", key: 'appType', width: columnWidths.appType, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                slot: product.slot,
+                slotEnd: product.slotEnd,
+                slotCount: product.slotCount,
+                appType: product.appType,
             })
         });
   
