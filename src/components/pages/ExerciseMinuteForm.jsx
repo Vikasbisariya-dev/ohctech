@@ -1,14 +1,15 @@
 import Input from "../common/Input";
 import PropTypes from "prop-types";
 import {  Grid} from "@mui/material";
-// import SingleSelect from "../common/SingleSelect";
+import SingleSelect from "../common/SingleSelect";
 
  const ExerciseMinuteForm = ({values,
   touched,
   handleBlur,
   errors,
   handleChange,
-//   setFieldValue,
+  setFieldValue,
+exercise,
   handleSubmit,}) => {
 
 
@@ -28,24 +29,36 @@ import {  Grid} from "@mui/material";
           <form onSubmit={handleSubmit}>
               <Grid container spacing={2} justifyContent="center" alignItems="center">
               <Grid item  xs={12} sm={12} spacing={1}  container  justifyContent="center"   alignItems="center">
-              <Input
-                  label="Exercise Name"
-                  name="exerciseName"
-                  type="text"
-                  size="large"
-                  sx={{ width: "300px" }}
-                  value={values.exerciseName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  helperText={
-                    errors.exerciseName && touched.exerciseName ? (
-                      <span style={{ color: "red" }}>
-                        {errors.exerciseName}
-                      </span>
-                    ) : null
-                  }
-                />
-              </Grid>
+                <SingleSelect
+                    arr={exercise}
+                    label="Exercise Name"
+                    name="exercisename"
+                    value={values.exercisename}
+                    sx={{ width: '250px' }}
+                    // onChange={(event, newValue) => {
+                    //   const syntheticEvent = {
+                    //     target: {
+                    //       name: "exercisename",
+                    //       value: newValue,
+                    //     },
+                    //   };
+                    //   handleChange(syntheticEvent);
+                    // }}
+                    // handleChange ={handleChange}
+
+                    onChange={(event, newValue) => {
+                      setFieldValue('exercisename', newValue ? newValue.label : '');
+                    }}
+
+                    onBlur={handleBlur}
+                    type="text"
+                    helperText={
+                      errors.exercisename && touched.exercisename ? (
+                        <span style={{ color: "red" }}>{errors.exercisename}</span>
+                      ) : null
+                    }
+                  />
+                </Grid>
               <Grid item  xs={12} sm={12} spacing={1}  container  justifyContent="center"   alignItems="center">
               <Input
                   label="Minutes"

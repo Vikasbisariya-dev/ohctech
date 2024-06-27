@@ -7,7 +7,6 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-import SectionForm from './SectionForm';
 //import { sectionForm } from './Validationform';
 import { useFormik } from "formik";
 // import { WidthFull } from '@mui/icons-material';
@@ -19,52 +18,16 @@ import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import FoodNutritionMappingForm from './FoodNutritionMappingForm';
-const FoodNutrients = [
-    {
-      name: "Carbohydrates",
-      // value: "Carbohydrate",
-      label: "Enter the name of Carbohydrates",
-    },
-    {
-      name: "Proteins",
-      // value: "Protein",
-      label: "Enter the name of Proteins",
-    },
-    {
-      name: "Vitamins",
-      // value: "Protein",
-      label: "Enter the name of Vitamins",
-    },
-    {
-      name: "Minrals",
-      // value: "Protein",
-      label: "Enter the name of Minrals",
-    },
-    {
-      name: "Fats",
-      // value: "Protein",
-      label: "Enter the name of Fats",
-    },
-  
-    {
-      name: "Calcium",
-      // value: "Protein",
-      label: "Enter the name of Calcium",
-    },
-    {
-      name: "Dietary fibre",
-      // value: "Protein",
-      label: "Enter the name of Dietary fibre",
-    },
-  ];
-  const validationSchema = Yup.object().shape(
-    FoodNutrients.reduce((schema, item) => {
-      schema[item.name] = Yup.string().required(`Please enter ${item.name}`);
-      return schema;
-    }, {})
-  );
+ 
+
+  // const validationSchema = Yup.object().shape(
+  //   FoodNutrients.reduce((schema, item) => {
+  //     schema[item.name] = Yup.string().required(`Please enter ${item.name}`);
+  //     return schema;
+  //   }, {})
+  // );
 
 const FoodNutritionMappingList = () => {
 
@@ -82,14 +45,31 @@ const FoodNutritionMappingList = () => {
 
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
+    const [foodname,setFoodname] = useState([{}]);
 
-    const initialValues = FoodNutrients.reduce((values, item) => {
-        values[item.name] = "";
+    const [nutrient,setNutrient] = useState([{}]);
+
+    const [nutrientmap,setNutrientmap] = useState({});
+
+
+        // console.log("intit",nutrient);
+    const initialValues = nutrient.reduce((values, item) => {
+      values[item.label] = "";
         return values;
-      }, {});
+      }, { foodMasterId : "",
+        lastModified: "",
+        modifiedBy: ""});
 
-    
-    
+      // initialValues = {
+      //     foodMasterId : "",
+      //     lastModified: "",
+      //     modifiedBy: ""
+      // }
+      
+
+      // console.log("is empty ",values);
+      
+      
       const {
         values,
         touched,
@@ -101,37 +81,144 @@ const FoodNutritionMappingList = () => {
         resetForm
       } = useFormik({
         initialValues: initialValues,
-        validationSchema: validationSchema,
-        // onSubmit: (values, action) => {
-        //     console.log(values);
-            
-        //   },
-          onSubmit: async (values, {resetForm}) => {
-             console.log(values);
-             resetForm();
-            try {
-                const response = await axiosClientPrivate.post('/foodnutrients', values);
-                toast.success("Saved Successfully!",{
-                    position:"top-center"
-                 });  
-                       // getting id(key,value) of last index
-                //     const id = rowData[rowData.length-1].buId;
-                //     const obj = {
-                //         buId : id+1,
-                //         ...values
-                //     }
-                //  console.log(obj);
-                //  setRowData(rowData => [...rowData, obj]);
-                setFetchTrigger(prev => prev+1);
+        // validationSchema: validationSchema,
+        onSubmit: (values) => {
+          console.log(" value",values);
 
-                console.log('Response:', response.data);
-                resetForm();
-              } catch (error) {
-                console.log(values);
-                console.error('Error:', error);
-              }
-            },
+
+        //  delete values.undefined
+          //  const nutrientValues = {};
+
+          //  console.log(values["Protein"]);
+
+          //  for (const key in values) {
+          //       nutrientValues[nutrientmap[key]] = values[key];
+          //   }
+
+          //   delete nutrientValues.undefined
+          //   console.log("final value",nutrientValues);
+            // console.log("final value",values);
+            
+          },
+          // onSubmit: async (values, {resetForm}) => {
+          //    console.log(values);
+          //    resetForm();
+          //   try {
+          //       const response = await axiosClientPrivate.post('/foodnutrients', values);
+          //       toast.success("Saved Successfully!",{
+          //           position:"top-center"
+          //        });  
+          //              // getting id(key,value) of last index
+          //       //     const id = rowData[rowData.length-1].buId;
+          //       //     const obj = {
+          //       //         buId : id+1,
+          //       //         ...values
+          //       //     }
+          //       //  console.log(obj);
+          //       //  setRowData(rowData => [...rowData, obj]);
+          //       setFetchTrigger(prev => prev+1);
+
+          //       console.log('Response:', response.data);
+          //       resetForm();
+          //     } catch (error) {
+          //       console.log(values);
+          //       console.error('Error:', error);
+          //     }
+          //   },
       });
+
+      // console.log("is empty1 ",values);
+
+      useEffect(() => {
+        const controller = new AbortController();
+    
+        const getAllOhc = async () => {
+            try {
+                const response = await axiosClientPrivate.get('http://localhost:8080/foods', { signal: controller.signal });
+                const items = response.data.content;
+                    console.log("food name :-",items);
+    
+                    // const newDiagnosisMap = new Map();
+                    // items.forEach(item => newDiagnosisMap.set(item.ailmentSysName, item.id));
+                    // setBodysystem(newDiagnosisMap);
+    
+                    // console.log(diagnosisMap.size);
+                    // const ailment = items.map((item)=>{
+                    //   // diagnosisMap.set(item.id,item.ailmentSysName);
+                    //   return item.ailmentSysName;
+                    // });
+    
+                    const foodName = items.map((item)=>{
+                      return {label : item.foodName,value : item.id};
+                    });
+    
+                    setFoodname(foodName);
+                    // console.log(ailment);
+    
+            } catch (err) {
+                console.error("Failed to fetch data: ", err);
+            }
+        };
+    
+        getAllOhc();
+    
+        return () => {
+            controller.abort();
+        };
+    
+    }, []);
+
+      useEffect(() => {
+        const controller = new AbortController();
+    
+        const getAllOhc = async () => {
+            try {
+                const response = await axiosClientPrivate.get('http://localhost:8080/nutrient-masters', { signal: controller.signal });
+                const items = response.data.content;
+                    console.log("food name :-",items);
+    
+                    // const newDiagnosisMap = new Map();
+                    // items.forEach(item => newDiagnosisMap.set(item.ailmentSysName, item.id));
+                    // setBodysystem(newDiagnosisMap);
+    
+                    // console.log(diagnosisMap.size);
+                    // const ailment = items.map((item)=>{
+                    //   // diagnosisMap.set(item.id,item.ailmentSysName);
+                    //   return item.ailmentSysName;
+                    // });
+
+                    const nutrientMap = {};
+                      items.forEach(item => {
+                        nutrientMap[item.nutrientName] = item.id;
+                      });
+
+                    // console.log("checkkkk",nutrientMap);
+                    setNutrientmap(nutrientMap);
+
+
+
+    
+                    const options = items.map((item)=>{
+                      return {label : item.nutrientName,value : item.id};
+                    });
+    
+                    
+                    setNutrient(options);
+                    // console.log(ailment);
+    
+            } catch (err) {
+                console.error("Failed to fetch data: ", err);
+            }
+        };
+    
+        getAllOhc();
+    
+        return () => {
+            controller.abort();
+        };
+    
+    }, []);
+
 
    // to delete a row
    const handleDeleteRow = async (id) => {
@@ -365,9 +452,9 @@ const CustomActionComponent = ({id}) => {
                 />
             </Box>
 
-            <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Nutrition Form ">
+            <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Food Nutrition mapping form">
 
-                <FoodNutritionMappingForm FoodNutrients={FoodNutrients} values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
+                <FoodNutritionMappingForm nutrient={nutrient} foodname={foodname}  values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
                 
             </Popup>
         </>

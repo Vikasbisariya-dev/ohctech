@@ -35,7 +35,7 @@ import SingleSelect from "../common/SingleSelect";
               
               <Grid item  xs={12} sm={12} spacing={1}  container  justifyContent="center"   alignItems="center">
               <Input
-                  label="Food Name"
+                  label="Nutrient Name"
                   name="nutrientName"
                   type="text"
                   size="large"

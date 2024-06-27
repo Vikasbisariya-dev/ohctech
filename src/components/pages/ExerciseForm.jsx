@@ -33,16 +33,16 @@ const ExerciseForm = ({
                 <Grid item xs={12}  container spacing={1} justifyContent="center" alignItems="center">
                   <Input
                     label="Enter Exercise Name"
-                    name="exercisename"
+                    name="exerciseName"
                     type="text"
                     size="large"
-                    value={values.exercisename}
+                    value={values.exerciseName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     helperText={
-                      errors.exercisename && touched.exercisename ? (
+                      errors.exerciseName && touched.exerciseName ? (
                         <span style={{ color: "red" }}>
-                          {errors.exercisename}
+                          {errors.exerciseName}
                         </span>
                       ) : null
                     }

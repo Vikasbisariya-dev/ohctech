@@ -116,7 +116,7 @@ const NutrientUnitList = () => {
         // alert(id);
         try {
           const response = await axiosClientPrivate.get(`/nutrient-masters/${id}`);
-
+            console.log(response.data);
 
             values.id = response.data.id;
             const updateDish = unit.find(item => item.value == parseInt(response.data.unitId)).label;
@@ -262,9 +262,6 @@ useEffect(() => {
                 else{
                     console.log("Not found!");
                 }
-
-
-
 
                 if (items.length > 0) {
 

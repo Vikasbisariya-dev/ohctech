@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-import ExerciseMinuteForm from './ExerciseMinuteForm';
+import ExerciseForm from './ExerciseForm';
 // import { VaccineValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,12 +25,11 @@ import * as Yup from 'yup';
 
 const ExerciseMinuteValidationForm = Yup.object({
     exerciseName: Yup.string().required("Please Enter Exercise Name "),
-    minutes: Yup.string().required("Please Enter Minutes "),
   
 });
 
 
-const ExerciseMinuteList = () => {
+const ExerciseList = () => {
 
 
     const [rowData, setRowData] = useState([]);
@@ -55,7 +54,6 @@ const ExerciseMinuteList = () => {
 
     const initialValues = {
         exerciseName:"",
-        minutes:"",
       };
 
 
@@ -109,7 +107,6 @@ const ExerciseMinuteList = () => {
             console.log(response.data);
             setFieldValue("id",response.data.id);
             setFieldValue("exerciseName",response.data.exerciseName);
-            setFieldValue("minutes",response.data.minutes);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -187,7 +184,6 @@ const ExerciseMinuteList = () => {
 
                     const headerMappings = {
                         exerciseName: "Exercise Name",
-                        minutes : "Minutes",
                     };
 
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -232,11 +228,10 @@ const ExerciseMinuteList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id', 'Exercise Name',"Minutes"]];
+        const header = [['Id', 'Exercise Name']];
         const tableData = rowData.map(item => [
           item.id,
           item.exerciseName,
-          item.minutes,          
         ]);
         doc.autoTable({
           head: header,
@@ -247,7 +242,7 @@ const ExerciseMinuteList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("ExerciseMinuteList.pdf");
+        doc.save("ExerciseList.pdf");
     };
 
 
@@ -274,16 +269,13 @@ const ExerciseMinuteList = () => {
         //                 minutes : "Minutes",
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "Exercise Name", key: 'exerciseName', width: columnWidths.exerciseName, style: headerStyle },
-          { header: "Minutes", key: 'minutes', width: columnWidths.minutes, style: headerStyle },
-          
+          { header: "Exercise Name", key: 'exerciseName', width: columnWidths.exerciseName, style: headerStyle },          
       ];
   
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
                 exerciseName: product.exerciseName,
-                minutes: product.minutes,
             })
         });
   
@@ -294,7 +286,7 @@ const ExerciseMinuteList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'ExerciseMinuteList.xlsx';
+            anchor.download = 'ExerciseList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })
@@ -389,11 +381,11 @@ const [index,setIndex] = useState();
 
             <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Exercise Minutes Master">
 
-                <ExerciseMinuteForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
+                <ExerciseForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
                 
             </Popup>
         </>
     );
 };
 
-export default ExerciseMinuteList;
+export default ExerciseList;
