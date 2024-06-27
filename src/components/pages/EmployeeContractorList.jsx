@@ -152,9 +152,10 @@ const EmployeeContractorList = () => {
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        //filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
@@ -232,8 +233,9 @@ const EmployeeContractorList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [["Employer/Contractor","Code",'Address',"Contact","Email","Remarks"]];
+        const header = [["Id","Employer/Contractor","Code",'Address',"Contact","Email","Remarks"]];
         const tableData = rowData.map(item => [
+          item.id,
           item.employerContractorName,
           item.employerContractorCode,
           item.employerContractorAddress,
@@ -267,15 +269,17 @@ const EmployeeContractorList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
+            id: 20,
             employerContractorName: 20,
             employerContractorCode: 20,
             employerContractorAddress: 15,
             employerContractorContact: 25,
-               employerContractorEmail : 25,
-               employerContractorDesc : 25
+            employerContractorEmail : 25,
+            employerContractorDesc : 25
         };
   
         sheet.columns = [
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
           { header: "Employer/Contractor", key: 'employerContractorName', width: columnWidths.employerContractorName, style: headerStyle },
           { header: "Code", key: 'employerContractorCode', width: columnWidths.employerContractorCode, style: headerStyle },
           { header: "Address", key: 'employerContractorAddress', width: columnWidths.employerContractorAddress, style: headerStyle },
@@ -287,6 +291,7 @@ const EmployeeContractorList = () => {
   
         rowData.map(product =>{
             sheet.addRow({
+                id: product.id,
                 employerContractorName: product.employerContractorName,
                 employerContractorCode: product.employerContractorCode,
                 employerContractorAddress: product.employerContractorAddress,

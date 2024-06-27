@@ -146,9 +146,10 @@ const DiagnosisList = () => {
                        const  columns = Object.keys(items[0]).map(key => ({
                             field: key,
                             headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                            filter: true,
+                            //filter: true,
                             floatingFilter: true,
                             sortable: true,
+                            filter: 'agTextColumnFilter' ,
                             width: key === 'id' ? 100 : undefined,
                         }));
     
@@ -224,7 +225,7 @@ const DiagnosisList = () => {
           const exportpdf = async () => {
             
             const doc = new jsPDF();
-            const header = [["Id","Ailment Name",'Ailment Desc',"Ailment code","Is Active"]];
+            const header = [["Id","Ailment Name",'Ailment Desc',"Ailment Code","Is Active"]];
             const tableData = rowData.map(item => [
               item.id,
               item.ailmentName,
@@ -270,7 +271,7 @@ const DiagnosisList = () => {
               { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
               { header: "Ailment Name", key: 'ailmentName', width: columnWidths.ailmentName, style: headerStyle },
               { header: "Ailment Desc", key: 'ailmentDesc', width: columnWidths.ailmentDesc, style: headerStyle },
-              { header: "Ailment code", key: 'ailmentCode', width: columnWidths.ailmentCode, style: headerStyle },
+              { header: "Ailment Code", key: 'ailmentCode', width: columnWidths.ailmentCode, style: headerStyle },
               { header: "Is Active", key: 'isActive', width: columnWidths.isActive, style: headerStyle },
           ];
       

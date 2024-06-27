@@ -213,7 +213,7 @@ const AmbulanceItemList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', ' issueto'," ohclocation"," itemcatagories"]];
+        const header = [['Id', ' Issue to'," Ohc Location"," Item Catagories"]];
         const tableData = rowData.map(item => [
           item.Id,
           item.issueto,
@@ -256,9 +256,9 @@ const AmbulanceItemList = () => {
   
         sheet.columns = [
           { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
-          { header: " issueto", key: ' issueto', width: columnWidths. issueto, style: headerStyle },
-          { header: "  ohclocation", key: '  ohclocation', width:  columnWidths.ohclocation, style: headerStyle },
-          { header: " itemcatagories", key: ' itemcatagories', width: columnWidths. itemcatagories, style: headerStyle },    
+          { header: " Issue to", key: ' issueto', width: columnWidths. issueto, style: headerStyle },
+          { header: "  Ohc Location", key: '  ohclocation', width:  columnWidths.ohclocation, style: headerStyle },
+          { header: " Item Catagories", key: ' itemcatagories', width: columnWidths. itemcatagories, style: headerStyle },    
       ];
   
         rowData.map(product =>{
@@ -277,7 +277,7 @@ const AmbulanceItemList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'AmbulanceItemList.xlsx';
             anchor.click();
             
         })

@@ -214,12 +214,13 @@ const AmbulanceList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Ambulance number',"Ambulance form","Ambulances","Cardiacs"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.Id,
+          item.ambulancenumber,
+          item.ambulanceform,
+          item.ambulances,
+          item.cardiacs,
           
         ]);
         doc.autoTable({
@@ -249,25 +250,28 @@ const AmbulanceList = () => {
         
         const columnWidths = {
             Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            ambulancenumber: 20,
+            ambulanceform: 15,
+            ambulances: 25,
+            cardiacs: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Ambulance number", key: 'ambulancenumber', width: columnWidths.ambulancenumber, style: headerStyle },
+          { header: "Ambulance form", key: 'ambulanceform', width: columnWidths.ambulanceform, style: headerStyle },
+          { header: "Ambulances", key: 'ambulances', width: columnWidths.ambulances, style: headerStyle },
+          { header: "Cardiacs", key: 'cardiacs', width: columnWidths.cardiacs, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                Id: product.Id,
+                ambulancenumber: product.ambulancenumber,
+                ambulanceform: product.ambulanceform,
+                ambulances: product.ambulances,
+                cardiacs: product.cardiacs,
             })
         });
   

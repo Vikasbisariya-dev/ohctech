@@ -212,12 +212,14 @@ const AddCityList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id','City', 'Ac PerKM Cost',"Ac Ambulance Charge","NonAc PerKM Cost","NonAc Ambulance Charge"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.city,
+          item.AcPerKMCost,
+          item.AcAmbulanceCharge,
+          item.NonAcPerKMCost,
+          item.NonAcAmbulanceCharge,
           
         ]);
         doc.autoTable({
@@ -246,26 +248,32 @@ const AddCityList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            city: 20,
+            AcPerKMCost: 15,
+            AcAmbulanceCharge: 25,
+            NonAcPerKMCost: 15,
+            NonAcAmbulanceCharge: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "City", key: 'city', width: columnWidths.city, style: headerStyle },
+          { header: "Ac PerKM Cost", key: 'AcPerKMCost', width: columnWidths.AcPerKMCost, style: headerStyle },
+          { header: "Ac Ambulance Charge", key: 'AcAmbulanceCharge', width: columnWidths.AcAmbulanceCharge, style: headerStyle },
+          { header: "NonAc PerKM Cost", key: 'NonAcPerKMCost', width: columnWidths.NonAcPerKMCost, style: headerStyle },
+          { header: "NonAc Ambulance Charge", key: 'NonAcAmbulanceCharge', width: columnWidths.NonAcAmbulanceCharge, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                city: product.city,
+                AcPerKMCost: product.AcPerKMCost,
+                AcAmbulanceCharge: product.AcAmbulanceCharge,
+                NonAcPerKMCost: product.NonAcPerKMCost,
+                NonAcAmbulanceCharge: product.NonAcAmbulanceCharge,
             })
         });
   
@@ -276,7 +284,7 @@ const AddCityList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'AddCityList.xlsx';
             anchor.click();
            
         })

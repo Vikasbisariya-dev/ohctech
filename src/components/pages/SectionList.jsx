@@ -155,9 +155,10 @@ const CustomActionComponent = ({id}) => {
                     const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                       // filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
@@ -235,8 +236,9 @@ const CustomActionComponent = ({id}) => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [["Bussiness Unit","Department Id",'Section Name',"Section Head","Section Head Email"]];
+        const header = [["Id","Bussiness Unit","Department Id",'Section Name',"Section Head","Section Head Email"]];
         const tableData = rowData.map(item => [
+          item.id,
           item.buId,
           item.deptId,
           item.sectionName,
@@ -253,7 +255,7 @@ const CustomActionComponent = ({id}) => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("SectionList.pdf");
     };
 
 
@@ -270,14 +272,16 @@ const CustomActionComponent = ({id}) => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
+            id: 20,
             buId: 20,
             deptId: 20,
             sectionName: 15,
             sectionHeadName: 25,
-               sectionHeadEmail : 25
+            sectionHeadEmail : 25
         };
   
         sheet.columns = [
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
           { header: "Bussiness Unit", key: 'buId', width: columnWidths.buId, style: headerStyle },
           { header: "Department Id", key: 'deptId', width: columnWidths.deptId, style: headerStyle },
           { header: "Section Name", key: 'sectionName', width: columnWidths.sectionName, style: headerStyle },
@@ -288,6 +292,7 @@ const CustomActionComponent = ({id}) => {
   
         rowData.map(product =>{
             sheet.addRow({
+                id: product.id,
                 buId: product.buId,
                 deptId: product.deptId,
                 sectionName: product.sectionName,
@@ -303,7 +308,7 @@ const CustomActionComponent = ({id}) => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'SectionList.xlsx';
             anchor.click();
         })
     }

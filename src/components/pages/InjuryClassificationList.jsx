@@ -140,9 +140,10 @@ const InjuryClassificationList = () => {
                      const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        //filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
@@ -215,7 +216,7 @@ const InjuryClassificationList = () => {
       const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [["Id","Complaint",'Complaint in Details',"Is Active"]];
+        const header = [["Id","Injury Class Name",'Injury Class Desc',"Injury Class Code"]];
         const tableData = rowData.map(item => [
           item.id,
           item.injClassName,

@@ -143,9 +143,10 @@ const InjuryPartList = () => {
                     const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                       // filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
@@ -218,7 +219,7 @@ const InjuryPartList = () => {
       const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [["Id","Injury Part",'Injury Part Desc',"Injury Part Desc"]];
+        const header = [["Id","Injury Part",'Injury Part Desc',"Injury Part Code"]];
         const tableData = rowData.map(item => [
           item.id,
           item.name,
@@ -236,7 +237,7 @@ const InjuryPartList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("InjuryClassificationList.pdf");
+        doc.save("InjuryPartList.pdf");
     };
 
 
@@ -283,7 +284,7 @@ const InjuryPartList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'InjuryClassificationList.xlsx';
+            anchor.download = 'InjuryPartList.xlsx';
             anchor.click();
         })
     }

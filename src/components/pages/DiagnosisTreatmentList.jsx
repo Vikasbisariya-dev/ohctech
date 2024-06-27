@@ -84,7 +84,7 @@ const DiagnosisTreatmentList = () => {
         //   },
         onSubmit: async (values, {resetForm}) => {
         try {
-            const response = await axiosClientPrivate.post('/business-units', values);
+            const response = await axiosClientPrivate.post('/diagnosis-treatment', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -112,12 +112,17 @@ const DiagnosisTreatmentList = () => {
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/business-units/${id}`);
+          const response = await axiosClientPrivate.get(`/diagnosis-treatment/${id}`);
             console.log(response.data);
-            setFieldValue("buEmail",response.data.buEmail);
-            setFieldValue("buHeadName",response.data.buHeadName);
-            setFieldValue("buId",response.data.buId);
-            setFieldValue("buName",response.data.buName);
+            setFieldValue("chillness",response.data.chillness);
+            setFieldValue("diagnosis",response.data.diagnosis);
+            setFieldValue("medicin",response.data.medicin);
+            setFieldValue("frequency",response.data.frequency);
+            setFieldValue("timing",response.data.timing);
+            setFieldValue("adroute",response.data.adroute);
+            setFieldValue("duration",response.data.duration);
+            setFieldValue("doseqty",response.data.doseqty);
+            setFieldValue("healthadvice",response.data.healthadvice);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -133,7 +138,7 @@ const DiagnosisTreatmentList = () => {
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/business-units/${id}`,update);
+             await axiosClientPrivate.put(`/diagnosis-treatment/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -155,7 +160,7 @@ const DiagnosisTreatmentList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/business-units/${id}`);
+           await axiosClientPrivate.delete(`/diagnosis-treatment/${id}`);
         //    setRowData(prevData => prevData.filter(row => row.buId !== id));
         setFetchTrigger(prev => prev+1);
 
@@ -183,17 +188,32 @@ const DiagnosisTreatmentList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get('business-units', { signal: controller.signal });
+                const response = await axiosClientPrivate.get('diagnosis-treatment', { signal: controller.signal });
                 const items = response.data.content;
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
+
+                  const headerMappings = {
+                    chillness: "Chronic Illness",
+                    diagnosis : "Diagnosis",
+                    medicin : "Medicine",
+                    frequency: "Frequency",
+                    timing : "Timing",
+                    adroute : "Admin Route",
+                    duration: "Duration",
+                    doseqty : "Dose Qty",
+                    healthadvice : "Health Advice",
+                };
+
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                        //filter: true,
                         floatingFilter: true,
-                        sortable: true
+                        sortable: true,
+                        filter: 'agTextColumnFilter' ,
+                        width: key === 'id' ? 100 : undefined,
                     }));
 
                     columns.unshift({
@@ -227,12 +247,18 @@ const DiagnosisTreatmentList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Diagnosis',"Chronic Illness","Medicine","Frequency","Timing","Admin Route","Duration","Dose Qty","Health Advice"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.diagnosis,
+          item.chillness,
+          item.medicin,
+          item.frequency,
+          item.timing,
+          item.adroute,
+          item.duration,
+          item.doseqty ,
+          item.healthadvice ,
           
         ]);
         doc.autoTable({
@@ -244,7 +270,7 @@ const DiagnosisTreatmentList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("BussinessList.pdf");
+        doc.save("DiagnosisTreatmentList.pdf");
     };
 
 
@@ -259,26 +285,45 @@ const DiagnosisTreatmentList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            diagnosis: 20,
+            chillness: 20,
+            medicin: 20,
+            frequency: 20,
+            timing: 20,
+            adroute: 20,
+            duration: 20,
+            doseqty: 20,
+            healthadvice: 20,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Diagnosis", key: 'diagnosis', width: columnWidths.diagnosis, style: headerStyle },
+          { header: "Chronic Illness", key: 'chillness', width: columnWidths.chillness, style: headerStyle },
+          { header: "Medicine", key: 'medicin', width: columnWidths.medicin, style: headerStyle },
+          { header: "Frequency", key: 'frequency', width: columnWidths.frequency, style: headerStyle },
+          { header: "Timing", key: 'timing', width: columnWidths.timing, style: headerStyle },
+          { header: "Admin Route", key: 'adroute', width: columnWidths.adroute, style: headerStyle },
+          { header: "Duration", key: 'duration', width: columnWidths.duration, style: headerStyle },
+          { header: "Dose Qty", key: 'doseqty', width: columnWidths.doseqty, style: headerStyle },
+          { header: "Health Advice", key: 'healthadvice', width: columnWidths.healthadvice, style: headerStyle },
+          
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                diagnosis: product.diagnosis,
+                chillness: product.chillness,
+                medicin: product.medicin,
+                frequency: product.frequency,
+                timing: product.timing,
+                adroute: product.adroute,
+                duration: product.duration,
+                doseqty: product.doseqty,
+                healthadvice: product.healthadvice,
             })
         });
   
@@ -289,7 +334,7 @@ const DiagnosisTreatmentList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'DiagnosisTreatmentList.xlsx';
             anchor.click();
         })
     }
