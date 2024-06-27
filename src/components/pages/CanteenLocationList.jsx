@@ -205,7 +205,7 @@ const CanteenLocationList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['id','location',"code","type"]];
+        const header = [['Id','Location',"Code","Type"]];
         const tableData = rowData.map(item => [
           item.id,
           item.location,
@@ -245,10 +245,10 @@ const CanteenLocationList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "location", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "code", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "type", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Location", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Code", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Type", key: 'buName', width: columnWidths.buName, style: headerStyle },
           
       ];
   

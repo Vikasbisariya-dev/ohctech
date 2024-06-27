@@ -225,7 +225,7 @@ const CalibrationEquipmentList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['id', 'calibration',"modelbrand","idnumber","location","date","duedate","docupdate"]];
+        const header = [['Id', 'Calibration',"Model brand","Id number","Location","Date","Due date","Doc update"]];
         const tableData = rowData.map(item => [
           item.id,
           item.calibration,
@@ -274,14 +274,14 @@ const CalibrationEquipmentList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: " calibration", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "modelbrand", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "idnumber", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: " location", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "date", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "duedate", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "docupdate", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: " Calibration", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Model brand", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Id number", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: " Location", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Date", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Due date", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Doc update", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
         
           
       ];

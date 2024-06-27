@@ -226,7 +226,7 @@ const CheckupSectionMasterList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['id', 'CheckupSectionName',"Description","Notes","Comments","SetStatus","ApplicableRules","SectionSequence","Interpretation"]];
+        const header = [['Id', 'Checkup Section Name',"Description","Notes","Comments","Set Status","Applicable Rules","Section Sequence","Interpretation"]];
         const tableData = rowData.map(item => [
           item.id,
           item.CheckupSectionName,
@@ -278,15 +278,15 @@ const CheckupSectionMasterList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "CheckupSectionName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "Description", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "Notes", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "Comments", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "SetStatus", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "ApplicableRules", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "SectionSequence", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "Interpretation", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Checkup Section Name", key: 'CheckupSectionName', width: columnWidths.CheckupSectionName, style: headerStyle },
+          { header: "Description", key: 'Description', width: columnWidths.Description, style: headerStyle },
+          { header: "Notes", key: 'Notes', width: columnWidths.Notes, style: headerStyle },
+          { header: "Comments", key: 'Comments', width: columnWidths.Comments, style: headerStyle },
+          { header: "Set Status", key: 'SetStatus', width: columnWidths.SetStatus, style: headerStyle },
+          { header: "Applicable Rules", key: 'ApplicableRules', width: columnWidths.ApplicableRules, style: headerStyle },
+          { header: "Section Sequence", key: 'SectionSequence', width: columnWidths.SectionSequence, style: headerStyle },
+          { header: "Interpretation", key: 'Interpretation', width: columnWidths.Interpretation, style: headerStyle },
           
       ];
   

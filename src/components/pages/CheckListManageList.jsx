@@ -220,7 +220,7 @@ const CheckListManageList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['id','issueto', "ohclocation","itemtype","item","qty","unit","delete"
+        const header = [['Id','Issue to', "Ohc location","Item type","Item","Oty","Unit","Delete"
         ]];
         const tableData = rowData.map(item => [
             item.id,
@@ -270,14 +270,14 @@ const CheckListManageList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "issueto", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "ohclocation", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "itemtype", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "item", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "qty", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "unit", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
-          { header: "delete", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
+          { header: "sIsue to", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Ohc location", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Item type", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Item", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Qty", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Unit", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Delete", key: 'buName', width: columnWidths.buName, style: headerStyle },
          
           
       ];

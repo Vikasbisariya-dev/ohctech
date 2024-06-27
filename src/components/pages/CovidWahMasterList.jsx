@@ -204,12 +204,13 @@ const CovidWahMasterList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Hindi',"English","Type","Seq"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.Id,
+          item.hindi,
+          item.english,
+          item.type,
+          item.seq,
           
         ]);
         doc.autoTable({
@@ -221,7 +222,7 @@ const CovidWahMasterList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("AddCityList.pdf");
+        doc.save("CovidWahMasterList.pdf");
     };
 
 
@@ -239,25 +240,28 @@ const CovidWahMasterList = () => {
         
         const columnWidths = {
             Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            hindi: 20,
+            english: 15,
+            type: 25,
+            seq: 25,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Hindi", key: 'hindi', width: columnWidths.hindi, style: headerStyle },
+          { header: "English", key: 'english', width: columnWidths.english, style: headerStyle },
+          { header: "Type", key: 'type', width: columnWidths.type, style: headerStyle },
+          { header: "Seq", key: 'seq', width: columnWidths.seq, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                Id: product.Id,
+                hindi: product.hindi,
+                english: product.english,
+                type: product.type,
+                seq: product.seq,
             })
         });
   
@@ -268,7 +272,7 @@ const CovidWahMasterList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'CovidWahMasterList.xlsx';
             anchor.click();
 
         })

@@ -231,7 +231,7 @@ const ChronicIllnessList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id','cillness', 'pname',"date","duedate","remark","medicine","frequency","timing","adminroute","duration" ]];
+        const header = [['Id','Cillness', 'Pname',"Date","Due date","Remark","Medicine","Frequency","Timing","Admin route","Duration" ]];
         const tableData = rowData.map(item => [
             item.cillness,
             item.pname,
@@ -288,19 +288,19 @@ const ChronicIllnessList = () => {
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "cillness", key: 'cillness', width: columnWidths.cillness, style: headerStyle },
-          { header: "pname", key: 'pname', width: columnWidths.pname, style: headerStyle },
-          { header: "date", key: 'date', width: columnWidths.date, style: headerStyle },
+          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
+          { header: "Cillness", key: 'cillness', width: columnWidths.cillness, style: headerStyle },
+          { header: "Pname", key: 'pname', width: columnWidths.pname, style: headerStyle },
+          { header: "Date", key: 'date', width: columnWidths.date, style: headerStyle },
 
-          { header: "duedate", key: 'duedate', width: columnWidths.duedate, style: headerStyle },
-          { header: "remark", key: 'remark', width: columnWidths.remark, style: headerStyle },
-          { header: "medicine", key: 'medicine', width: columnWidths.medicine, style: headerStyle },
-          { header: "frequency", key: 'frequency', width: columnWidths.frequency, style: headerStyle },
+          { header: "Due date", key: 'duedate', width: columnWidths.duedate, style: headerStyle },
+          { header: "Remark", key: 'remark', width: columnWidths.remark, style: headerStyle },
+          { header: "Medicine", key: 'medicine', width: columnWidths.medicine, style: headerStyle },
+          { header: "Frequency", key: 'frequency', width: columnWidths.frequency, style: headerStyle },
 
-          { header: "timing", key: 'timing', width: columnWidths.timing, style: headerStyle },
-          { header: "adminroute", key: 'adminroute', width: columnWidths.adminroute, style: headerStyle },
-          { header: "duration", key: 'duration', width: columnWidths.duration, style: headerStyle },
+          { header: "Timing", key: 'timing', width: columnWidths.timing, style: headerStyle },
+          { header: "Admin route", key: 'adminroute', width: columnWidths.adminroute, style: headerStyle },
+          { header: "Duration", key: 'duration', width: columnWidths.duration, style: headerStyle },
 
       ];
   
@@ -328,7 +328,7 @@ const ChronicIllnessList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'ChronicIllnessList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })
