@@ -8,7 +8,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
 import MergeDepartmentForm from './MergeDepartmentForm';
-import { MergeDepartmentValidationForm } from './Validationform';
+//import { MergeDepartmentValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +18,12 @@ import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import PropTypes from "prop-types";
+import * as Yup from 'yup';
+
+const MergeDepartmentValidationForm = Yup.object({
+    DepartmentUsed: Yup.string().min(2).max(25).required("Please choose department used"),
+    DepartmentRecord: Yup.string().min(2).max(25).required("Please choose department record")
+  });
 
 const MergeDepartmentList = () => {
 
@@ -62,7 +68,7 @@ const MergeDepartmentList = () => {
         //   },
         onSubmit: async (values, {resetForm}) => {
         try {
-            const response = await axiosClientPrivate.post('/business-units', values);
+            const response = await axiosClientPrivate.post('/merge-department', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -90,12 +96,11 @@ const MergeDepartmentList = () => {
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/business-units/${id}`);
+          const response = await axiosClientPrivate.get(`/merge-department/${id}`);
             console.log(response.data);
-            setFieldValue("buEmail",response.data.buEmail);
-            setFieldValue("buHeadName",response.data.buHeadName);
-            setFieldValue("buId",response.data.buId);
-            setFieldValue("buName",response.data.buName);
+            setFieldValue("id",response.data.id);
+            setFieldValue("DepartmentUsed",response.data.DepartmentUsed);
+            setFieldValue("DepartmentRecord",response.data.DepartmentRecord);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -111,7 +116,7 @@ const MergeDepartmentList = () => {
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/business-units/${id}`,update);
+             await axiosClientPrivate.put(`/merge-department/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -133,7 +138,7 @@ const MergeDepartmentList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/business-units/${id}`);
+           await axiosClientPrivate.delete(`/merge-department/${id}`);
         //    setRowData(prevData => prevData.filter(row => row.buId !== id));
         setFetchTrigger(prev => prev+1);
 
@@ -161,22 +166,30 @@ const MergeDepartmentList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get('business-units', { signal: controller.signal });
+                const response = await axiosClientPrivate.get('merge-department', { signal: controller.signal });
                 const items = response.data;
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
+
+                    const headerMappings = {
+                        DepartmentUsed: "Department Used",
+                        DepartmentRecord : "Department Record",
+                    };
+
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                        //filter: true,
                         floatingFilter: true,
-                        sortable: true
+                        sortable: true,
+                        filter: 'agTextColumnFilter' ,
+                        width: key === 'id' ? 100 : undefined,
                     }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
-                            const id = params.data.buId;
+                            const id = params.data.id;
                             return <CustomActionComponent id={id} />
                         }
                     });
@@ -206,20 +219,21 @@ const MergeDepartmentList = () => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [['Id', 'Department Used',"Department Record"]];
+        //const header = [['Id', 'Primary Id',"Primary Name","Primary Empcode","Primary Aadhar","Merged Id","Merged Name","Merged Empcode","Merged Aadhar"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.id,
+          item.DepartmentUsed,
+          item.DepartmentRecord,
+          
           
         ]);
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20, // Start Y position for the table
-          theme: 'grid', // Optional theme for the table
-          margin: { top: 30 }, // Optional margin from top
+          startY: 20, 
+          theme: 'grid', 
+          margin: { top: 30 }, 
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
@@ -232,7 +246,7 @@ const MergeDepartmentList = () => {
         const sheet = workbook.addWorksheet('My Sheet');
   
         const headerStyle = {
-          // font: { bold: true, size: 12 },
+          
           alignment: { horizontal: 'center' }
           
       };
@@ -240,26 +254,33 @@ const MergeDepartmentList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+            id: 10,
+            DepartmentUsed: 20,
+            DepartmentRecord: 15,
+            
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Department Used", key: 'DepartmentUsed', width: columnWidths.DepartmentUsed, style: headerStyle },
+          { header: "Department Record", key: 'DepartmentRecord', width: columnWidths.DepartmentRecord, style: headerStyle },
+          //{ header: "Primary Id", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Primary Name", key: 'DesignationUsed', width: columnWidths.DesignationUsed, style: headerStyle },
+          //{ header: "Primary Empcode", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Primary Aadhar", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Id", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Name", key: 'DesignationUsed', width: columnWidths.DesignationUsed, style: headerStyle },
+          //{ header: "Merged Empcode", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Aadhar", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                id: product.id,
+                DepartmentUsed: product.DepartmentUsed,
+                DepartmentRecord: product.DepartmentRecord,
+        
             })
         });
   
@@ -270,9 +291,9 @@ const MergeDepartmentList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'MergeDepartmentList.xlsx';
             anchor.click();
-            // anchor.URL.revokeObjectURL(url);
+            
         })
     }
    

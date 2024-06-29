@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-import { MergePatientform } from './Validationform';
+//import { MergePatientform } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,6 +20,13 @@ import MergePatientForm from './MergePatientForm';
 import PropTypes from "prop-types";
 //import MultipleSelect from '../common/MultipleSelect';
 //import TextField from '@mui/material';
+import * as Yup from 'yup';
+
+const MergePatientform = Yup.object({
+    merged: Yup.string().required("Please choose patient record  merged"),
+    used: Yup.string().required("Please choose patient record  used"),
+    
+  });
 const MergePatientList = () => {
 
 
@@ -59,7 +66,7 @@ const MergePatientList = () => {
         validationSchema: MergePatientform,
         onSubmit: async (values, {resetForm}) => {
         try {
-            const response = await axiosClientPrivate.post('/medicallist', values);
+            const response = await axiosClientPrivate.post('/merge-patient', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -86,13 +93,13 @@ const MergePatientList = () => {
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/business-units/${id}`);
+          const response = await axiosClientPrivate.get(`/merge-patient/${id}`);
             console.log(response.data);
             setFieldValue("id",response.data.id);
-          
             setFieldValue("merged",response.data.merged);
             setFieldValue("used",response.data.used);
-       
+            setFieldValue("lastModified", response.data.lastModified);
+            setFieldValue("modifiedBy", response.data.modifiedBy);
             setId(id);
           setShowupdate(true);
           setOpenPopup(true);
@@ -106,7 +113,7 @@ const MergePatientList = () => {
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/medicalitem/${id}`,update);
+             await axiosClientPrivate.put(`/merge-patient/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -128,7 +135,7 @@ const MergePatientList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/business-units/${id}`);
+           await axiosClientPrivate.delete(`/merge-patient/${id}`);
            //setRowData(prevData => prevData.filter(row => row.buId !== id));
            setFetchTrigger(prev => prev+1);
        } catch (error) {
@@ -154,22 +161,30 @@ const MergePatientList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get('business-units', { signal: controller.signal });
+                const response = await axiosClientPrivate.get('merge-patient', { signal: controller.signal });
                 const items = response.data.content;
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
+
+                    const headerMappings = {
+                        merged: "Merged",
+                        used : "Used",
+                    };
+
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                        //filter: true,
                         floatingFilter: true,
-                        sortable: true
+                        sortable: true,
+                        filter: 'agTextColumnFilter' ,
+                        width: key === 'id' ? 100 : undefined,
                     }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
-                            const id = params.data.buId;
+                            const id = params.data.id;
                             return <CustomActionComponent id={id} />
                         }
                     });
@@ -199,10 +214,10 @@ const MergePatientList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id',"merged","used"]];
+        const header = [['Id',"Merged","Used"]];
+        //const header = [['Id', 'Primary Id',"Primary Name","Primary Empcode","Primary Aadhar","Merged Id","Merged Name","Merged Empcode","Merged Aadhar"]];
         const tableData = rowData.map(item => [
-            item.bracket,
-          
+            item.id,
             item.merged,
             item.used,
           
@@ -212,13 +227,13 @@ const MergePatientList = () => {
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20, // Start Y position for the table
-          theme: 'grid', // Optional theme for the table
-          margin: { top: 30 }, // Optional margin from top
+          startY: 20, 
+          theme: 'grid', 
+          margin: { top: 30 }, 
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("RulegenerationList.pdf");
+        doc.save("MergePatientList.pdf");
     };
 
 
@@ -236,8 +251,7 @@ const MergePatientList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-           
+            id: 10,
             merged: 20,
             used: 20,
   
@@ -247,19 +261,23 @@ const MergePatientList = () => {
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-       
-          { header: "merged", key: 'merged', width: columnWidths.merged, style: headerStyle },
-          { header: "used", key: 'used', width: columnWidths.used, style: headerStyle },
-    
-
-         
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Merged", key: 'merged', width: columnWidths.merged, style: headerStyle },
+          { header: "Used", key: 'used', width: columnWidths.used, style: headerStyle },
+          //{ header: "Primary Id", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Primary Name", key: 'DesignationUsed', width: columnWidths.DesignationUsed, style: headerStyle },
+          //{ header: "Primary Empcode", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Primary Aadhar", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Id", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Name", key: 'DesignationUsed', width: columnWidths.DesignationUsed, style: headerStyle },
+          //{ header: "Merged Empcode", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Aadhar", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+        
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                Id: product.Id,
-              
+                id: product.id,
                 merged: product. merged,
                 used: product.used,
 
@@ -273,9 +291,9 @@ const MergePatientList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'MergePatientList.xlsx';
             anchor.click();
-            // anchor.URL.revokeObjectURL(url);
+            
         })
     }
    
