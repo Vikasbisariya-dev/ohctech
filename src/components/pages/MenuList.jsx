@@ -13,16 +13,16 @@ import { useState,useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from "prop-types";
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 
-export const menuValidationForm = Yup.object({
-  menuid: Yup.number().required("Please enter Menu Id"),
-  menuname: Yup.string().min(2).max(25).required("Please enter Menu Name"),
-  menudescription : Yup.string().max(50).required("Please enter Menu Description"),
-  menuurl : Yup.string().required("Please enter Menu Url"),
-  parentmanu: Yup.string().required("Please enter Parent Menu"),
-  displaysequence: Yup.string().required("Please enter Display Sequence"),
-});
+// export const menuValidationForm = Yup.object({
+//   menuid: Yup.number().required("Please enter Menu Id"),
+//   menuname: Yup.string().min(2).max(25).required("Please enter Menu Name"),
+//   menudescription : Yup.string().max(50).required("Please enter Menu Description"),
+//   menuurl : Yup.string().required("Please enter Menu Url"),
+//   parentmanu: Yup.string().required("Please enter Parent Menu"),
+//   displaysequence: Yup.string().required("Please enter Display Sequence"),
+// });
 
 const MenuList = () => {
 

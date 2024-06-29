@@ -59,7 +59,7 @@ import ExerciseList from "./components/pages/ExerciseList";
 import FoodMasterList from "./components/pages/FoodMasterList";
 import UnitList from "./components/pages/UnitList"
 import NutrientUnitList from "./components/pages/NutrientUnitList";
-
+import FoodNutritionMappingList from "./components/pages/FoodNutritionMappingList";
 
 const router = createBrowserRouter([
   {
@@ -289,6 +289,10 @@ const router = createBrowserRouter([
               {
                 path : "/NutrientUnitList",
                 element : <NutrientUnitList />
+              },
+              {
+                path : "/FoodMappingList",
+                element : <FoodNutritionMappingList />
               }
             ],
           },
