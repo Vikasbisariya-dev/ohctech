@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-import ExerciseForm from './ExerciseForm';
+import ExerciseMinuteForm from './ExerciseMinuteForm';
 // import { VaccineValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,11 +25,12 @@ import * as Yup from 'yup';
 
 const ExerciseMinuteValidationForm = Yup.object({
     exerciseName: Yup.string().required("Please Enter Exercise Name "),
+    minutes: Yup.string().required("Please Enter Minutes "),
   
 });
 
 
-const ExerciseList = () => {
+const ExerciseMinuteList = () => {
 
 
     const [rowData, setRowData] = useState([]);
@@ -54,6 +55,7 @@ const ExerciseList = () => {
 
     const initialValues = {
         exerciseName:"",
+        minutes:"",
       };
 
 
@@ -107,6 +109,7 @@ const ExerciseList = () => {
             console.log(response.data);
             setFieldValue("id",response.data.id);
             setFieldValue("exerciseName",response.data.exerciseName);
+            setFieldValue("minutes",response.data.minutes);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -184,6 +187,7 @@ const ExerciseList = () => {
 
                     const headerMappings = {
                         exerciseName: "Exercise Name",
+                        minutes : "Minutes",
                     };
 
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -228,10 +232,11 @@ const ExerciseList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id', 'Exercise Name']];
+        const header = [['Id', 'Exercise Name',"Minutes"]];
         const tableData = rowData.map(item => [
           item.id,
           item.exerciseName,
+          item.minutes,          
         ]);
         doc.autoTable({
           head: header,
@@ -242,7 +247,7 @@ const ExerciseList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("ExerciseList.pdf");
+        doc.save("ExerciseMinuteList.pdf");
     };
 
 
@@ -269,13 +274,16 @@ const ExerciseList = () => {
         //                 minutes : "Minutes",
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "Exercise Name", key: 'exerciseName', width: columnWidths.exerciseName, style: headerStyle },          
+          { header: "Exercise Name", key: 'exerciseName', width: columnWidths.exerciseName, style: headerStyle },
+          { header: "Minutes", key: 'minutes', width: columnWidths.minutes, style: headerStyle },
+          
       ];
   
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
                 exerciseName: product.exerciseName,
+                minutes: product.minutes,
             })
         });
   
@@ -286,7 +294,7 @@ const ExerciseList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'ExerciseList.xlsx';
+            anchor.download = 'ExerciseMinuteList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })
@@ -342,7 +350,7 @@ const [index,setIndex] = useState();
         <ToastContainer />
             <Box
                 className="ag-theme-quartz" 
-                style={{ height: "110vh" }}
+                style={{ height: "80vh" }}
             >
 
                 <Stack sx={{ display: 'flex', flexDirection: 'row' }} marginY={1} paddingX={1}>
@@ -353,7 +361,13 @@ const [index,setIndex] = useState();
                     </ButtonGroup>
 
                 </Stack>
-
+                <Box
+      className="ag-theme-alpine"
+      style={{
+        height: '100%', // Set the height
+        width: '100%'    // Set the width
+      }}
+    >
                 <AgGridReact
                     rowData={rowData}
                     columnDefs={colDefs}
@@ -361,7 +375,7 @@ const [index,setIndex] = useState();
                     pagination={true}
                     paginationPageSize={paginationPageSize}
                     paginationPageSizeSelector={pageSizeOptions}
-                    Sx={{height:'100%',width: '100%'}}
+                    //Sx={{height:'100%',width: '100%'}}
                     onPaginationChanged={(event) => {
                         setPaginationPageSize(event.api.paginationGetPageSize());
                         setIndex(event.api.paginationGetCurrentPage());
@@ -376,16 +390,16 @@ const [index,setIndex] = useState();
                     // paginationGetPageSize = {200}
                     
                 />
-
+</Box>
             </Box>
 
             <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Exercise Minutes Master">
 
-                <ExerciseForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
+                <ExerciseMinuteForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
                 
             </Popup>
         </>
     );
 };
 
-export default ExerciseList;
+export default ExerciseMinuteList;

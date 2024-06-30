@@ -21,7 +21,7 @@ import PropTypes from "prop-types";
 // new
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-// import * as Yup from 'yup';
+import * as Yup from 'yup';
 
 // const FoodValidationForm = Yup.object({
 //     nutrientName: Yup.string().required("Please Enter Nutrient Name "),
@@ -117,15 +117,9 @@ const NutrientUnitList = () => {
         try {
           const response = await axiosClientPrivate.get(`/nutrient-masters/${id}`);
             console.log(response.data);
-
-            values.id = response.data.id;
-            const updateDish = unit.find(item => item.value == parseInt(response.data.unitId)).label;
-            values.unit = String(updateDish);
-
-            console.log(response.data);
             setFieldValue("id",response.data.id);
-            setFieldValue("unit",String(updateDish));
-            setFieldValue("nutrientName",response.data.nutrientName);
+            setFieldValue("foodCode",response.data.foodCode);
+            setFieldValue("foodName",response.data.foodName);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -138,10 +132,6 @@ const NutrientUnitList = () => {
 
       const handleUpdate = async (id)=> {
         // alert(id);
-
-        values.unitId = unit.find(item => item.label == String(values.unit)).value;
-        delete values.unit;
-
         const update = values;
         try{
              console.log(values);
@@ -194,7 +184,7 @@ useEffect(() => {
     const getAllOhc = async () => {
         
         try {
-            const response = await axiosClientPrivate.get('http://localhost:8080/checkup-parameter-units', { signal: controller.signal });
+            const response = await axiosClientPrivate.get('http://localhost:8080/units', { signal: controller.signal });
             const items = response.data.content;
                 console.log("unit names :-",items);
 
@@ -209,7 +199,7 @@ useEffect(() => {
                 // });
 
                 const options = items.map((item)=>{
-                  return {label:item.unitName,value:item.id};
+                  return {label : item.unitName,value : item.id};
                 });
 
                 setUnit(options);
@@ -247,27 +237,11 @@ useEffect(() => {
                     console.log("new",items);
                 setRowData(items);
 
-
-                if(unit.length>0){
-                    // items.forEach(obj => {
-                    //     obj.unitId = unit.find(item => item.value == parseInt(obj.unitId)).label;
-                    //   });
-                    items.forEach(obj => {
-                        const foundItem = unit.find(item => item.value == parseInt(obj.unitId));
-                        if (foundItem) {
-                            obj.unitId = foundItem.label;
-                        } 
-                    });
-                }
-                else{
-                    console.log("Not found!");
-                }
-
                 if (items.length > 0) {
 
                     const headerMappings = {
                         nutrientName: "Nutrient name",
-                        unitId : "Unit name"
+                        unit : "Unit name"
                     };
 
                    const  columns = Object.keys(items[0]).map(key => ({
@@ -312,11 +286,12 @@ useEffect(() => {
     const exportpdf = async () => {
         
         const doc = new jsPDF();
-        const header = [['Id', 'Nutrient name','Unit name']];
+        const header = [['Id', 'Food code','Food name']];
         const tableData = rowData.map(item => [
           item.id,
-          item.nutrientName,
-          item.unitId,
+          item.foodCode,
+          item.foodName,
+          
           
         ]);
         doc.autoTable({
@@ -346,23 +321,23 @@ useEffect(() => {
         
         const columnWidths = {
             Id: 10,
-            nutrientName: 20,
-            unitId : 20,
+            foodName: 20,
+            foodCode : 20,
       };
       
   
         sheet.columns = [
           { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "Nutrient name", key: 'nutrientName', width: columnWidths.nutrientName, style: headerStyle },
-          { header: "Unit name", key: 'unitId', width: columnWidths.unitId, style: headerStyle },
+          { header: "Food code", key: 'foodCode', width: columnWidths.foodCode, style: headerStyle },
+          { header: "Food name", key: 'foodName', width: columnWidths.foodName, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
-                nutrientName : product.nutrientName,
-                unitId: product.unitId,
+                foodCode : product.foodCode,
+                foodName: product.foodName,
             })
         });
   
@@ -429,7 +404,7 @@ const [index,setIndex] = useState();
         <ToastContainer />
             <Box
                 className="ag-theme-quartz" 
-                style={{ height: '110vh' }}
+                style={{ height: '80vh' }}
             >
 
                 <Stack sx={{ display: 'flex', flexDirection: 'row' }} marginY={1} paddingX={1}>
@@ -440,7 +415,13 @@ const [index,setIndex] = useState();
                     </ButtonGroup>
 
                 </Stack>
-
+                <Box
+      className="ag-theme-alpine"
+      style={{
+        height: '100%', // Set the height
+        width: '100%'    // Set the width
+      }}
+    >
                 <AgGridReact
                     rowData={rowData}
                     columnDefs={colDefs}
@@ -448,7 +429,7 @@ const [index,setIndex] = useState();
                     pagination={true}
                     paginationPageSize={paginationPageSize}
                     paginationPageSizeSelector={pageSizeOptions}
-                    Sx={{height:'100%',width: '100%'}}
+                  //  Sx={{height:'100%',width: '100%'}}
                     onPaginationChanged={(event) => {
                         setPaginationPageSize(event.api.paginationGetPageSize());
                         setIndex(event.api.paginationGetCurrentPage());
@@ -463,7 +444,7 @@ const [index,setIndex] = useState();
                     // paginationGetPageSize = {200}
                     
                 />
-
+</Box>
             </Box>
 
             <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Food Master">

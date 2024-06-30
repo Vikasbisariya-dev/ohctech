@@ -24,7 +24,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import * as Yup from 'yup';
 
 const ExerciseMinuteValidationForm = Yup.object({
-    exercisename: Yup.string().required("Please Enter Exercise Name "),
+    exerciseName: Yup.string().required("Please Enter Exercise Name "),
     minutes: Yup.string().required("Please Enter Minutes "),
   
 });
@@ -49,15 +49,12 @@ const ExerciseMinuteList = () => {
 
     const [paginationPageSize, setPaginationPageSize] = useState(10);
 
-    const [exercise,setExercise] = useState([{}]);
-
     // const [change, setChange] = useState("";)
 
     // console.log("check",paginationPageSize);
 
     const initialValues = {
-        // exerciseName:"",
-        exercisename : "",
+        exerciseName:"",
         minutes:"",
       };
 
@@ -79,15 +76,8 @@ const ExerciseMinuteList = () => {
         //     action.resetForm();
         //   },
         onSubmit: async (values, {resetForm}) => {
-
-            const fooddish = exercise.find(item => item.label === values.exercisename);
-            const dishid = fooddish ? fooddish.value : null;
-            values['exerciseMasterId'] = values.exercisename;
-            delete values.exercisename;
-            values.exerciseMasterId = dishid;
-
         try {
-            const response = await axiosClientPrivate.post('/exercises', values);
+            const response = await axiosClientPrivate.post('/exercise-masters', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -110,64 +100,15 @@ const ExerciseMinuteList = () => {
         },
       });
 
-
-
-
-      useEffect(() => {
-        const controller = new AbortController();
-    
-        const getAllOhc = async () => {
-            
-            try {
-                const response = await axiosClientPrivate.get('http://localhost:8080/exercise-masters', { signal: controller.signal });
-                const items = response.data.content;
-                    // console.log("unit names :-",items);
-    
-                    // const newDiagnosisMap = new Map();
-                    // items.forEach(item => newDiagnosisMap.set(item.ailmentSysName, item.id));
-                    // setBodysystem(newDiagnosisMap);
-    
-                    // console.log(diagnosisMap.size);
-                    // const ailment = items.map((item)=>{
-                    //   // diagnosisMap.set(item.id,item.ailmentSysName);
-                    //   return item.ailmentSysName;
-                    // });
-    
-                    const options = items.map((item)=>{
-                      return {label:item.exerciseName,value:item.id};
-                    });
-    
-                    setExercise(options);
-                    // console.log(ailment);
-    
-            } catch (err) {
-                console.error("Failed to fetch data: ", err);
-            }
-        };
-    
-        getAllOhc();
-    
-        return () => {
-            controller.abort();
-        };
-    
-    }, []);
-    
-
       
 
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/exercises/${id}`);
-            // console.log(response.data);
-
-            values.id = response.data.id;
-            const update = exercise.find(item => item.value == parseInt(response.data.exerciseMasterId)).label;
-            values.exercisename = String(update);
-
+          const response = await axiosClientPrivate.get(`/exercise-masters/${id}`);
+            console.log(response.data);
             setFieldValue("id",response.data.id);
-            setFieldValue("exercisename",String(update));
+            setFieldValue("exerciseName",response.data.exerciseName);
             setFieldValue("minutes",response.data.minutes);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
@@ -180,15 +121,11 @@ const ExerciseMinuteList = () => {
       };
 
       const handleUpdate = async (id)=> {
-        // alert(id);
-        
-        values.exerciseMasterId = exercise.find(item => item.label == String(values.exercisename)).value;
-        delete values.exercisename;
-
+        alert(id);
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/exercises/${id}`,update);
+             await axiosClientPrivate.put(`/exercise-masters/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -210,7 +147,7 @@ const ExerciseMinuteList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/exercises/${id}`);
+           await axiosClientPrivate.delete(`/exercise-masters/${id}`);
         //    setRowData(prevData => prevData.filter(row => row.buId !== id));
         setFetchTrigger(prev => prev+1);
 
@@ -241,27 +178,10 @@ const ExerciseMinuteList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get(`http://localhost:8080/exercises?page=0&size=${paginationPageSize}`, { signal: controller.signal });
+                const response = await axiosClientPrivate.get(`http://localhost:8080/exercise-masters?page=0&size=${paginationPageSize}`, { signal: controller.signal });
                 const items = response.data.content;
                     // console.log("new",items);
                 setRowData(items);
-
-
-                if(exercise.length>0){
-                    // items.forEach(obj => {
-                    //     obj.unitId = unit.find(item => item.value == parseInt(obj.unitId)).label;
-                    //   });
-                    items.forEach(obj => {
-                        const foundItem = exercise.find(item => item.value == parseInt(obj.exerciseMasterId));
-                        if (foundItem) {
-                            obj.exerciseMasterId = foundItem.label;
-                        } 
-                    });
-                }
-                else{
-                    console.log("Not found!");
-                }
-
 
                 if (items.length > 0) {
 
@@ -304,7 +224,7 @@ const ExerciseMinuteList = () => {
             controller.abort();
         };
 
-    }, [paginationPageSize,exercise,fetchTrigger,axiosClientPrivate]);
+    }, [paginationPageSize,fetchTrigger,axiosClientPrivate]);
 
 
      
@@ -430,7 +350,7 @@ const [index,setIndex] = useState();
         <ToastContainer />
             <Box
                 className="ag-theme-quartz" 
-                style={{ height: "110vh" }}
+                style={{ height: "80vh" }}
             >
 
                 <Stack sx={{ display: 'flex', flexDirection: 'row' }} marginY={1} paddingX={1}>
@@ -441,7 +361,13 @@ const [index,setIndex] = useState();
                     </ButtonGroup>
 
                 </Stack>
-
+                <Box
+      className="ag-theme-alpine"
+      style={{
+        height: '100%', // Set the height
+        width: '100%'    // Set the width
+      }}
+    >
                 <AgGridReact
                     rowData={rowData}
                     columnDefs={colDefs}
@@ -449,7 +375,7 @@ const [index,setIndex] = useState();
                     pagination={true}
                     paginationPageSize={paginationPageSize}
                     paginationPageSizeSelector={pageSizeOptions}
-                    Sx={{height:'100%',width: '100%'}}
+                   // Sx={{height:'100%',width: '100%'}}
                     onPaginationChanged={(event) => {
                         setPaginationPageSize(event.api.paginationGetPageSize());
                         setIndex(event.api.paginationGetCurrentPage());
@@ -464,12 +390,12 @@ const [index,setIndex] = useState();
                     // paginationGetPageSize = {200}
                     
                 />
-
+ </Box>
             </Box>
 
             <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Exercise Minutes Master">
 
-                <ExerciseMinuteForm exercise={exercise} values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
+                <ExerciseMinuteForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
                 
             </Popup>
         </>

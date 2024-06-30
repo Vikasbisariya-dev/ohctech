@@ -465,7 +465,7 @@ const [index,setIndex] = useState();
         <ToastContainer />
             <Box
                 className="ag-theme-quartz" 
-                style={{ height: '110vh' }}
+                style={{ height: '58vh' }}
             >
             <EmpHealthDasboard />
                 <Stack sx={{ display: 'flex', flexDirection: 'row' }} marginY={1} paddingX={1}>
@@ -489,7 +489,13 @@ const [index,setIndex] = useState();
                 
                  
                 </Stack>
-
+                <Box
+      className="ag-theme-alpine"
+      style={{
+        height: '100%', // Set the height
+        width: '100%'    // Set the width
+      }}
+    >
                 <AgGridReact
                     rowData={rowData}
                     columnDefs={colDefs}
@@ -497,7 +503,7 @@ const [index,setIndex] = useState();
                     pagination={true}
                     paginationPageSize={paginationPageSize}
                     paginationPageSizeSelector={pageSizeOptions}
-                    Sx={{height:'100%',width: '100%'}}
+                  //  Sx={{height:'100%',width: '100%'}}
                     onPaginationChanged={(event) => {
                         setPaginationPageSize(event.api.paginationGetPageSize());
                         setIndex(event.api.paginationGetCurrentPage());
@@ -512,7 +518,7 @@ const [index,setIndex] = useState();
                     // paginationGetPageSize = {200}
                     
                 />
-
+  </Box>
             </Box>
 
             <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Nutrition Master">
