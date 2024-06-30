@@ -187,13 +187,27 @@ const CheckupSectionMasterList = () => {
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
-                   const  columns = Object.keys(items[0]).map(key => ({
+                    const headerMappings = {
+                        CheckupSectionName: "Checkup Section Name",
+                        Description: "Description",
+                        Notes: "Notes",
+                        Comments: "Comments",
+                        SetStatus: "Set Status",
+                        ApplicableRules: "Applicable Rules",
+                        SectionSequence: "Section Sequence",
+                        Interpretation: "Interpretation",
+                      };
+
+
+                      const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                      // filter: true,
                         floatingFilter: true,
-                        sortable: true
-                    }));
+                        sortable: true,
+                        filter: 'agTextColumnFilter' ,
+                        width: key === 'id' ? 100 : undefined,
+                  }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
@@ -226,7 +240,7 @@ const CheckupSectionMasterList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'Checkup Section Name',"Description","Notes","Comments","Set Status","Applicable Rules","Section Sequence","Interpretation"]];
+        const header = [['id', 'CheckupSectionName',"Description","Notes","Comments","SetStatus","ApplicableRules","SectionSequence","Interpretation"]];
         const tableData = rowData.map(item => [
           item.id,
           item.CheckupSectionName,
@@ -278,15 +292,15 @@ const CheckupSectionMasterList = () => {
       };
   
         sheet.columns = [
-          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "Checkup Section Name", key: 'CheckupSectionName', width: columnWidths.CheckupSectionName, style: headerStyle },
-          { header: "Description", key: 'Description', width: columnWidths.Description, style: headerStyle },
-          { header: "Notes", key: 'Notes', width: columnWidths.Notes, style: headerStyle },
-          { header: "Comments", key: 'Comments', width: columnWidths.Comments, style: headerStyle },
-          { header: "Set Status", key: 'SetStatus', width: columnWidths.SetStatus, style: headerStyle },
-          { header: "Applicable Rules", key: 'ApplicableRules', width: columnWidths.ApplicableRules, style: headerStyle },
-          { header: "Section Sequence", key: 'SectionSequence', width: columnWidths.SectionSequence, style: headerStyle },
-          { header: "Interpretation", key: 'Interpretation', width: columnWidths.Interpretation, style: headerStyle },
+          { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "CheckupSectionName", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Description", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Notes", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Comments", key: 'buId', width: columnWidths.buId, style: headerStyle },
+          { header: "SetStatus", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "ApplicableRules", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "SectionSequence", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Interpretation", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
           
       ];
   

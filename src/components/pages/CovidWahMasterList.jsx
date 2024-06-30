@@ -44,10 +44,11 @@ const CovidWahMasterList = () => {
     const [showupdate,setShowupdate] = useState(false);
 
     const initialValues = {
-        hindi: "",
+       hindi: "",
        english: "",
-        type: "",
-       seq:""   
+       type: "",
+       seq:"",
+       modifiedBy:"",   
       };
       const {
         values,
@@ -95,10 +96,10 @@ const CovidWahMasterList = () => {
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
-            setFieldValue("buEmail",response.data.buEmail);
-            setFieldValue("buHeadName",response.data.buHeadName);
-            setFieldValue("buId",response.data.buId);
-            setFieldValue("buName",response.data.buName);
+            setFieldValue("english",response.data.english);
+            setFieldValue("hindi",response.data.hindi);
+            setFieldValue("type",response.data.type);
+            setFieldValue("seq",response.data.seq);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -135,7 +136,7 @@ const CovidWahMasterList = () => {
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
-           setRowData(prevData => prevData.filter(row => row.buId !== id));
+           setRowData(prevData => prevData.filter(row => row.type !== id));
        } catch (error) {
            console.error('Error deleting row:', error);
        }
@@ -165,17 +166,27 @@ const CovidWahMasterList = () => {
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
-                   const  columns = Object.keys(items[0]).map(key => ({
+                    const headerMappings = {
+                        english: "Question in English",
+                        hindi: "Question in Hindi",
+                        type: "Select Type",
+                        seq: "Sequence",
+                      };
+
+
+                      const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                      // filter: true,
                         floatingFilter: true,
-                        sortable: true
-                    }));
+                        sortable: true,
+                        filter: 'agTextColumnFilter' ,
+                        width: key === 'id' ? 100 : undefined,
+                  }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
-                            const id = params.data.buId;
+                            const id = params.data.type;
                             return <CustomActionComponent id={id} />
                         }
                     });
@@ -204,11 +215,10 @@ const CovidWahMasterList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'Hindi',"English","Type","Seq"]];
+        const header = [["Questions in English","Questions in Hindi","Select Type","Sequence"]];
         const tableData = rowData.map(item => [
-          item.Id,
-          item.hindi,
           item.english,
+          item.hindi,
           item.type,
           item.seq,
           
@@ -239,27 +249,24 @@ const CovidWahMasterList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            hindi: 20,
-            english: 15,
-            type: 25,
-            seq: 25,
+            english: 25,
+            hindi: 15,
+            type: 15,
+            seq: 20,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'Id', width: columnWidths.Id, style: headerStyle },
-          { header: "Hindi", key: 'hindi', width: columnWidths.hindi, style: headerStyle },
-          { header: "English", key: 'english', width: columnWidths.english, style: headerStyle },
-          { header: "Type", key: 'type', width: columnWidths.type, style: headerStyle },
-          { header: "Seq", key: 'seq', width: columnWidths.seq, style: headerStyle },
+          { header: "Questions in English", key: 'english', width: columnWidths.english, style: headerStyle },
+          { header: "Questions in Hindi", key: 'hindi', width: columnWidths.hindi, style: headerStyle },
+          { header: "Select Type", key: 'type', width: columnWidths.type, style: headerStyle },
+          { header: "Sequence", key: 'seq', width: columnWidths.seq, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                Id: product.Id,
-                hindi: product.hindi,
                 english: product.english,
+                hindi: product.hindi,
                 type: product.type,
                 seq: product.seq,
             })
