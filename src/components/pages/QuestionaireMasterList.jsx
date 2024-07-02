@@ -47,13 +47,14 @@ const QuestionaireMasterList = () => {
     const [showupdate,setShowupdate] = useState(false);
 
     const initialValues = {
-        secname: "",
-        seq: "",
-        type: "",
         question:"",
         locallanguage:"",
+        type: "",
         secavailable: "",
-        order: ""
+        secname: "",
+        seq: "",
+        order: "",
+        modifiedBy:"",
       };
 
       const {
@@ -102,10 +103,13 @@ const QuestionaireMasterList = () => {
         try {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
-            setFieldValue("buEmail",response.data.buEmail);
-            setFieldValue("buHeadName",response.data.buHeadName);
-            setFieldValue("buId",response.data.buId);
-            setFieldValue("buName",response.data.buName);
+            setFieldValue("question",response.data.question);
+            setFieldValue("locallanguage",response.data.locallanguage);
+            setFieldValue("type",response.data.type);
+            setFieldValue("secavailable",response.data.secavailable);
+            setFieldValue("secname",response.data.secname);
+            setFieldValue("seq",response.data.seq);
+            setFieldValue("order",response.data.order);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
           setId(id);
@@ -142,7 +146,7 @@ const QuestionaireMasterList = () => {
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
            await axiosClientPrivate.delete(`/business-units/${id}`);
-           setRowData(prevData => prevData.filter(row => row.buId !== id));
+           setRowData(prevData => prevData.filter(row => row.type !== id));
        } catch (error) {
            console.error('Error deleting row:', error);
        }
@@ -172,17 +176,30 @@ const QuestionaireMasterList = () => {
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
-                   const  columns = Object.keys(items[0]).map(key => ({
+                    const headerMappings = {
+                        question: "ENTER THE QUESTION",
+                        locallanguage: "QUESTION IN LOCAL LANGUAGE",
+                        type: "Select  TYPE",
+                        secavailable: "SUB SECTION AVAILABLE",
+                        secname: "SECTION NAME",
+                        seq: "SEQUENCE",
+                        order: "SUB SECTION ORDER",
+                      };
+
+
+                      const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                      // filter: true,
                         floatingFilter: true,
-                        sortable: true
-                    }));
+                        sortable: true,
+                        filter: 'agTextColumnFilter' ,
+                        width: key === 'id' ? 100 : undefined,
+                  }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
-                            const id = params.data.buId;
+                            const id = params.data.type;
                             return <CustomActionComponent id={id} />
                         }
                     });
@@ -211,12 +228,15 @@ const QuestionaireMasterList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['Id', 'buName',"buHeadName","buEmail"]];
+        const header = [["ID","ENTER THE QUESTION","QUESTION IN LOCAL LANGUAGE","Select  TYPE","SUB SECTION AVAILABLE","SECTION NAME","SEQUENCE","SUB SECTION ORDER"]];
         const tableData = rowData.map(item => [
-          item.buId,
-          item.buName,
-          item.buHeadName,
-          item.buEmail,
+          item.question,
+          item.locallanguage,
+          item.type,
+          item.secavailable,
+          item.secname,
+          item.seq,
+          item.order,
           
         ]);
         doc.autoTable({
@@ -228,7 +248,7 @@ const QuestionaireMasterList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("AddCityList.pdf");
+        doc.save("QuestionaireMasterList.pdf");
     };
 
 
@@ -245,26 +265,36 @@ const QuestionaireMasterList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
-            buName: 20,
-            buHeadName: 15,
-            buEmail: 25,
+          question: 25,
+          locallanguage: 15,
+          type:  20,
+          secavailable:  20,
+          secname:  20,
+          seq:  20,
+          order:  20,
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "buName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "buHeadName", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "buEmail", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+            { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+            { header: "ENTER THE QUESTION", key: 'question', width: columnWidths.question, style: headerStyle },
+            { header: "QUESTION IN LOCAL LANGUAGE", key: 'locallanguage', width: columnWidths.locallanguage, style: headerStyle },
+            { header: "Select  TYPE", key: 'type', width: columnWidths.type, style: headerStyle },
+            { header: "SUB SECTION AVAILABLE", key: 'secavailable', width: columnWidths.secavailable, style: headerStyle },
+            { header: "SECTION NAME", key: 'secname', width: columnWidths.secname, style: headerStyle },
+            { header: "SEQUENCE", key: 'seq', width: columnWidths.seq, style: headerStyle },
+            { header: "SUB SECTION ORDER", key: 'order', width: columnWidths.order, style: headerStyle },
           
       ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
-                buName: product.buName,
-                buHeadName: product.buHeadName,
-                buEmail: product.buEmail,
+                question: product.question,
+                locallanguage: product.locallanguage,
+                type: product.type,
+                secavailable: product.secavailable,
+                secname: product.secname,
+                seq: product.seq,
+                order: product.order,
             })
         });
   
@@ -275,7 +305,7 @@ const QuestionaireMasterList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'QuestionaireMasterList.xlsx';
             anchor.click();
 
         })

@@ -247,7 +247,7 @@ const ContactList = () => {
 
     const exportpdf = async () => {
         const doc = new jsPDF();
-        const header = [['id', 'email', 'pphone', "pcperson", "pcnumber", "scperson", "scnumber"]];
+        const header = [['Id', 'Email', 'Personal Phone', "Primary Contact Person", "Primary Contact Number", "Sec Contact Person", "Sec Contact Number"]];
         const tableData = rowData.map(item => [
             item.id,
             item.email,

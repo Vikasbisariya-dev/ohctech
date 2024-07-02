@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-import { MergeStationValidationForm } from './Validationform';
+//import { MergeStationValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,6 +20,16 @@ import MergeStationForm from './MergeStationForm';
 import PropTypes from "prop-types";
 //import MultipleSelect from '../common/MultipleSelect';
 //import TextField from '@mui/material';
+import * as Yup from 'yup';
+
+const MergeStationValidationForm = Yup.object({
+ 
+    record: Yup.string().required("Please Choose Station Record To Be Used "),
+   
+    records: Yup.string().required("Please Choose Station Record To Be Merged "),
+  
+  });
+
 const MergeStationList = () => {
 
 
@@ -59,7 +69,7 @@ const MergeStationList = () => {
         validationSchema: MergeStationValidationForm,
         onSubmit: async (values, {resetForm}) => {
         try {
-            const response = await axiosClientPrivate.post('/medicallist', values);
+            const response = await axiosClientPrivate.post('/merge-station', values);
             toast.success("Saved Successfully!",{
                 position:"top-center"
              }); 
@@ -86,11 +96,13 @@ const MergeStationList = () => {
       const handleEdit = async (id) => {
         alert(id);
         try {
-          const response = await axiosClientPrivate.get(`/business-units/${id}`);
+          const response = await axiosClientPrivate.get(`/merge-station/${id}`);
             console.log(response.data);
             setFieldValue("id",response.data.id);
             setFieldValue("record",response.data.record);
             setFieldValue(" records",response.data. records);
+            setFieldValue("lastModified", response.data.lastModified);
+            setFieldValue("modifiedBy", response.data.modifiedBy);
               setId(id);
           setShowupdate(true);
           setOpenPopup(true);
@@ -104,7 +116,7 @@ const MergeStationList = () => {
         const update = values;
         try{
              console.log(values);
-             await axiosClientPrivate.put(`/medicalitem/${id}`,update);
+             await axiosClientPrivate.put(`/merge-station/${id}`,update);
              toast.success("Updated Successfully!",{
                 position:"top-center",
                 autoClose: 3000,
@@ -126,7 +138,7 @@ const MergeStationList = () => {
         alert(id)
        if(window.confirm('Are you sure you want to delete this data?')){
        try {
-           await axiosClientPrivate.delete(`/business-units/${id}`);
+           await axiosClientPrivate.delete(`/merge-station/${id}`);
            //setRowData(prevData => prevData.filter(row => row.buId !== id));
            setFetchTrigger(prev => prev+1);
        } catch (error) {
@@ -152,29 +164,30 @@ const MergeStationList = () => {
 
         const getAllOhc = async () => {
             try {
-                const response = await axiosClientPrivate.get('business-units', { signal: controller.signal });
+                const response = await axiosClientPrivate.get('merge-station', { signal: controller.signal });
                 const items = response.data.content;
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
                     
                     const headerMappings = {
-                        record : "record",
-                        records : "records",
+                        record : "Record",
+                        records : "Records",
                     };
 
                     const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
                         headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        //filter: true,
                         floatingFilter: true,
                         sortable: true,
+                        filter: 'agTextColumnFilter' ,
                         width: key === 'id' ? 100 : undefined,
                     }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
-                            const id = params.data.buId;
+                            const id = params.data.id;
                             return <CustomActionComponent id={id} />
                         }
                     });
@@ -204,8 +217,10 @@ const MergeStationList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['Id','record', 'records' ]];
+        const header = [['Id','Record', 'Records' ]];
+        //const header = [['Id', 'Primary Id',"Primary Name","Primary Empcode","Primary Aadhar","Merged Id","Merged Name","Merged Empcode","Merged Aadhar"]];
         const tableData = rowData.map(item => [
+            item.id,
             item.record,
             item.records,
             
@@ -213,9 +228,9 @@ const MergeStationList = () => {
         doc.autoTable({
           head: header,
           body: tableData,
-          startY: 20, // Start Y position for the table
-          theme: 'grid', // Optional theme for the table
-          margin: { top: 30 }, // Optional margin from top
+          startY: 20, 
+          theme: 'grid', 
+          margin: { top: 30 }, 
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
@@ -237,22 +252,30 @@ const MergeStationList = () => {
       sheet.getRow(1).font = { bold: true };
         
         const columnWidths = {
-            Id: 10,
+            id: 10,
             record: 20,
             records: 20,
             
       };
   
         sheet.columns = [
-          { header: "Id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "record", key: 'record', width: columnWidths.record, style: headerStyle },
-          { header: "records", key: 'records', width: columnWidths.records, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Record", key: 'record', width: columnWidths.record, style: headerStyle },
+          { header: "Records", key: 'records', width: columnWidths.records, style: headerStyle },
+          //{ header: "Primary Id", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Primary Name", key: 'DesignationUsed', width: columnWidths.DesignationUsed, style: headerStyle },
+          //{ header: "Primary Empcode", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Primary Aadhar", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Id", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Name", key: 'DesignationUsed', width: columnWidths.DesignationUsed, style: headerStyle },
+          //{ header: "Merged Empcode", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          //{ header: "Merged Aadhar", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
          
         ];
   
         rowData.map(product =>{
             sheet.addRow({
-                buId: product.buId,
+                id: product.id,
                 record: product.record,
                 records: product. records,
                 
@@ -270,9 +293,9 @@ const MergeStationList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'download.xlsx';
+            anchor.download = 'MergeStationList.xlsx';
             anchor.click();
-            // anchor.URL.revokeObjectURL(url);
+            
         })
     }
    

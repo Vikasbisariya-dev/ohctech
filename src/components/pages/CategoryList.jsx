@@ -204,7 +204,7 @@ const CategoryList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['id', 'CategoryName',"status","remarks"]];
+        const header = [['Id', 'Category Name',"Status","Remarks"]];
         const tableData = rowData.map(item => [
           item.id,
           item.CategoryName,
@@ -243,10 +243,10 @@ const CategoryList = () => {
       };
   
         sheet.columns = [
-          { header: "id", key: 'id', width: columnWidths.id, style: headerStyle },
-          { header: "CategoryName", key: 'buName', width: columnWidths.buName, style: headerStyle },
-          { header: "status", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
-          { header: "remarks", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Category Name", key: 'buName', width: columnWidths.buName, style: headerStyle },
+          { header: "Status", key: 'buHeadName', width: columnWidths.buHeadName, style: headerStyle },
+          { header: "Remarks", key: 'buEmail', width: columnWidths.buEmail, style: headerStyle },
           
       ];
   

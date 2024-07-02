@@ -7,7 +7,7 @@ import DeleteSweepRoundedIcon from '@mui/icons-material/DeleteSweepRounded';
 // import ImportExportRoundedIcon from '@mui/icons-material/ImportExportRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import Popup from './Popup';
-//import { CheckupParameterValidationForm } from './Validationform';
+//import { CheckupParameterGroupValidationForm } from './Validationform';
 import { useFormik } from "formik";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,40 +16,19 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import CheckupParameterForm from './CheckupParameterForm';
+import CheckupParameterGroupForm from './CheckupParameterGroupForm';
 import PropTypes from "prop-types";
+//import MultipleSelect from '../common/MultipleSelect';
+//import TextField from '@mui/material';
 import * as Yup from 'yup';
-
-const CheckupParameterValidationForm = Yup.object({
-
-    cpname: Yup.string().required("Please enter checkup parameter"),
-    startingrange: Yup.string().required("Please enter starting range"),
-    endingrange: Yup.string().required("Please enter ending range"),
-    columnorder: Yup.string().required("Please enter column order"),
-    placeholder: Yup.string().required("Please enter Place holder"),
-    parametervaluename: Yup.string().required("Please enter Parameter Name"),
-    checkuptype: Yup.string().required("Please enter the checkup type"),
-    refrange: Yup.string().required("Please enter ref range"),
-    default: Yup.string().required("Please enter the default"),
-    healthkeyname: Yup.string().required("Please enter healthkeyname"),
-    lessrisk: Yup.string().required("Please enter lessrisk"),
-    morerisk: Yup.string().required("Please enter morerisk"),
-    lessadvice: Yup.string().required("Please enter lessadvice"),
-    moreadvice: Yup.string().required("Please enter moreadvice"),
-    section: Yup.string().required("Please enter section"),
-    inputtype: Yup.string().required("Please enter inputtype"),
-    status: Yup.string().required("Please enter status"),
-    edit: Yup.string().required("Please enter edit"),
-    selectunit: Yup.string().required("Please enter selectunit"),
-    opd: Yup.string().required("Please enter opd"),
-    daycare: Yup.string().required("Please enter daycare"),
-    injury: Yup.string().required("Please enter injury"),
-    rangerule: Yup.string().required("Please enter rangerule"),
-    parent: Yup.string().required("Please enter parent"),
-    mandatory: Yup.string().required("Please enter mandatory"),
+const CheckupParameterGroupValidationForm = Yup.object({
+    group: Yup.string().required("Please enter Group"),
+    groupnumber: Yup.string().required("Please enter Group Number"),
+      groupsec: Yup.string().required("Please enter Group Section "),
+     
   });
-  
-const CheckupParameterList = () => {
+
+const CheckupParameterGroupList =() => {
 
 
     const [rowData, setRowData] = useState([]);
@@ -68,33 +47,12 @@ const CheckupParameterList = () => {
 
     const initialValues = {
         
-        cpname: "",
-        healthkeyname:"",
-        startingrange:"",
-        endingrange:"",
-        lessrisk:"",
-        morerisk:"",
-        lessadvice:"",
-        moreadvice:"",
-        section:"",
-        columnorder:"",
-        placeholder:"",
-        parametervaluename:"",
-        inputtype:"",
-        checkuptype:"",
-        status:"",
-        edit:"",
-        selectunit:"",
-        refrange:"",
-        opd:"",
-        daycare:"",
-        injury:"",
-        rangerule:"",
-        parent:"",
-        mandatory:"",
-        default:"",
+        group: "",
+        groupnumber:"",
+        groupsec:"",
         lastModified: "",
         modifiedBy: ""
+       
       };
 
 
@@ -109,7 +67,7 @@ const CheckupParameterList = () => {
         resetForm
       } = useFormik({
         initialValues: initialValues,
-        validationSchema: CheckupParameterValidationForm,
+        validationSchema: CheckupParameterGroupValidationForm,
         onSubmit: async (values, {resetForm}) => {
         try {
             const response = await axiosClientPrivate.post('/medicallist', values);
@@ -142,36 +100,12 @@ const CheckupParameterList = () => {
           const response = await axiosClientPrivate.get(`/business-units/${id}`);
             console.log(response.data);
             setFieldValue("id",response.data.id);
-            setFieldValue("cpname",response.data.cpname);
-            setFieldValue(" healthkeyname",response.data. healthkeyname);
-            setFieldValue("startingrange",response.data.startingrange);
-            setFieldValue("endingrange",response.data.endingrange);
-            setFieldValue("lessrisk", response.data.lessrisk);
-            setFieldValue("morerisk", response.data.morerisk);
-
-            setFieldValue("lessadvice",response.data.lessadvice);
-            setFieldValue("moreadvice",response.data.moreadvice);
-            setFieldValue("section",response.data.section);
-            setFieldValue("columnorder",response.data.columnorder);
-            setFieldValue("placeholder", response.data.placeholder);
-            setFieldValue("parametervaluename", response.data.parametervaluename);
-
-            setFieldValue("inputtype",response.data.inputtype);
-            setFieldValue("checkuptype",response.data.checkuptype);
-            setFieldValue("status",response.data.status);
-            setFieldValue("edit",response.data.edit);
-            setFieldValue("selectunit", response.data.selectunit);
-            setFieldValue("refrange", response.data.refrange);
-
-            setFieldValue("opd",response.data.opd);
-            setFieldValue("daycare",response.data.daycare);
-            setFieldValue("injury",response.data.injury);
-            setFieldValue("rangerule",response.data.rangerule);
-            setFieldValue("parent",response.data.parent);
-            setFieldValue("mandatory",response.data.mandatory);
-            setFieldValue("default",response.data.default);
+            setFieldValue("group",response.data.group);
+            setFieldValue(" groupnumber",response.data. groupnumber);
+            setFieldValue("groupsec",response.data.groupsec);
             setFieldValue("lastModified", response.data.lastModified);
             setFieldValue("modifiedBy", response.data.modifiedBy);
+            
           setId(id);
           setShowupdate(true);
           setOpenPopup(true);
@@ -238,33 +172,10 @@ const CheckupParameterList = () => {
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
-
                     const headerMappings = {
-                        cpname: "Checkup Name",
-                        healthkeyname : "Health key name",
-                        startingrange : "Starting range",
-                        endingrange : "Ending range",
-                        lessrisk : "Lessrisk",
-                        morerisk : "Morerisk",
-                        lessadvice : "Less advice",
-                        moreadvice : "More advice",
-                        section : "Section",
-                        columnorder : "Columnorder",
-                        parametervaluename : "Parameter value name",
-                        inputtype : "Input type",
-                        status : "Status",
-                        edit : "Edit",
-                        selectunit : "Select Unit",
-                        refrange : "Ref Range",
-                        opd : "Opd",
-                        daycare : "Day care",
-                        injury : "Injury",
-                        rangerule : "Rangerule",
-                        parent : "Parent",
-                        mandatory : "Mandatory",
-                        default : "Default",
-                        lastModified : "LastModified",
-                        modifiedBy : "Modified By",
+                        group: "Group",
+                        groupnumber : "Group Number",
+                        groupsec : "Group Section",
                     };
                    const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
@@ -307,36 +218,13 @@ const CheckupParameterList = () => {
     const exportpdf = async () => {
        
         const doc = new jsPDF();
-        const header = [['id','cpname', 'healthkeyname',"startingrange","endingrange","lessrisk","morerisk","lessadvice","moreadvice","section","columnorder"
-        ,"placeholder","parametervaluename","inputtype","checkuptype","status","edit","selectunit","refrange","opd","daycare","injury"
-      ,"rangerule","parent","mandatory","default" ]];
+        const header = [['Id','Group', 'Group number',"Group sec"]];
         const tableData = rowData.map(item => [
             item.id,
-            item.cpname,
-            item.healthkeyname,
-            item.startingrange,
-            item.endingrange,
-            item.lessrisk,
-            item.morerisk,
-            item.lessadvice,
-            item.moreadvice,
-            item.section,
-            item.columnorder,
-            item.placeholder,
-            item.parametervaluename,
-            item.inputtype,
-            item.checkuptype,
-            item.status,
-            item.edit,
-            item.selectunit,
-            item.refrange,
-            item.opd,
-            item.daycare,
-            item.injury,
-            item.rangerule,
-            item.parent,
-            item.mandatory,
-            item.default,
+            item.group,
+            item.groupnumber,
+            item.groupsec,
+            
           
         ]);
         doc.autoTable({
@@ -348,7 +236,7 @@ const CheckupParameterList = () => {
           styles: { fontSize: 5 },
           columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } }
       });
-        doc.save("CheckupParameterList.pdf");
+        doc.save("CheckupParameterGroupList.pdf");
     };
 
 
@@ -367,104 +255,28 @@ const CheckupParameterList = () => {
         
         const columnWidths = {
             id: 10,
-            cpname: 20,
-            healthkeyname: 20,
-            startingrange: 20,
-            endingrange: 20,
-            lessrisk: 20,
-            morerisk: 20,
-            lessadvice: 20,
-            moreadvice: 20,
-            section: 20,
-            columnorder: 20,
-            placeholder: 20,
-            parametervaluename: 20,
-            inputtype: 20,
-            checkuptype: 20,
-            status: 20,
-            edit: 20,
-            selectunit: 20,
-            refrange: 20,
-            opd: 10,
-            daycare: 10,
-            injury: 10,
-            rangerule: 20,
-            parent: 20,
-            mandatory: 20,
-            default: 20,
+            group: 20,
+            groupnumber: 20,
+            groupsec: 20,
            
             
       };
   
         sheet.columns = [
-          { header: "id", key: 'buId', width: columnWidths.buId, style: headerStyle },
-          { header: "cpname", key: 'cpname', width: columnWidths.cpname, style: headerStyle },
-          { header: "healthkeyname", key: 'healthkeyname', width: columnWidths.healthkeyname, style: headerStyle },
-          { header: "startingrange", key: 'startingrange', width: columnWidths.startingrange, style: headerStyle },
+          { header: "Id", key: 'id', width: columnWidths.id, style: headerStyle },
+          { header: "Group", key: 'group', width: columnWidths.group, style: headerStyle },
+          { header: "Group number", key: 'groupnumber', width: columnWidths.groupnumber, style: headerStyle },
+          { header: "Group sec", key: 'groupsec', width: columnWidths.groupsec, style: headerStyle },
 
-          { header: "endingrange", key: 'endingrange', width: columnWidths.endingrange, style: headerStyle },
-          { header: "lessrisk", key: 'lessrisk', width: columnWidths.lessrisk, style: headerStyle },
-          { header: "morerisk", key: 'morerisk', width: columnWidths.morerisk, style: headerStyle },
-          { header: "lessadvice", key: 'lessadvice', width: columnWidths.lessadvice, style: headerStyle },
-
-          { header: "moreadvice", key: 'moreadvice', width: columnWidths.moreadvice, style: headerStyle },
-          { header: "section", key: 'section', width: columnWidths.section, style: headerStyle },
-          { header: "columnorder", key: 'columnorder', width: columnWidths.columnorder, style: headerStyle },
-          { header: "placeholder", key: 'placeholder', width: columnWidths.placeholder, style: headerStyle },
-
-          { header: "parametervaluename", key: 'parametervaluename', width: columnWidths.parametervaluename, style: headerStyle },
-          { header: "inputtype", key: 'inputtype', width: columnWidths.inputtype, style: headerStyle },
-          { header: "checkuptype", key: 'checkuptype', width: columnWidths.checkuptype, style: headerStyle },
-          { header: "status", key: 'status', width: columnWidths.status, style: headerStyle },
-          
-
-          { header: "edit", key: 'edit', width: columnWidths.edit, style: headerStyle },
-          { header: "selectunit", key: 'selectunit', width: columnWidths.selectunit, style: headerStyle },
-          { header: "refrange", key: 'refrange', width: columnWidths.refrange, style: headerStyle },
-          { header: "opd", key: 'opd', width: columnWidths.opd, style: headerStyle },
-
-          { header: "daycare", key: 'daycare', width: columnWidths.daycare, style: headerStyle },
-          { header: "injury", key: 'injury', width: columnWidths.injury, style: headerStyle },
-          { header: "rangerule", key: 'rangerule', width: columnWidths.rangerule, style: headerStyle },
-          { header: "parent", key: 'parent', width: columnWidths.parent, style: headerStyle },
-          { header: "mandatory", key: 'mandatory', width: columnWidths.mandatory, style: headerStyle },
-          { header: "default", key: 'default', width: columnWidths.default, style: headerStyle },
-      ];
+             ];
   
         rowData.map(product =>{
             sheet.addRow({
                 id: product.id,
-                cpname: product.cpname,
-                healthkeyname: product.healthkeyname,
-                startingrange: product.startingrange,
-                endingrange: product.endingrange,
-                lessrisk: product.lessrisk,
-                morerisk: product.morerisk,
-                lessadvice: product.lessadvice,
-                moreadvice: product.moreadvice,
-                section: product.section,
-                columnorder: product.columnorder,
-                placeholder: product.placeholder,
-                parametervaluename: product.parametervaluename,
-                inputtype: product.inputtype,
-                checkuptype: product.checkuptype,
-                status: product.status,
-                edit: product.edit,
-                selectunit: product.selectunit,
-                refrange: product.refrange,
-                opd: product.opd,
-                daycare: product.daycare,
-                injury: product.injury,
-                rangerule: product.rangerule,
-                parent: product.parent,
-                mandatory: product.mandatory,
-                default: product.default,
-                
-
-              
-
-
-
+                group: product.group,
+                groupnumber: product.groupnumber,
+                groupsec: product.groupsec,
+               
             })
         });
   
@@ -475,7 +287,7 @@ const CheckupParameterList = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = 'ChekupParameterList.xlsx';
+            anchor.download = 'CheckupParameterGroupList.xlsx';
             anchor.click();
             // anchor.URL.revokeObjectURL(url);
         })
@@ -508,13 +320,13 @@ const CheckupParameterList = () => {
                 />
             </Box>
 
-            <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Checkup Parameter Form">
+            <Popup showupdate={showupdate} id= {id} handleUpdate={handleUpdate} setShowupdate={setShowupdate} resetForm={resetForm} handleSubmit={handleSubmit}  openPopup={openPopup} setOpenPopup={setOpenPopup} title="Checkup Parameter Group Form">
 
-                < CheckupParameterForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
+                < CheckupParameterGroupForm values={values} touched={touched} errors={errors} handleBlur={handleBlur} handleChange={handleChange} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
                 
             </Popup>
         </>
     );
 };
 
-export default  CheckupParameterList;
+export default  CheckupParameterGroupList;

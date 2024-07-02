@@ -187,13 +187,27 @@ const CheckupSectionMasterList = () => {
                     // console.log(items);
                 setRowData(items);
                 if (items.length > 0) {
-                   const  columns = Object.keys(items[0]).map(key => ({
+                    const headerMappings = {
+                        CheckupSectionName: "Checkup Section Name",
+                        Description: "Description",
+                        Notes: "Notes",
+                        Comments: "Comments",
+                        SetStatus: "Set Status",
+                        ApplicableRules: "Applicable Rules",
+                        SectionSequence: "Section Sequence",
+                        Interpretation: "Interpretation",
+                      };
+
+
+                      const  columns = Object.keys(items[0]).map(key => ({
                         field: key,
-                        headerName: key.charAt(0).toUpperCase() + key.slice(1),
-                        filter: true,
+                        headerName: headerMappings[key] || key.charAt(0).toUpperCase() + key.slice(1),
+                      // filter: true,
                         floatingFilter: true,
-                        sortable: true
-                    }));
+                        sortable: true,
+                        filter: 'agTextColumnFilter' ,
+                        width: key === 'id' ? 100 : undefined,
+                  }));
 
                     columns.unshift({
                         field: "Actions", cellRenderer:  (params) =>{
